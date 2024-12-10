@@ -20,5 +20,8 @@
     "mainSearch": {
         "cover": "search-background-img.jpg",
         "welcome": "Üdvözöljük az oldalunkon!"
+    },
+    "account": {
+        "cover" : "search-background-img.jpg"
     }
 }

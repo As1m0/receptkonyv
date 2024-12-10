@@ -402,13 +402,13 @@ footer {
 .write-review .star {
     width: 20px;
     height: 20px;
-    background-image: url('../../content/star-empty.png');
+    background-image: url('../../content/stars/star-empty.png');
     background-size: cover;
     margin: 5px;
     transition: all ease .2;
 }
 .write-review .star.selected {
-    background-image: url('../../content/star-filled.png');
+    background-image: url('../../content/stars/star-filled.png');
 }
 
 .write-review .star:hover{
@@ -444,13 +444,29 @@ margin: auto;
 
 /*              Profil page         */
 
+.cover-pic{
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+}
+
+.cover-pic h2{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+}
+
+
 .profil-pic{
     width: 80%;
     max-width: 250px;
 }
 
 .profil-adatok{
-    height: 1000px;
+
 }
 
 
@@ -483,9 +499,13 @@ margin: auto;
     margin-top: -140px;
 }
 
+.shadow{
+    box-shadow: 5px 5px 15px rgba(0,0,0,.1);
+}
 
 
-/*          STRAR RECEPT SECTION           */
+
+/*          STAR RECEPT SECTION           */
 
 
 .star-recept{
@@ -515,7 +535,7 @@ margin: auto;
     margin-top: 30px;
     margin: auto;
     max-width: 250px;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: var(--primary-color);
     opacity: .8;
 }

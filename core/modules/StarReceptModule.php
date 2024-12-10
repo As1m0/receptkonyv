@@ -21,7 +21,7 @@ class StarReceptModule implements IVisibleModuleBase
         $this->template->AddData("IDO", "22");
         $this->template->AddData("ADAG", "4");
         $this->template->AddData("NEHEZSEG", "Könnyű");
-        $this->template->AddData("STARSPIC", "content/rating.png");
+        $this->template->AddData("STARSPIC", "content/stars/4_star.png");
         $this->template->AddData("ERTEKELESSZAM", "6");
         $this->template->AddData("KOMMENTSZAM", "4");
         $this->template->AddData("RECEPTKEP", "https://images.pexels.com/photos/1640772/pexels-photo-1640772.jpeg?cs=srgb&dl=pexels-ella-olsson-572949-1640772.jpg&fm=jpg");

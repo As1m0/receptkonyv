@@ -23,6 +23,9 @@ class AccountPage implements IPageBase
             header("Location: {$cfg['mainPage']}.php?p=login");
         }
 
+        //cover kép
+        $this->template->AddData("COVERIMG", $cfg["contentFolder"]."/".Model::LoadText("account", "cover")["text"]);
+
         //Profil adatok
         $this->template->AddData("SRC", "content/pelda.png");
         $this->template->AddData("NAME", "Ujvárossy Ábel");
@@ -39,7 +42,7 @@ class AccountPage implements IPageBase
         $receptCard->AddData("ADAG", "4");
         $receptCard->AddData("NEHEZSEG", "Közepes");
         $receptCard->AddData("SCORE", "8");
-        $receptCard->AddData("STARSKEP", "content/rating.png");
+        $receptCard->AddData("STARSKEP", "content/stars/4_star.png");
 
         $this->template->AddData("RECEPTEK", $receptCard);
 
