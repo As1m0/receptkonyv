@@ -1,0 +1,24 @@
+{
+    "body": {
+        "bg-img": "background-pattern.png"
+    },
+    "index": {
+        "title": "Főoldal",
+        "welcome": "Üdvözöljük az oldalunkon!"
+    },
+    "about": {
+        "img": "pelda.png",
+        "about": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut elit id lorem interdum lobortis. Duis neque justo, gravida in lacus vel, convallis dictum est. Fusce varius, lacus ut lobortis tempus, risus ligula fermentum libero, ac lobortis dui justo nec nulla. Donec hendrerit gravida ultrices. Phasellus vehicula sem at lectus consequat, sed vestibulum libero auctor. Vivamus eu purus pretium, cursus ligula eu, rutrum ipsum. Interdum et malesuada fames ac ante ipsum primis in faucibus.*enter*Cras dapibus aliquet nisi, et malesuada magna scelerisque eget. Ut ut luctus felis, et dapibus sem. Mauris elementum vulputate quam, in faucibus ligula semper a. Morbi vehicula, purus quis rutrum vulputate, libero sapien ultrices elit, et ornare dolor arcu vitae felis. Sed at malesuada sapien, quis fringilla justo. Nam malesuada vulputate neque commodo aliquet. Vivamus eget arcu quam. Aenean augue magna, pharetra eu auctor ac, placerat id massa. Integer semper, sapien in dapibus fermentum, est eros efficitur magna, vel gravida nulla orci efficitur nisi. Mauris tellus nisl, molestie eu lorem ac, pretium laoreet tellus. Nam sagittis ante faucibus orci pulvinar iaculis. Pellentesque lacinia mauris nec laoreet dictum. Nulla commodo justo at velit suscipit dictum. Quisque scelerisque risus fringilla condimentum ultrices. Sed placerat nibh sed nunc mattis, eget mollis purus congue.",
+        "tel": "06203303333",
+        "email": "kis.balazs@ruander.hu",
+        "address": "1139 BP, Frangepán u. 3."
+    },
+    "navigation": {
+        "img": "profil-pic.png",
+        "logo": "logo.png"
+    },
+    "mainSearch": {
+        "cover": "search-background-img.jpg",
+        "welcome": "Üdvözöljük az oldalunkon!"
+    }
+}

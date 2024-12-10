@@ -1,0 +1,26 @@
+<h6 class="text-center" style="background-color: %!COLOR!%; padding: 5px; color: white;">%!RESULT!%</h6>
+<div class="container d-flex justify-content-center align-items-center vh-100" id="login-box">
+    <div class="card p-4 shadow-lg my-5" style="width: 100%; max-width: 400px;">
+        <h3 class="text-center mb-4">Bejelentkezés</h3>
+        <form method="post">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email cím</label>
+                <input type="email" name="email" class="form-control" id="email" placeholder="Email megadása" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Jelszó</label>
+                <input type="password" name="pass" class="form-control" id="password" placeholder="Jelszó megadása" required>
+            </div>
+            <button type="submit" class="btn btn-default w-100 mt-3" name="login">Bejeltkezés</button>
+        </form>
+        <div class="text-center mt-3">
+            <small>
+                Nincs még fiókod? <a href="index.php?p=register" class="text-decoration-none">Regisztráció</a>
+            </small><br>
+            <small>
+                Vagy  <a href="#" class="text-decoration-none">elfelejtetted</a> a jelszavad?
+            </small>
+        </div>
+    </div>
+</div>
+%!SCRIPT!%

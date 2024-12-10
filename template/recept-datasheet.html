@@ -1,0 +1,143 @@
+<div class="container">
+    <div class="row">
+
+
+        <!--     Recept section  -->
+
+
+        <div class="col-lg-9 col-sm-12 blokk my-5">
+            <h2 class="text-center my-5">%!NEV!%</h2>
+            <div class="parameters my-4">
+                <ul>
+                    <li>
+                        <small><span>%!IDO!%</span> perc |</small>
+                    </li>
+                    <li>
+                        <small><span>%!ADAG!%</span> adag |</small>
+                    </li>
+                    <li>
+                        <small>%!NEHEZSEG!%</small>
+                    </li>
+                </ul>
+            </div>
+            <div class="reviews small mb-3">
+                <span><img src="%!STARSPIC!%" alt="stars"> &#x2022 </span>
+                <span>%!ERTEKELESSZAM!% értékelés &#x2022 </span>
+                <span>%!KOMMENTSZAM!%<a class="primary-color" href="#comments"> hozzászólás</a></span>
+            </div>
+
+
+            <div class="cover">
+                <img class="img-fluid"
+                    src="%!RECEPTKEP!%"
+                    alt="recept képe">
+            </div>
+
+            <div class="ingredients">
+                <h3 class="my-5" style="margin-left: 20px">Hozzávalók</h3>
+                <ul>
+                    <li>2L <span class="list-element">tej</span></li>
+                    <li>120g <span class="list-element">cukor</span></li>
+                    <li>5dl <span class="list-element">víz</span></li>
+                    <li>3 szelet <span class="list-element">sajt</span></li>
+                    <li>2 ek <span class="list-element">tejöl</span></li>
+                </ul>
+            </div>
+
+            <div class="devider"></div>
+
+            <div class="description my-3">
+                <h3 class="my-5 ml-2" style="margin-left: 20px">Elkészítés</h3>
+
+                <ol>
+                    <li>
+                        A baconszeletekkel béleljük ki az őzgerincformát úgy, hogy a szeletek kissé fedjék egymást,
+                        és a végeik kilógjanak a forma szélén, hogy a végén be tudjuk hajtani.
+                    </li>
+                    <li>
+                        A baconszeletekkel béleljük ki az őzgerincformát úgy, hogy a szeletek kissé fedjék egymást,
+                        és a végeik kilógjanak a forma szélén, hogy a végén be tudjuk hajtani.
+                    </li>
+                    <li>
+                        A csirkemelleket vágjuk kisebb, 2 cm-es csíkokra vagy kockákra. Sózzuk, borsozzuk ízlés
+                        szerint. A petrezselymet aprítsuk finomra.
+
+                    </li>
+                    <li>
+                        Egy tálban keverjük össze a tejfölt vagy habtejszínt, a tojásokat, a reszelt sajtot, a
+                        zúzott fokhagymát, a mustárt, és ha szeretnénk egy kis lisztet a sűrűség kedvéért. Adjuk
+                        hozzá a finomra vágott petrezselymet is, keverjük össze.
+
+                    </li>
+                </ol>
+            </div>
+
+            <div class="devider"></div>
+
+
+
+            <!--      Comments section        -->
+
+            <div class="recept-reviews mt-3">
+                <h3 class="text-center" id="comments">Hozzászólások</h3>
+
+                %!KOMMENTEK!%
+
+
+                <!--        Write review        -->
+
+                <div class="write-review mb-5">
+                    <form method="post">
+                        <h4 class="text-center mb-4">Hozzászólok:</h4>
+
+                        <div id="starContainer" class="stars">
+                            <div class="star" data-value="1"></div>
+                            <div class="star" data-value="2"></div>
+                            <div class="star" data-value="3"></div>
+                            <div class="star" data-value="4"></div>
+                            <div class="star" data-value="5"></div>
+                        </div>
+                        <input type="hidden" id="rating" name="rating" value="0">
+
+
+                        <textarea class="form-control mt-3" id="review-area" rows="4" name="review"
+                            placeholder="Hozzászólás írása..."></textarea>
+
+                        <button type="submit" id="submit-button" class="btn btn-primary mt-3 disabled" name="UserReview">Hozzászólok</button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+
+        <!--    Side section    -->
+
+        <div class="col-lg-3 col-sm-12 blokk my-5">
+            <h4 class="text-center my-5">Hasonló receptek</h4>
+
+
+            %!RECEPTTHUMBNAILS!%
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<script src="core/scripts/write-review-stars.js"></script>

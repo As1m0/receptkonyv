@@ -1,0 +1,34 @@
+{
+    "ContactModule":
+            {
+                "enabled" : true
+            },
+    "VisitLoggerModule":
+            {
+                "enabled" : true
+            },
+    "ImageCustomUpload":
+            {
+                "enabled" : true
+            },
+    "NavigationModule":
+        { 
+            "enabled" : true
+        },
+    "FooterModule":
+        {
+            "enabled" : true
+        },
+    "MainSearchModule":
+        {
+            "enabled" : true
+        },
+    "RecentRecepiesModule":
+        {
+            "enabled" : true
+        },
+    "StarReceptModule":
+        {
+            "enabled" : true
+        }
+}

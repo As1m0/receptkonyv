@@ -1,0 +1,44 @@
+[
+    {
+        "page" : "index",
+        "template" : "main.html",
+        "fullTemplate" : false,
+        "class" : "IndexPage"
+    },
+    {
+        "page" : "account",
+        "template" : "account-page.html",
+        "fullTemplate" : false,
+        "class" : "AccountPage"
+    },
+    {
+        "page" : "receptek",
+        "template" : "receptek.html",
+        "fullTemplate" : false,
+        "class" : "ReceptekPage"
+    },
+    {
+        "page" : "recept-feltoltes",
+        "template" : "recept-feltoltes.html",
+        "fullTemplate" : false,
+        "class" : "UploadPage"
+    },
+    {
+        "page" : "login",
+        "template" : "login.html",
+        "fullTemplate" : false,
+        "class" : "LoginPage"
+    },
+    {
+        "page" : "register",
+        "template" : "register.html",
+        "fullTemplate" : false,
+        "class" : "RegisterPage"
+    },
+    {
+        "page" : "recept-aloldal",
+        "template" : "recept-datasheet.html",
+        "fullTemplate" : false,
+        "class" : "receptDatasheetPage"
+    }
+]

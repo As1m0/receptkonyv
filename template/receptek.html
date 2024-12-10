@@ -1,0 +1,189 @@
+%!MAINSEARCH!%
+
+<div class="wrapper">
+    <div class="row">
+
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <div class="filter shadow-sm">
+                <h4 class="p-4">Szűrők</h4>
+                
+                
+                <div class="container">
+                    <form method="post" id="szurok" name="szurok">
+                        <div class="form-group text-center">
+                            <label for="category" class="form-label text-left">Kategória</label><br>
+                            <select class="from-control w-100" name="category" id="category">
+                                <option value="null" selected>-</option>
+                                %!CATEGORIES!%
+                            </select>
+                        </div>
+        
+                        <div class="form-group mt-3">
+                            <label for="time" class="form-label">Elkészítési idő</label>
+                            <select class="form-select" id="ido" name="ido">
+                                <option value="null" selected>-</option>
+                                <option value="30>">30 perc alatti</option>
+                                <option value="30-60">30-60 perces</option>
+                                <option value="60-90">60-90 perces</option>
+                                <option value="90<">90 perc feletti</option>
+                            </select>
+                        </div>
+                        <div class="form-grou mt-3">
+                            <label for="nehezseg" class="form-label">Nehézség</label>
+                            <select class="form-select" id="nehezseg" name="nehezseg">
+                                <option value="null" selected>-</option>
+                                <option value="kezdo">Kezdő</option>
+                                <option value="konnyu">Könnyű</option>
+                                <option value="kozepes">Közepes</option>
+                                <option value="nehez">Nehéz</option>
+                                <option value="profi">Profi</option>
+                            </select>
+                        </div>
+
+                        <div class="form-grou mt-3">
+                            <label for="ertekeles" class="form-label">Értékelés</label>
+                            <select class="form-select" id="ertekeles" name="ertekeles">
+                                <option value="null" selected>-</option>
+                                <option value="1">*</option>
+                                <option value="2">**</option>
+                                <option value="3">***</option>
+                                <option value="4">****</option>
+                                <option value="5">*****</option>
+                            </select>
+                        </div>
+
+                    </form>
+    
+                </div>
+
+
+
+            </div>
+        </div>
+
+        <div class="col-lg-9 col-md-8 col-sm-12 mr-2 white p-5">
+            <div class="row">
+
+                <div class="order-list">
+                    <ul>
+                        <li class="order-item">A-Z &darr;</li>
+                        <li class="order-item">Elk. idő &darr;</li>
+                        <li class="order-item">Feltöltés dátuma &darr;</li>
+                        <li class="order-item">Értékelés &darr;</li>
+                        <!-- &uarr;  -->
+                    </ul>
+                </div>
+            
+                <div class="card-deck col-lg-4 col-md-6 col-6 mb-5" id="receptID">
+                    <div class="card shadow-sm">
+                        <a href="#">
+                            <img class="card-img-top"
+                                src="https://cdn.mindmegette.hu/2024/04/cNfIfBYPwpvl1tAzwvSqehQ4nF42_Gm7adWhewfYfrI/fill/0/0/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50L2FiNzg4Y2RjNGVmNzQwOGFiMzQ1NWRhZTFkNjc0NmQ0.jpg"
+                                alt="recept kep">
+                        </a>
+                        <div class="card-body mt-2">
+                            <h5 class="card-title"><a href="#">Recept neve</a></h5>
+                            <ul class="card-list">
+                                <li class="card-text">
+                                    <small class="text-muted">85 perc | </small>
+                                </li>
+                                <li class="card-text">
+                                    <small class="text-muted">6 adag | </small>
+                                </li>
+                                <li class="card-text">
+                                    <small class="text-muted">könnyű</small>
+                                </li>
+                            </ul>
+                            <p class="card-text text-center mb-1"><small><span>Ábel</span> receptje</small></p>
+                            <p class="card-text text-center mb-0 text-muted"><small>Értékelés <span>5,4</span></small>
+                            </p>
+                            <div class="star text-center mb-1">
+                                <img class="star-image" src="content/rating.png" alt="stars">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-deck col-lg-4 col-md-6 col-6 mb-5" id="receptID">
+                    <div class="card shadow-sm">
+                        <a href="#">
+                            <img class="card-img-top"
+                                src="https://cdn.mindmegette.hu/2024/04/cNfIfBYPwpvl1tAzwvSqehQ4nF42_Gm7adWhewfYfrI/fill/0/0/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50L2FiNzg4Y2RjNGVmNzQwOGFiMzQ1NWRhZTFkNjc0NmQ0.jpg"
+                                alt="recept kep">
+                        </a>
+                        <div class="card-body mt-2">
+                            <h5 class="card-title"><a href="#">Recept neve</a></h5>
+                            <ul class="card-list">
+                                <li class="card-text">
+                                    <small class="text-muted">85 perc | </small>
+                                </li>
+                                <li class="card-text">
+                                    <small class="text-muted">6 adag | </small>
+                                </li>
+                                <li class="card-text">
+                                    <small class="text-muted">könnyű</small>
+                                </li>
+                            </ul>
+                            <p class="card-text text-center mb-1"><small><span>Ábel</span> receptje</small></p>
+                            <p class="card-text text-center mb-0 text-muted"><small>Értékelés <span>5,4</span></small>
+                            </p>
+                            <div class="star text-center mb-1">
+                                <img class="star-image" src="content/rating.png" alt="stars">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-deck col-lg-4 col-md-6 col-6 mb-5" id="receptID">
+                    <div class="card shadow-sm">
+                        <a href="#">
+                            <img class="card-img-top"
+                                src="https://cdn.mindmegette.hu/2024/04/cNfIfBYPwpvl1tAzwvSqehQ4nF42_Gm7adWhewfYfrI/fill/0/0/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50L2FiNzg4Y2RjNGVmNzQwOGFiMzQ1NWRhZTFkNjc0NmQ0.jpg"
+                                alt="recept kep">
+                        </a>
+                        <div class="card-body mt-2">
+                            <h5 class="card-title"><a href="#">Recept neve</a></h5>
+                            <ul class="card-list">
+                                <li class="card-text">
+                                    <small class="text-muted">85 perc | </small>
+                                </li>
+                                <li class="card-text">
+                                    <small class="text-muted">6 adag | </small>
+                                </li>
+                                <li class="card-text">
+                                    <small class="text-muted">könnyű</small>
+                                </li>
+                            </ul>
+                            <p class="card-text text-center mb-1"><small><span>Ábel</span> receptje</small></p>
+                            <p class="card-text text-center mb-0 text-muted"><small>Értékelés <span>5,4</span></small>
+                            </p>
+                            <div class="star text-center mb-1">
+                                <img class="star-image" src="content/rating.png" alt="stars">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+ 
+                
+                %!RECEPTCARDS!%
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="core/scripts/szurok.js"></script>
+<script>
+    let orderItems = document.getElementsByClassName("order-item");
+    for (let i=0; i< orderItems.length; i++){
+        orderItems[i].addEventListener("click", ()=>{
+
+
+        })
+    }
+</script>

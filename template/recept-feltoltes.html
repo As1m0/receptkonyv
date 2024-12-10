@@ -1,0 +1,116 @@
+
+<div class="container upload-form my-4">
+    <h2 class="text-center my-4">Recept feltöltése</h2>
+    <form method="post" id="receptFeltoltes" onsubmit="validateForm(event)">
+        <div class="form-group py-3">
+            <label for="name" class="my-1">Recept neve</label><br>
+            <input type="text" name="name" class="form-control" id="name" placeholder="recept neve" required>
+        </div>
+
+        <div class="separator"></div>
+
+
+        <div class="form-group py-3">
+            <label for="formFile" class="form-label">Képek feltöltése</label>
+            <input class="form-control" type="file" id="formFile" multiple accept="image/png, image/jpeg">
+        </div>
+
+        <div class="container mt-3">
+            <div class="row p-4" style="background-color: rgb(234, 245, 250); border-radius: 10px;">
+
+                <div class="form-group text-center col-3">
+                    <label for="category" class="form-label text-left">Kategória</label><br>
+                    <select class="from-control w-100" name="category" id="category">
+                        %!CATEGORIES!%
+                    </select>
+                </div>
+
+                <div class="form-group col-3">
+                    <label for="time" class="form-label">Elkészítési idő</label>
+                    <input class="form-control" type="number" id="time" name="time" min="5" value="30" step="5">
+                    <small class="form-text text-muted">perc</small>
+                </div>
+
+                <div class="form-grou col-3">
+                    <label for="nehezseg" class="form-label">Nehézség</label>
+                    <select class="form-select" id="nehezseg" name="nehezseg">
+                        <option value="kezdo">Kezdő</option>
+                        <option value="konnyu">Könnyű</option>
+                        <option value="kozepes" selected>Közepes</option>
+                        <option value="nehez">Nehéz</option>
+                        <option value="profi">Profi</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-3">
+                    <label for="adag" class="form-label">Adag</label>
+                    <input class="form-control" type="number" id="adag" name="adag" min="1" value="2">
+                    <small class="form-text text-muted">fő</small>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="separator my-5 text-center">
+            <h4>Hozzávalók</h4>
+        </div>
+
+        <div id="ingredientsForm">
+            <div id="ingredients" class="row g-3 mb-3">
+                <div class="col-12 row align-items-end ingredient-row mt-1">
+                    <div class="col-md-4">
+                        <label for="ingredientName1" class="form-label">Hozzávaló neve</label>
+                        <input type="text" class="form-control input-filed" id="ingredientName1"
+                            name="ingredients[0][name]" placeholder="pl. cukor.." required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="ingredientAmount1" class="form-label">Mennyiség</label>
+                        <input type="number" class="form-control input-filed" id="ingredientAmount1"
+                            name="ingredients[0][amount]" placeholder="pl. 100.." required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="ingredientUnit1" class="form-label">Mértékegység</label>
+                        <select class="form-select" id="ingredientUnit1" name="ingredients[0][unit]">
+                            <option value="grams">gramm</option>
+                            <option value="pieces">dkg</option>
+                            <option value="ml">ml</option>
+                            <option value="liter">liter</option>
+                            <option value="db">db</option>
+                            <option value="ek">ek</option>
+                            <option value="tk">tk</option>
+                            <option value="bogre">bögre</option>
+                            <option value="csomag">csomag</option>
+                            <option value="csipet">csipet</option>
+                            <option value="csokor">csokor</option>
+                            <option value="csesze">csésze</option>
+                            <option value="szelet">szelet</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-outline-danger remove-ingredient d-none">Törlés</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-default" id="addIngredient">+ hozzávaló</button>
+
+        <div class="separator my-4 text-center">
+            <h4>Leírás</h4>
+        </div>
+
+        <div class="form-group py-3">
+            <label for="leiras" class="form-label">Recept elkészítése</label>
+            <textarea class="form-control" id="leiras" rows="15" name="leiras"
+                placeholder="Recept leírása..."></textarea>
+        </div>
+
+
+        <input type="submit" class="form-control btn btn-default my-4" name="feltoltes" id="feltoltes" value="Feltöltés"
+            required>
+
+
+    </form>
+</div>
+
+
+<script src="core/scripts/receptFormHandler.js" defer></script>
