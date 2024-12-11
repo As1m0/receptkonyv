@@ -27,6 +27,24 @@ class UploadPage implements IPageBase
         if(isset($_POST["feltoltes"]))
         {
          //TODO -> save data into database
+         if(isset($_POST["name"])
+            && isset($_POST["kep"])
+            && isset($_POST["category"])
+            && isset($_POST["time"])
+            && isset($_POST["nehezseg"])
+            && isset($_POST["adag"])
+            && isset($_POST["ingredients"])
+            && isset($_POST["leiras"]))
+            {
+                $name = trim(htmlspecialchars($_POST["name"]));
+                $kep = htmlspecialchars($_POST["kep"]);
+                $category = $_POST["category"];
+                $elkIdo = $_POST["time"];
+                $nehezseg = $_POST["nehezseg"];
+                $adag = $_POST["adag"];
+                $ingredients = $_POST["ingredients"];
+                $leiras = htmlspecialchars(trim($_POST["leiras"]));
+            }
         }
 
         try
