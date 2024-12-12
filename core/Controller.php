@@ -5,6 +5,7 @@ abstract class Controller
     public static function Route() : void
     {
         global $cfg;
+        
         $page = $cfg["mainPage"];
         if(isset($_GET[$cfg["pageKey"]]))
         {

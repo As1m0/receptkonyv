@@ -2,10 +2,6 @@
     "body": {
         "bg-img": "background-pattern.png"
     },
-    "index": {
-        "title": "Főoldal",
-        "welcome": "Üdvözöljük az oldalunkon!"
-    },
     "navigation": {
         "img": "profil-pic.png",
         "logo": "logo.png"
