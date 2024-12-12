@@ -143,6 +143,40 @@ abstract class Model
     } else {
         throw new Exception("A tartalmakat tároló CSV feldolgozása meghiúsult!");
     }
-}
+    }
+
+    public static function UploadReceptDB(array $data): bool
+    {
+        global $cfg;
+        $mysqli = new mysqli($cfg["DBhostname"], $cfg["DBusername"], $cfg["DBPass"], $cfg["DB"]);
+
+        // Check connection
+        if ($mysqli->connect_error) {
+            return false;
+        }
+
+        $formattedString = implode(", ", array_map(function($value) {
+            if (is_null($value)) {
+                return "NULL";
+            } elseif (is_string($value)) {
+                return "'" . addslashes($value) . "'";
+            } else {
+                return $value;
+            }
+        }, $data));
+
+        try
+        {
+            $mysqli->query("INSERT INTO `recept` VALUES ($formattedString) ;");
+            return true;
+        }
+        catch(error_log)
+        {
+            //print(error_log);
+            return false;
+        }
+        $mysqli->close();
+    }
+
 
 }

@@ -18,3 +18,8 @@ $cfg["defaultContentFlag"] = "CONTENT";
 $cfg["defaultNavFlag"] = "NAVIGATION";
 $cfg["defaultFooterFlag"] = "FOOTER";
 
+//Database
+$cfg["DB"] = "ReceptkonyvDB";
+$cfg["DBhostname"] = "localhost";
+$cfg["DBusername"] = "webpage";
+$cfg["DBPass"] = "receptkonyv";

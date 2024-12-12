@@ -26,7 +26,6 @@ class UploadPage implements IPageBase
 
         if(isset($_POST["feltoltes"]))
         {
-         //TODO -> save data into database
          if(isset($_POST["name"])
             && isset($_POST["kep"])
             && isset($_POST["category"])
@@ -44,6 +43,20 @@ class UploadPage implements IPageBase
                 $adag = $_POST["adag"];
                 $ingredients = $_POST["ingredients"];
                 $leiras = htmlspecialchars(trim($_POST["leiras"]));
+
+                $data = array(null, $name, $category, $leiras, $elkIdo, $adag, $nehezseg, 1, $kep); //TODO: felh_id from SESSION
+
+                if(Model::UploadReceptDB($data) !== false)
+                {
+                    $this->template->AddData("RESULT", "Sikeres recept feltöltés!");
+                    $this->template->AddData("COLOR", "green");
+                    $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='index.php?p=account';}, 1500);</script>");
+                }
+                else{
+                    throw new Exception("Hiba a recept adatbázisba való feltöltése közben");
+                    $this->template->AddData("RESULT", "A recept feltöltése közben HIBA lépett fel!");
+                    $this->template->AddData("COLOR", "red");
+                }
             }
         }
 
