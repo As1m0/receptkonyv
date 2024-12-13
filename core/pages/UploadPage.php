@@ -35,7 +35,7 @@ class UploadPage implements IPageBase
             && isset($_POST["ingredients"])
             && isset($_POST["leiras"]))
             {
-                $name = trim(htmlspecialchars($_POST["name"]));
+                $name = htmlspecialchars(trim($_POST["name"]));
                 $kep = htmlspecialchars($_POST["kep"]);
                 $category = $_POST["category"];
                 $elkIdo = $_POST["time"];
@@ -57,6 +57,11 @@ class UploadPage implements IPageBase
                     $this->template->AddData("RESULT", "A recept feltöltése közben HIBA lépett fel!");
                     $this->template->AddData("COLOR", "red");
                 }
+            }
+            else
+            {
+                $this->template->AddData("RESULT", "Kérjük töltsön ki minden mezőt!");
+                $this->template->AddData("COLOR", "red");
             }
         }
 
