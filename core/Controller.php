@@ -11,6 +11,7 @@ abstract class Controller
         {
             $page = htmlspecialchars($_GET[$cfg["pageKey"]]);
         }
+
         try
         {
             View::setBaseTemplate(Template::Load($cfg["mainPageTemplate"]));
@@ -18,7 +19,7 @@ abstract class Controller
             if(class_exists($pageData["class"]) && in_array("IPageBase", class_implements($pageData["class"])))
             {
                 $pageObject = new $pageData["class"]();
-                $pageObject->Run($pageData);
+                 $pageObject->Run($pageData);
                 $result = $pageObject->GetTemplate();
                 if($result !== null)
                 {

@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/xampp10/htdocs/SajatCMS/template/imgUpload.html</file>
-            <file>file:/C:/xampp10/htdocs/SajatCMS/core/Controller.php</file>
-            <file>file:/C:/xampp10/htdocs/SajatCMS/core/modules/AllowedMimes.php</file>
-            <file>file:/C:/xampp10/htdocs/SajatCMS/core/pages/IndexPage.php</file>
-            <file>file:/C:/xampp10/htdocs/SajatCMS/core/modules/ImageCustomUpload.php</file>
-            <file>file:/C:/xampp10/htdocs/SajatCMS/template/main.html</file>
-            <file>file:/C:/xampp10/htdocs/SajatCMS/content/modules.json</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

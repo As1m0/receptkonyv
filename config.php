@@ -11,7 +11,13 @@ $cfg["uploadsFolder"] = $cfg["contentFolder"]."/uploads";
 $cfg["templateFolder"] = "template";
 $cfg["defaultContentType"] = "text/html";
 $cfg["templateFlag"] = "/%!([A-Z]+)!%/";
+
 $cfg["pageKey"] = "p";
+$cfg["receptId"] = "r";
+$cfg["searchKey"] = "q";
+
+
+
 $cfg["mainPage"] = "index";
 $cfg["mainPageTemplate"] = "index.html";
 $cfg["defaultContentFlag"] = "CONTENT";
