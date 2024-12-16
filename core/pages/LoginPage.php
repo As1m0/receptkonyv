@@ -21,13 +21,19 @@ class LoginPage implements IPageBase
                 {
                     $email = htmlspecialchars(trim($_POST["email"]));
                     $pass = hash("sha256", trim($_POST["pass"]));
-                    if(Model::LoginCheck($email, $pass) !== false)
+
+                    Model::Connect();
+                    if (Model::LoginDB([ "email" => $email, "password_hash" => $pass ]))
                     {
                         $result["login"]["info"] = "Sikeres bejelentkezés!";
                         $result["login"]["success"] = true;
-                    } else {
+                    }
+                    else
+                    {
                         $result["login"]["info"] = "Hibás felhasználónév / jelszó!";
                     }
+                    Model::Disconnect();
+
                 }
             }
             else

@@ -6,8 +6,8 @@ error_reporting(E_ALL);
 
 require_once("config.php");
 require_once("autoload.php");
-session_start();
 
+session_start();
 if(isset($_GET['logout']) && $_GET['logout'] == true)
 {
     session_unset();

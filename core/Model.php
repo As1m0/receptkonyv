@@ -69,81 +69,7 @@ abstract class Model
         }
     }
     
-    public static function LoginCheck(string $email, string $pass) : bool
-    {
-        global $cfg;
-        if(file_exists($cfg["contentFolder"]."/login.csv"))
-        {
-            $csv = fopen($cfg["contentFolder"]."/login.csv", "r");
-            $loggedIn = false;
-            while (!$loggedIn && !feof($csv))
-            //while (!($loggedIn || feof($csv)))
-            {
-                $csvRow = fgetcsv($csv, null, ";");
-                if($csvRow === false)
-                {
-                    continue;
-                }
-                if(trim($csvRow[2]) == $email && trim($csvRow[3]) == $pass)
-                {
-                    $loggedIn = true;
-                    $_SESSION["loggedIn"] = true;
-                    $_SESSION["username"] = $csvRow[1];
-                    //$_SESSION["userPic"] = $csvRow[4];
-                    return true;
-                }
-            }
-            fclose($csv);
-            if(!$loggedIn)
-            {
-                return false;
-            }
-        }
-        else
-        {
-            throw new Exception("A tartalmakat tároló CSV feldolgozása meghiúsult!");
-            return false;
-        }
-    }
 
-    public static function Register(array $data): bool
-    {
-        global $cfg;
-
-
-        if (file_exists($cfg["contentFolder"] . "/login.csv")) {
-
-            $csv = fopen($cfg["contentFolder"] . "/login.csv", "r");
-            $registered = false;
-
-            while (!$registered && !feof($csv)) {
-                $csvRow = fgetcsv($csv, null, ";");
-                if ($csvRow === false)
-                {
-                    continue;
-                }
-                if ($csvRow[2] == $data[2])
-                {
-                    $registered = true;
-                }
-            }
-            fclose($csv);
-
-            if (!$registered) {
-                $csv = fopen($cfg["contentFolder"] . "/login.csv", "a");
-                if (fputcsv($csv, $data, ";") === false) {
-                    fclose($csv);
-                    throw new Exception("Hiba történt az adatok hozzáadása közben!");
-                }
-                fclose($csv);
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            throw new Exception("A tartalmakat tároló CSV feldolgozása meghiúsult!");
-        }
-    }
 
     public static function Connect() : void
     {
@@ -152,7 +78,7 @@ abstract class Model
         $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
         try
         {
-            self::$con = new mysqli($cfg["DBhostname"], $cfg["DBusername"], $cfg["DBPass"], $cfg["DB"]);
+            self::$con = new mysqli($cfg["DBhostname"], $cfg["DBusername"], $cfg["DBPass"], $cfg["DB"], $cfg["PORT"]);
         }
         catch (Exception $ex)
         {
@@ -240,10 +166,59 @@ abstract class Model
             $stmt = self::$con->prepare("INSERT INTO `felhasznalok` (`veznev`,`kernev`,`email`,`password_hash`, `pic_name`) VALUES (?,?,?,?,?)");
             $stmt->bind_param("sssss", $datas["veznev"], $datas["kernev"], $datas["email"],$datas["password_hash"], $datas["pic_name"]);
             $stmt->execute();
+            $stmt->close();
         }
         catch (Exception $ex)
         {
             throw new SQLException("A felhasználó rögzítése sikertelen!", $ex);
+        }
+    }
+
+    public static function LoginDB($datas):bool
+    {
+        if(!isset(self::$con) || self::$con === false)
+        {
+            throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
+        }
+        try
+        {
+            $stmt = self::$con->prepare("SELECT * FROM `felhasznalok` WHERE `email` = ? AND `password_hash` = ?");
+            $stmt->bind_param("ss", $datas["email"], $datas["password_hash"]);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+            $data = $result->fetch_all(MYSQLI_ASSOC);
+
+            $result->close();
+            $stmt->close();
+
+            if(!empty($data))
+            {
+                //save user info to SESSION
+                $_SESSION["loggedIn"] = true;
+                $_SESSION["userID"] = $data[0]["felh_id"];
+                $_SESSION["username"] =  $data[0]["kernev"];
+                $_SESSION["userfullname"] = $data[0]["veznev"] . " " . $data[0]["kernev"];
+                if ($data[0]["pic_name"] !== null)
+                {
+                    $_SESSION["userpic"] = $data[0]["pic_name"];
+                }
+                else
+                {
+                    $_SESSION["userpic"] = "empty_profilPic";
+                }
+                $_SESSION["usermail"] = $data[0]["email"];
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+        catch (Exception $ex)
+        {
+            throw new SQLException("A bejelentkezés sikertelen!", $ex);
         }
     }
 

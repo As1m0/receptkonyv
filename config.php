@@ -29,6 +29,7 @@ $cfg["DB"] = "ReceptkonyvDB";
 $cfg["DBhostname"] = "localhost";
 $cfg["DBusername"] = "webpage";
 $cfg["DBPass"] = "receptkonyv";
+$cfg["PORT"] = 3306;
 
 //Picture handling
 $cfg["foodPicSize1"] = 1200;
