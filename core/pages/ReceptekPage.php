@@ -22,7 +22,11 @@ class ReceptekPage implements IPageBase
 
         
         if (isset($_GET[$cfg["searchKey"]])) {
+             //write in search log
+             Controller::RunModule("SearchKeyLoggerModule", [ "searcKey" => $_GET[$cfg["searchKey"]]]);
+
             $query = htmlspecialchars($_GET[$cfg["searchKey"]]);
+            
 
 
             // DATABASE -> Recept card-ok betöltése

@@ -13,6 +13,7 @@ class MainSearchModule implements IVisibleModuleBase
     public function Run(array $data = []): void
     {
         global $cfg;
+        
         $this->template = Template::Load("mainSearch.html");
 
         if (isset($_GET[$cfg["searchKey"]]) && $_GET[$cfg["searchKey"]] !== "") {

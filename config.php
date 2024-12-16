@@ -2,6 +2,7 @@
 $cfg = [];
 
 $cfg["debug"] = true;
+
 $cfg["debugErrorPage"] = "DebugError.html";
 $cfg["maintanceTemplate"] = "maintance.html";
 $cfg["PageNotFoundTemplate"] = "404.html";
@@ -11,12 +12,12 @@ $cfg["templateFolder"] = "template";
 $cfg["defaultContentType"] = "text/html";
 $cfg["templateFlag"] = "/%!([A-Z]+)!%/";
 
+//Keys
 $cfg["pageKey"] = "p";
 $cfg["receptId"] = "r";
 $cfg["searchKey"] = "q";
 
-
-
+//navigation
 $cfg["mainPage"] = "index";
 $cfg["mainPageTemplate"] = "index.html";
 $cfg["defaultContentFlag"] = "CONTENT";
@@ -29,7 +30,7 @@ $cfg["DBhostname"] = "localhost";
 $cfg["DBusername"] = "webpage";
 $cfg["DBPass"] = "receptkonyv";
 
-//Pics
+//Picture handling
 $cfg["foodPicSize1"] = 1200;
 $cfg["foodPicSize2"] = 300;
 $cfg["receptKepek"] = $cfg["contentFolder"]."/recept_kepek";

@@ -462,7 +462,8 @@ margin: auto;
 
 .profil-pic{
     width: 80%;
-    max-width: 250px;
+    max-width: 200px;
+    border-radius: 50% !important;
 }
 
 .profil-adatok{

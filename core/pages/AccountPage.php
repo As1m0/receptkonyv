@@ -27,7 +27,7 @@ class AccountPage implements IPageBase
         $this->template->AddData("COVERIMG", $cfg["contentFolder"]."/".Model::LoadText("account", "cover")["text"]);
 
         //Profil adatok
-        $this->template->AddData("SRC", "content/pelda.png");
+        $this->template->AddData("SRC", "content/profil_kepek/a7428d3e851b49.jpg");
         $this->template->AddData("NAME", "Ujvárossy Ábel");
         $this->template->AddData("EMAIL", "ujvarossyabel@gmail.com");
         $this->template->AddData("RECEPTSZAM", "12");
