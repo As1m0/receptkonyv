@@ -7,7 +7,6 @@ $cfg["maintanceTemplate"] = "maintance.html";
 $cfg["PageNotFoundTemplate"] = "404.html";
 
 $cfg["contentFolder"] = "content";
-$cfg["uploadsFolder"] = $cfg["contentFolder"]."/uploads";
 $cfg["templateFolder"] = "template";
 $cfg["defaultContentType"] = "text/html";
 $cfg["templateFlag"] = "/%!([A-Z]+)!%/";
@@ -29,3 +28,11 @@ $cfg["DB"] = "ReceptkonyvDB";
 $cfg["DBhostname"] = "localhost";
 $cfg["DBusername"] = "webpage";
 $cfg["DBPass"] = "receptkonyv";
+
+//Pics
+$cfg["foodPicSize1"] = 1200;
+$cfg["foodPicSize2"] = 300;
+$cfg["receptKepek"] = $cfg["contentFolder"]."/recept_kepek";
+$cfg["UserPicSize1"] = 200;
+$cfg["UserPicSize2"] = 25;
+$cfg["ProfilKepek"] = $cfg["contentFolder"]."/profil_kepek";

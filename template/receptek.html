@@ -6,21 +6,21 @@
         <div class="col-lg-3 col-md-4 col-sm-12 mt-3">
             <div class="filter shadow-sm">
                 <h4 class="p-4">Szűrők</h4>
-                
-                
+
+
                 <div class="container">
                     <form method="post" id="szurok" name="szurok">
                         <div class="form-group text-center">
                             <label for="category" class="form-label text-left">Kategória</label><br>
-                            <select class="from-control w-100" name="category" id="category">
+                            <select class="from-control w-100 szuro-item" name="category" id="category">
                                 <option value="null" selected>-</option>
                                 %!CATEGORIES!%
                             </select>
                         </div>
-        
+
                         <div class="form-group mt-3">
                             <label for="time" class="form-label">Elkészítési idő</label>
-                            <select class="form-select" id="ido" name="ido">
+                            <select class="form-select szuro-item" id="ido" name="ido">
                                 <option value="null" selected>-</option>
                                 <option value="30>">30 perc alatti</option>
                                 <option value="30-60">30-60 perces</option>
@@ -30,7 +30,7 @@
                         </div>
                         <div class="form-grou mt-3">
                             <label for="nehezseg" class="form-label">Nehézség</label>
-                            <select class="form-select" id="nehezseg" name="nehezseg">
+                            <select class="form-select szuro-item" id="nehezseg" name="nehezseg">
                                 <option value="null" selected>-</option>
                                 <option value="kezdo">Kezdő</option>
                                 <option value="konnyu">Könnyű</option>
@@ -42,7 +42,7 @@
 
                         <div class="form-grou mt-3">
                             <label for="ertekeles" class="form-label">Értékelés</label>
-                            <select class="form-select" id="ertekeles" name="ertekeles">
+                            <select class="form-select szuro-item" id="ertekeles" name="ertekeles">
                                 <option value="null" selected>-</option>
                                 <option value="1">*</option>
                                 <option value="2">**</option>
@@ -53,7 +53,7 @@
                         </div>
 
                     </form>
-    
+
                 </div>
 
 
@@ -73,33 +73,26 @@
                         <!-- &uarr;  -->
                     </ul>
                 </div>
-            
-               
 
 
- 
-                
+
+
+
+
                 %!RECEPTCARDS!%
 
 
 
 
-                
+
             </div>
 
         </div>
 
     </div>
 
+    <div id="results"></div>
+
 </div>
 
 <script src="core/scripts/szurok.js"></script>
-<script>
-    let orderItems = document.getElementsByClassName("order-item");
-    for (let i=0; i< orderItems.length; i++){
-        orderItems[i].addEventListener("click", ()=>{
-
-
-        })
-    }
-</script>

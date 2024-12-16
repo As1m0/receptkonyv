@@ -2,7 +2,7 @@
 
 <div class="container upload-form my-4">
     <h2 class="text-center my-4">Recept feltöltése</h2>
-    <form method="post" id="receptFeltoltes" onsubmit="validateForm(event)">
+    <form method="post" id="receptFeltoltes" onsubmit="validateForm(event)" enctype="multipart/form-data">
         <div class="form-group py-3">
             <label for="name" class="my-1">Recept neve</label><br>
             <input type="text" name="name" class="form-control" id="name" placeholder="recept neve" required>
@@ -13,7 +13,7 @@
 
         <div class="form-group py-3">
             <label for="formFile" class="form-label">Kép feltöltése</label>
-            <input class="form-control" type="file" id="formFile" accept="image/png, image/jpeg" name="kep">
+            <input class="form-control" type="file" id="formFile" accept="%!ACCEPT!%" name="img">
         </div>
 
         <div class="container mt-3">

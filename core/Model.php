@@ -4,7 +4,6 @@ abstract class Model
 {
     public static function GetPageData(string $page) : array
     {
-        //return ["page" => $page, "template" => "main.html", "fullTemplate" => false, "Class" => "IndexPage"];
         global $cfg;
         $pagesJson = json_decode(file_get_contents($cfg["contentFolder"]."/pages.json"), true);
         if($pagesJson !== null)
@@ -35,7 +34,6 @@ abstract class Model
     
     public static function LoadText(string $page, string $flag) : array
     {
-        //return ["flag" => $flag, "text" => "ASD"];
         global $cfg;
         $contentJson = json_decode(file_get_contents($cfg["contentFolder"]."/content.json"), true);
         if($contentJson !== null)

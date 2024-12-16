@@ -19,7 +19,7 @@ abstract class Controller
             if(class_exists($pageData["class"]) && in_array("IPageBase", class_implements($pageData["class"])))
             {
                 $pageObject = new $pageData["class"]();
-                 $pageObject->Run($pageData);
+                $pageObject->Run($pageData);
                 $result = $pageObject->GetTemplate();
                 if($result !== null)
                 {
@@ -103,4 +103,5 @@ abstract class Controller
             throw new NotFoundException("A megadott modul nem található!");
         }
     }
+    
 }

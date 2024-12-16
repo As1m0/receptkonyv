@@ -19,6 +19,8 @@ class ReceptekPage implements IPageBase
         //szűróhöz kategóriák
         $this->template->AddData("CATEGORIES", Template::Load("foodCategories.html"));
 
+
+        
         if (isset($_GET[$cfg["searchKey"]])) {
             $query = htmlspecialchars($_GET[$cfg["searchKey"]]);
 
@@ -47,6 +49,6 @@ class ReceptekPage implements IPageBase
             $this->template->AddData("RECEPTCARDS", "<h5 class='text-center p-5'>írjon be keresőszót...</h5>");
         }
        
-        
+ 
     }
 }
