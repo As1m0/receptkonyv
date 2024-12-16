@@ -151,9 +151,8 @@ abstract class Model
         {
             $mysqli = new mysqli($cfg["DBhostname"], $cfg["DBusername"], $cfg["DBPass"], $cfg["DB"]);
 
-            // Check connection
             if ($mysqli->connect_error) {
-                return false;
+                throw new SQLException("Hiba az adatbázishoz való csatlakozás során!", null);
             }
 
             $formattedString = implode(", ", array_map(function($value) {
@@ -170,10 +169,41 @@ abstract class Model
             $mysqli->query("INSERT INTO `recept` VALUES ($formattedString) ;");
             return true;
         }
-        catch(error_log)
+        catch (Exception $ex)
         {
-            //print(error_log);
-            return false;
+            throw new SQLException("A recept feltöltése sikertelen!", $ex);
+        }
+        $mysqli->close();
+    }
+
+    public static function GetRecepiesDB(string $query): array
+    {
+        global $cfg;
+
+        try
+        {
+            $mysqli = new mysqli($cfg["DBhostname"], $cfg["DBusername"], $cfg["DBPass"], $cfg["DB"]);
+
+            if ($mysqli->connect_error) {
+                throw new SQLException("Hiba az adatbázishoz való csatlakozás során!", null);
+            }
+
+            $stmt = $mysqli->prepare("SELECT * FROM `recept` WHERE `recept_neve` LIKE ? LIMIT 9");
+            $likeQuery = "%" . $query . "%"; // Részleges keresés helyettesítő karakterekkel
+            $stmt->bind_param("s", $likeQuery); // A keresési paraméter hozzáadása
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+            $data = $result->fetch_all(MYSQLI_ASSOC);
+
+            $result->close();
+            $stmt->close();
+
+            return $data;
+        }
+        catch (Exception $ex)
+        {
+            throw new SQLException("A receptek lekérdezése sikertelen!", $ex);
         }
         $mysqli->close();
     }

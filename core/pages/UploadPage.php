@@ -89,9 +89,8 @@ class UploadPage implements IPageBase
                 $ingredients = $_POST["ingredients"];
                 $leiras = htmlspecialchars(trim($_POST["leiras"]));
 
-                $data = array( null, $cim, $category, $leiras, $elkIdo, $adag, $nehezseg, 1, $imgName); //TODO: felh_id from SESSION
-
-                print_r($data);
+                $data = array( null, $cim, $category, $leiras, $elkIdo, $adag, $nehezseg, 1, $imgName, null); //TODO: felh_id from SESSION
+                //print_r($data);
                 //Feltöltés adatbázisba
                 if(Model::UploadReceptDB($data) !== false)
                 {
