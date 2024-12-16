@@ -90,19 +90,16 @@ class UploadPage implements IPageBase
                 $leiras = htmlspecialchars(trim($_POST["leiras"]));
 
                 $data = array( null, $cim, $category, $leiras, $elkIdo, $adag, $nehezseg, 1, $imgName, null); //TODO: felh_id from SESSION
-                //print_r($data);
+
                 //Feltöltés adatbázisba
-                if(Model::UploadReceptDB($data) !== false)
-                {
-                    $this->template->AddData("RESULT", "Sikeres recept feltöltés!");
-                    $this->template->AddData("COLOR", "green");
-                    $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='index.php?p=account';}, 1500);</script>");
-                }
-                else{
-                    throw new Exception("Hiba a recept adatbázisba való feltöltése közben");
-                    $this->template->AddData("RESULT", "A recept feltöltése közben HIBA lépett fel!");
-                    $this->template->AddData("COLOR", "red");
-                }
+                Model::Connect();
+                Model::UploadReceptDB($data);
+                Model::Disconnect();
+
+                $this->template->AddData("RESULT", "Sikeres recept feltöltés!");
+                $this->template->AddData("COLOR", "green");
+                $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='index.php?p=account';}, 1500);</script>");
+
             }
             else
             {
@@ -147,16 +144,16 @@ class UploadPage implements IPageBase
         $aspectRatio = $originalWidth / $originalHeight;
 
         // Resize the image to width1, maintaining the aspect ratio
-        $height1 = intval($width1 / $aspectRatio);  // Calculate height for width1
+        $height1 = intval($width1 / $aspectRatio);
         $canvas1 = imagecreatetruecolor($width1, $height1);
         imagecopyresampled($canvas1, $img, 0, 0, 0, 0, $width1, $height1, $originalWidth, $originalHeight);
-        imagejpeg($canvas1, $cfg["receptKepek"] . "/" . $name . ".jpg");  // Save the first resized image
+        imagejpeg($canvas1, $cfg["receptKepek"] . "/" . $name . ".jpg"); 
 
         // Resize the image to width2, maintaining the aspect ratio
-        $height2 = intval($width2 / $aspectRatio);  // Calculate height for width2
+        $height2 = intval($width2 / $aspectRatio); 
         $canvas2 = imagecreatetruecolor($width2, $height2);
         imagecopyresampled($canvas2, $img, 0, 0, 0, 0, $width2, $height2, $originalWidth, $originalHeight);
-        imagejpeg($canvas2, $cfg["receptKepek"] . "/" . $name . "_thumb.jpg");  // Save the second resized image with "_small" suffix
+        imagejpeg($canvas2, $cfg["receptKepek"] . "/" . $name . "_thumb.jpg");
 
         // Clean up memory
         imagedestroy($canvas1);

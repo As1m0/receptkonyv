@@ -27,12 +27,15 @@ class ReceptekPage implements IPageBase
 
             $query = htmlspecialchars($_GET[$cfg["searchKey"]]);
             // DATABASE -> Recept card-ok betöltése
+            Model::Connect();
             $result = Model::GetRecepiesDB($query);
+            Model::Disconnect();
         }
         else
         {
-            $query = " ";
-            $result = Model::GetRecepiesDB($query);
+            Model::Connect();
+            $result = Model::GetRecepiesDB();
+            Model::Disconnect();
         }
 
         for ($i = 0 ; $i < count($result); $i++)
@@ -49,7 +52,7 @@ class ReceptekPage implements IPageBase
             }
             else
             {
-                $recept->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image.png");
+                $recept->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image_thumb.png");
             }
             $recept->AddData("RECEPTNEV", $result[$i]["recept_neve"]);
             $recept->AddData("IDO", $result[$i]["elk_ido"]);

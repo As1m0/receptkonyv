@@ -77,15 +77,13 @@ class RegisterPage implements IPageBase
                     && mb_strtoupper($pass) != $pass)
                 {
                     $pass = hash("sha256", trim($_POST["pass"]));
-
-                    if( Model::Register(array($vezNev, $kerNev, $email, $pass, $imgName)) ==! false)
-                    {
-                        $result["reg"]["info"] = "Sikeres regisztráció!";
-                        $result["reg"]["success"] = true;
-                    } else {
-                        $result["reg"]["info"] = "Már regisztráltak ezzel az email címmel";
-                        $result["reg"]["success"] = false;
-                    }
+                    //Upload to database
+                    Model::Connect();
+                    Model::RegisterDB(array("veznev" => $vezNev, "kernev" => $kerNev, "email" => $email, "password_hash" => $pass, "pic_name" => $imgName));
+                    Model::Disconnect();
+                    
+                    $result["reg"]["info"] = "Sikeres regisztráció!";
+                    $result["reg"]["success"] = true;
                 }
                 else
                 {

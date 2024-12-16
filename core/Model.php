@@ -2,6 +2,8 @@
 
 abstract class Model
 {
+    private static mysqli $con;
+
     public static function GetPageData(string $page) : array
     {
         global $cfg;
@@ -106,55 +108,80 @@ abstract class Model
 
     public static function Register(array $data): bool
     {
-    global $cfg;
+        global $cfg;
 
 
-    if (file_exists($cfg["contentFolder"] . "/login.csv")) {
+        if (file_exists($cfg["contentFolder"] . "/login.csv")) {
 
-        $csv = fopen($cfg["contentFolder"] . "/login.csv", "r");
-        $registered = false;
+            $csv = fopen($cfg["contentFolder"] . "/login.csv", "r");
+            $registered = false;
 
-        while (!$registered && !feof($csv)) {
-            $csvRow = fgetcsv($csv, null, ";");
-            if ($csvRow === false)
-            {
-                continue;
-            }
-            if ($csvRow[2] == $data[2])
-            {
-                $registered = true;
-            }
-        }
-        fclose($csv);
-
-        if (!$registered) {
-            $csv = fopen($cfg["contentFolder"] . "/login.csv", "a");
-            if (fputcsv($csv, $data, ";") === false) {
-                fclose($csv);
-                throw new Exception("Hiba történt az adatok hozzáadása közben!");
+            while (!$registered && !feof($csv)) {
+                $csvRow = fgetcsv($csv, null, ";");
+                if ($csvRow === false)
+                {
+                    continue;
+                }
+                if ($csvRow[2] == $data[2])
+                {
+                    $registered = true;
+                }
             }
             fclose($csv);
-            return true;
+
+            if (!$registered) {
+                $csv = fopen($cfg["contentFolder"] . "/login.csv", "a");
+                if (fputcsv($csv, $data, ";") === false) {
+                    fclose($csv);
+                    throw new Exception("Hiba történt az adatok hozzáadása közben!");
+                }
+                fclose($csv);
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            throw new Exception("A tartalmakat tároló CSV feldolgozása meghiúsult!");
         }
-    } else {
-        throw new Exception("A tartalmakat tároló CSV feldolgozása meghiúsult!");
-    }
     }
 
-    public static function UploadReceptDB(array $data): bool
+    public static function Connect() : void
     {
         global $cfg;
+        $driver = new mysqli_driver();
+        $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
+        try
+        {
+            self::$con = new mysqli($cfg["DBhostname"], $cfg["DBusername"], $cfg["DBPass"], $cfg["DB"]);
+        }
+        catch (Exception $ex)
+        {
+            throw new SQLException("Az adatbázis csatlakozás sikertelen!", $ex);
+        }
+    }
+    
+    public static function Disconnect() : void
+    {
+        try
+        {
+            self::$con->close();
+        }
+        catch (Exception $ex)
+        {
+            throw new SQLException("Az adatbázis lecsatlakozása sikertelen!", $ex);
+        }
+    }
+
+    public static function UploadReceptDB(array $data): void
+    {
+
+        if(!isset(self::$con) || self::$con === false)
+        {
+            throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
+        }
         
         try
         {
-            $mysqli = new mysqli($cfg["DBhostname"], $cfg["DBusername"], $cfg["DBPass"], $cfg["DB"]);
-
-            if ($mysqli->connect_error) {
-                throw new SQLException("Hiba az adatbázishoz való csatlakozás során!", null);
-            }
-
             $formattedString = implode(", ", array_map(function($value) {
                 if (is_null($value)) {
                     return "NULL";
@@ -165,32 +192,27 @@ abstract class Model
                 }
             }, $data));
 
-        
-            $mysqli->query("INSERT INTO `recept` VALUES ($formattedString) ;");
-            return true;
+            self::$con->query("INSERT INTO `recept` VALUES ($formattedString) ;");
         }
         catch (Exception $ex)
         {
             throw new SQLException("A recept feltöltése sikertelen!", $ex);
         }
-        $mysqli->close();
     }
 
-    public static function GetRecepiesDB(string $query): array
+    public static function GetRecepiesDB(string $query = ""): array
     {
-        global $cfg;
+        if(!isset(self::$con) || self::$con === false)
+        {
+            throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
+        }
 
         try
         {
-            $mysqli = new mysqli($cfg["DBhostname"], $cfg["DBusername"], $cfg["DBPass"], $cfg["DB"]);
 
-            if ($mysqli->connect_error) {
-                throw new SQLException("Hiba az adatbázishoz való csatlakozás során!", null);
-            }
-
-            $stmt = $mysqli->prepare("SELECT * FROM `recept` WHERE `recept_neve` LIKE ? LIMIT 9");
+            $stmt = self::$con->prepare("SELECT * FROM `recept` WHERE `recept_neve` LIKE ? LIMIT 9");
             $likeQuery = "%" . $query . "%"; // Részleges keresés helyettesítő karakterekkel
-            $stmt->bind_param("s", $likeQuery); // A keresési paraméter hozzáadása
+            $stmt->bind_param("s", $likeQuery);
             $stmt->execute();
 
             $result = $stmt->get_result();
@@ -205,7 +227,24 @@ abstract class Model
         {
             throw new SQLException("A receptek lekérdezése sikertelen!", $ex);
         }
-        $mysqli->close();
+    }
+
+    public static function RegisterDB(array $datas):void
+    {
+        if(!isset(self::$con) || self::$con === false)
+        {
+            throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
+        }
+        try
+        {
+            $stmt = self::$con->prepare("INSERT INTO `felhasznalok` (`veznev`,`kernev`,`email`,`password_hash`, `pic_name`) VALUES (?,?,?,?,?)");
+            $stmt->bind_param("sssss", $datas["veznev"], $datas["kernev"], $datas["email"],$datas["password_hash"], $datas["pic_name"]);
+            $stmt->execute();
+        }
+        catch (Exception $ex)
+        {
+            throw new SQLException("A felhasználó rögzítése sikertelen!", $ex);
+        }
     }
 
 
