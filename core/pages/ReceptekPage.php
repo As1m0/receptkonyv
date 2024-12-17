@@ -59,7 +59,8 @@ class ReceptekPage implements IPageBase
             $recept->AddData("ADAG", $result[$i]["adag"]);
             $recept->AddData("NEHEZSEG", $result[$i]["nehezseg"]);
 
-            //TODO --> lekérdezni a többi adatot
+            //TODO Lekérdezni a többi adatot
+            $userId = $result[$i]["felh_id"]; //--> get user name with id
             $recept->AddData("USER", "Ujvárossy Samu");
             $recept->AddData("SCORE", "4.4");
             $recept->AddData("STARSKEP", "content/stars/4_star.png");

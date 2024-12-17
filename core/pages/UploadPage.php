@@ -54,6 +54,7 @@ class UploadPage implements IPageBase
             && isset($_POST["ingredients"])
             && isset($_POST["leiras"]))
             {
+            $imgName = null;
                 
                 //Kép átméretezése
                 if(isset($_FILES["img"]) && $_FILES["img"]["error"] == 0)
@@ -87,12 +88,13 @@ class UploadPage implements IPageBase
                 $nehezseg = $_POST["nehezseg"];
                 $adag = $_POST["adag"];
                 $ingredients = $_POST["ingredients"];
+                //var_dump($ingredients);
                 $leiras = htmlspecialchars(trim($_POST["leiras"]));
 
-                $data = array( null, $cim, $category, $leiras, $elkIdo, $adag, $nehezseg, 1, $imgName, null); //TODO: felh_id from SESSION
+                $data = ["recept_neve" => $cim, "kategoria" => $category, "leiras" => $leiras, "elk_ido" => $elkIdo, "adag" => $adag, "nehezseg" => $nehezseg, "felh_id" => $_SESSION["userID"], "pic_name" => $imgName];
 
-                //Feltöltés adatbázisba
                 Model::Connect();
+                //Model::UploadIngredientsDB($ingredients);
                 Model::UploadReceptDB($data);
                 Model::Disconnect();
 

@@ -108,23 +108,36 @@ abstract class Model
         
         try
         {
-            $formattedString = implode(", ", array_map(function($value) {
-                if (is_null($value)) {
-                    return "NULL";
-                } elseif (is_string($value)) {
-                    return "'" . addslashes($value) . "'";
-                } else {
-                    return $value;
-                }
-            }, $data));
+            $stmt = self::$con->prepare("INSERT INTO `recept` (`recept_neve`, `kategoria`, `leiras`, `elk_ido`, `adag`, `nehezseg`, `felh_id`, `pic_name`) VALUES (?,?,?,?,?,?,?,?)");
+            $stmt->bind_param("sssiisis", $data["recept_neve"],$data["kategoria"],$data["leiras"],$data["elk_ido"],$data["adag"],$data["nehezseg"],$data["felh_id"],$data["pic_name"]);
+            $stmt->execute();
+            $stmt->close();
 
-            self::$con->query("INSERT INTO `recept` VALUES ($formattedString) ;");
         }
         catch (Exception $ex)
         {
             throw new SQLException("A recept feltöltése sikertelen!", $ex);
         }
     }
+
+    public static function UploadIngredientsDB($data): void 
+    {
+        if (!isset(self::$con) || self::$con === false) {
+            throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
+        }
+
+        try {
+            foreach ($data as $item) {
+                $stmt = self::$con->prepare("INSERT INTO `hozzavalok` (`nev`,`mennyiseg`,`mertekegyseg`) VALUES (?,?,?)");
+                $stmt->bind_param("sss", $item["nev"], $item["mennyiseg"], $item["mertekegyseg"]);
+                $stmt->execute();
+                $stmt->close();
+            }
+        } catch (Exception $ex) {
+            throw new SQLException("A hozzávalók feltöltése sikertelen!", $ex);
+        }
+    }
+
 
     public static function GetRecepiesDB(string $query = ""): array
     {

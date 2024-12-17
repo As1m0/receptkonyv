@@ -19,7 +19,7 @@ document.getElementById("nehezseg").addEventListener("input", () => {
 
 //ingredients handler
 
-let ingredientIndex = 2;
+let ingredientIndex = 1;
 
 document.getElementById('addIngredient').addEventListener('click', () => {
   const ingredientsContainer = document.getElementById('ingredients');
@@ -28,27 +28,28 @@ document.getElementById('addIngredient').addEventListener('click', () => {
   newRow.innerHTML = `
         <div class="col-md-4">
           <label for="ingredientName${ingredientIndex}" class="form-label">Hozzávaló neve</label>
-          <input type="text" class="form-control input-filed" id="ingredientName${ingredientIndex}" name="ingredients[${ingredientIndex}][name]" placeholder="pl. cukor.." required>
+          <input type="text" class="form-control input-filed" id="ingredientName${ingredientIndex}" name="ingredients[${ingredientIndex}][nev]" placeholder="pl. cukor.." required>
         </div>
         <div class="col-md-3">
           <label for="ingredientAmount${ingredientIndex}" class="form-label">Mennyiség</label>
-          <input type="number" class="form-control input-filed" id="ingredientAmount${ingredientIndex}" name="ingredients[${ingredientIndex}][amount]" placeholder="pl. 100.." required>
+          <input type="number" class="form-control input-filed" id="ingredientAmount${ingredientIndex}" name="ingredients[${ingredientIndex}][mennyiseg]" placeholder="pl. 100.." required>
         </div>
         <div class="col-md-3">
           <label for="ingredientUnit${ingredientIndex}" class="form-label">Mértékegység</label>
-          <select class="form-select" id="ingredientUnit${ingredientIndex}" name="ingredients[${ingredientIndex}][unit]">
-            <option value="grams">gramm</option>
-            <option value="pieces">dkg</option>
+          <select class="form-select" id="ingredientUnit${ingredientIndex}" name="ingredients[${ingredientIndex}][mertekegyseg]">
+            <option value="gramm">gramm</option>
+            <option value="dkg">dkg</option>
             <option value="ml">ml</option>
-            <option value="pieces">liter</option>
-            <option value="pieces">db</option>
-            <option value="pieces">ek</option>
-            <option value="pieces">teáskanál</option>
-            <option value="pieces">bögre</option>
-            <option value="pieces">csomag</option>
-            <option value="pieces">csipet</option>
-            <option value="pieces">csokor</option>
-            <option value="pieces">csésze</option>
+            <option value="liter">liter</option>
+            <option value="db">db</option>
+            <option value="ek">ek</option>
+            <option value="tk">tk</option>
+            <option value="bögre">bögre</option>
+            <option value="csomag">csomag</option>
+            <option value="csipet">csipet</option>
+            <option value="csokor">csokor</option>
+            <option value="csésze">csésze</option>
+            <option value="szelet">szelet</option>
           </select>
         </div>
         <div class="col-md-2">
