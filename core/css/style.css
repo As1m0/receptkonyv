@@ -87,9 +87,9 @@ nav #logo {
 }
 
 .devider-small {
-    width: 60%;
+    width: 40%;
     margin: 15px auto;
-    height: 2px;
+    height: 1px;
     background-color: grey;
     opacity: .3;
 
@@ -301,24 +301,25 @@ footer {
 }
 
 .ingredients ul {
-    list-style-type: none;
-    font-size: 18px;
+    font-size: 20px;
+    list-style-image: url('../../content/list_disk.png');
 }
 
 .ingredients ul li {
     margin: 5px 0;
+
 }
 
-.ingredients ul li::before {
-    content: "•";
-    color: var(--primary-color);
-    padding: 5px;
-}
 
 .list-element {
     color: var(--primary-color);
 }
 
+.leiras {
+    font-size: 18px;
+}
+
+/*
 .description ol {
     list-style: none;
     counter-reset: item;
@@ -340,6 +341,7 @@ footer {
     text-align: center;
     display: inline-block;
 }
+/*
 
 /*   hasonló receptek side section   */
 
@@ -378,7 +380,7 @@ footer {
 .review-thumb {
     width: 80%;
     padding: 10px;
-    margin: 30px auto;
+    margin: 10px auto;
 }
 
 .review-thumb #user-pic{
@@ -386,6 +388,7 @@ footer {
     text-align: center;
     margin-left: auto;
     margin-bottom: 15px;
+    border-radius: 50%;
 }
 
 #review-star{

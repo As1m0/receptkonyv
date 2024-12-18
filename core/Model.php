@@ -128,9 +128,28 @@ abstract class Model
         }
     }
 
+    public static function UploadReviewDB(array $data) : void
+    {
+        if(!isset(self::$con) || self::$con === false)
+        {
+            throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
+        }
+        
+        try
+        {
+            $stmt = self::$con->prepare("INSERT INTO `reviews` (`recept_id`, `felh_id`, `komment`, `ertekeles`) VALUES (?,?,?,?)");
+            $stmt->bind_param("iisi", $data["recept_id"], $data["felh_id"], $data["komment"], $data["ertekeles"]);
+            $stmt->execute();
+            $stmt->close();
+        }
+        catch (Exception $ex)
+        {
+            throw new SQLException("A recept feltöltése sikertelen!", $ex);
+        }
+    }
 
     public static function GetRecepiesDB(string $query = "", int $limit = 9, ?int $userId = null): array
-{
+    {
     if (!isset(self::$con) || self::$con === false) {
         throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
     }
