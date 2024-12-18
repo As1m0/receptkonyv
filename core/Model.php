@@ -129,80 +129,90 @@ abstract class Model
     }
 
 
-        public static function GetRecepiesDB(string $query = "", int $limit = 9): array
-    {
-        if (!isset(self::$con) || self::$con === false) {
-            throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
-        }
-
-        try {
-            // Keresési kifejezés előkészítése
-            $searchQuery = "%$query%";
-
-            // Teljes találatok számának lekérdezése
-            $countStmt = self::$con->prepare("
-                SELECT COUNT(*) AS total_count
-                FROM recept r
-                LEFT JOIN felhasznalok f ON r.felh_id = f.felh_id
-                WHERE r.recept_neve LIKE ?
-            ");
-            $countStmt->bind_param("s", $searchQuery);
-            $countStmt->execute();
-            $countResult = $countStmt->get_result()->fetch_assoc();
-            $totalCount = $countResult['total_count'];
-            $countStmt->close();
-
-            // Adatok lekérdezése LIMIT-el
-            $stmt = self::$con->prepare("
-                SELECT
-                    r.recept_id,
-                    r.recept_neve,
-                    r.elk_ido,
-                    r.adag,
-                    r.nehezseg,
-                    r.pic_name,
-                    COALESCE(f.veznev, 'Nincs adat') AS veznev,
-                    COALESCE(f.kernev, 'Nincs adat') AS kernev,
-                    COALESCE(AVG(rv.ertekeles), 0) AS avg_ertekeles
-                FROM
-                    recept r
-                LEFT JOIN
-                    felhasznalok f ON r.felh_id = f.felh_id
-                LEFT JOIN
-                    reviews rv ON r.recept_id = rv.recept_id
-                WHERE
-                    r.recept_neve LIKE ?
-                GROUP BY
-                    r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name
-                LIMIT ?
-            ");
-            $stmt->bind_param("si", $searchQuery, $limit);
-            $stmt->execute();
-
-            // Adatok beolvasása
-            $result = $stmt->get_result();
-            $data = [];
-            while ($row = $result->fetch_assoc()) {
-                $data[] = $row;
-            }
-            $stmt->close();
-
-            // Eredmények visszaadása találatok számával együtt
-            return [
-                'total_count' => $totalCount,
-                'results' => $data
-            ];
-        } catch (Exception $ex) {
-            throw new SQLException("A receptek lekérdezése sikertelen!", $ex);
-        }
+    public static function GetRecepiesDB(string $query = "", int $limit = 9, ?int $userId = null): array
+{
+    if (!isset(self::$con) || self::$con === false) {
+        throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
     }
 
+    try {
+        // Keresési kifejezés előkészítése
+        $searchQuery = "%$query%";
 
+        // Dinamikus WHERE feltétel létrehozása
+        $userCondition = $userId !== null ? "AND r.felh_id = ?" : "";
 
+        // Teljes találatok számának lekérdezése
+        $countStmt = self::$con->prepare("
+            SELECT COUNT(*) AS total_count
+            FROM recept r
+            LEFT JOIN felhasznalok f ON r.felh_id = f.felh_id
+            WHERE r.recept_neve LIKE ? $userCondition
+        ");
+        
+        if ($userId !== null) {
+            $countStmt->bind_param("si", $searchQuery, $userId);
+        } else {
+            $countStmt->bind_param("s", $searchQuery);
+        }
+        
+        $countStmt->execute();
+        $countResult = $countStmt->get_result()->fetch_assoc();
+        $totalCount = $countResult['total_count'];
+        $countStmt->close();
 
-    public static function DBRequest(string $sql, int $recept_id):array
+        // Adatok lekérdezése LIMIT-el
+        $stmt = self::$con->prepare("
+            SELECT
+                r.recept_id,
+                r.recept_neve,
+                r.elk_ido,
+                r.adag,
+                r.nehezseg,
+                r.pic_name,
+                COALESCE(f.veznev, 'Nincs adat') AS veznev,
+                COALESCE(f.kernev, 'Nincs adat') AS kernev,
+                COALESCE(AVG(rv.ertekeles), 0) AS avg_ertekeles
+            FROM
+                recept r
+            LEFT JOIN
+                felhasznalok f ON r.felh_id = f.felh_id
+            LEFT JOIN
+                reviews rv ON r.recept_id = rv.recept_id
+            WHERE
+                r.recept_neve LIKE ? $userCondition
+            GROUP BY
+                r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name
+            LIMIT ?
+        ");
+        
+        if ($userId !== null) {
+            $stmt->bind_param("sii", $searchQuery, $userId, $limit);
+        } else {
+            $stmt->bind_param("si", $searchQuery, $limit);
+        }
+
+        $stmt->execute();
+
+        // Adatok beolvasása
+        $result = $stmt->get_result();
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+        $stmt->close();
+
+        // Eredmények visszaadása találatok számával együtt
+        return [
+            'total_count' => $totalCount,
+            'results' => $data
+        ];
+    } catch (Exception $ex) {
+        throw new SQLException("A receptek lekérdezése sikertelen!", $ex);
+    }
+}
+    public static function GetOneRecpieDB(int $recept_id) : array
     {
-
         if(!isset(self::$con) || self::$con === false)
         {
             throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
@@ -210,14 +220,40 @@ abstract class Model
 
         try
         {
-            $stmt = self::$con->prepare($sql);
-            $stmt->execute([':recept_id' => $recept_id]);
-
+            $stmt = self::$con->prepare("SELECT * FROM `recept` WHERE `recept_id` = ?");
+            $stmt->bind_param("i", $recept_id);
+            $stmt->execute();
             $result = $stmt->get_result();
-            $data = $result->fetch_all(MYSQLI_ASSOC);
-
+            $data["recept_adatok"] = $result->fetch_all(MYSQLI_ASSOC);
             $result->close();
             $stmt->close();
+
+            $stmt = self::$con->prepare("SELECT * FROM `hozzavalok` WHERE `recept_id` = ?");
+            $stmt->bind_param("i", $recept_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $data["hozzavalok"] = $result->fetch_all(MYSQLI_ASSOC);
+            $result->close();
+            $stmt->close();
+
+            $stmt = self::$con->prepare("SELECT
+                                            r.*,
+                                            AVG(r.`ertekeles`) AS `avg_ertekeles`,
+                                             COUNT(r.`komment`) AS `comment_count`
+                                        FROM
+                                            `reviews` r
+                                        WHERE
+                                            `recept_id` = ?
+                                        GROUP BY
+                                            r.`review_id`
+                                        ");
+            $stmt->bind_param("i", $recept_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $data["reviews"] = $result->fetch_all(MYSQLI_ASSOC);
+            $result->close();
+            $stmt->close();
+
             return $data;
         }
         catch (Exception $ex)
@@ -225,6 +261,9 @@ abstract class Model
             throw new SQLException("Az adatok lekérdezése sikertelen!", $ex);
         }
     }
+
+
+
 
     public static function RegisterDB(array $datas):void
     {
