@@ -38,3 +38,4 @@ $cfg["receptKepek"] = $cfg["contentFolder"]."/recept_kepek";
 $cfg["UserPicSize1"] = 200;
 $cfg["UserPicSize2"] = 25;
 $cfg["ProfilKepek"] = $cfg["contentFolder"]."/profil_kepek";
+$cfg["StarKepek"] = $cfg["contentFolder"]."/stars";

@@ -22,11 +22,10 @@ class ReceptekPage implements IPageBase
         
         if (isset($_GET[$cfg["searchKey"]]))
         {
-             //write in search log
              Controller::RunModule("SearchKeyLoggerModule", [ "searcKey" => $_GET[$cfg["searchKey"]]]);
 
             $query = htmlspecialchars($_GET[$cfg["searchKey"]]);
-            // DATABASE -> Recept card-ok betöltése
+
             Model::Connect();
             $result = Model::GetRecepiesDB($query);
             Model::Disconnect();
@@ -37,39 +36,56 @@ class ReceptekPage implements IPageBase
             $result = Model::GetRecepiesDB();
             Model::Disconnect();
         }
-
-        for ($i = 0 ; $i < count($result); $i++)
+        //var_dump($result);
+        //kapott DB adatok feldolgozása
+        for ($i = 0 ; $i < count($result["results"]); $i++)
         {
             //card template
             $recept = Template::Load("recept-card.html");
             //card feltöltése
-            $recept_id = $result[$i]["recept_id"];
+            $recept_id = $result["results"][$i]["recept_id"];
             $recept->AddData("RECEPTID", $recept_id);
             $recept->AddData("RECEPTLINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$recept_id}");
-            if ($result[$i]["pic_name"] !== null)
-            {
-                $recept->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$result[$i]["pic_name"]."_thumb.jpg");
-            }
-            else
-            {
+            if ($result["results"][$i]["pic_name"] !== null) {
+                $recept->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$result["results"][$i]["pic_name"]."_thumb.jpg");
+            } else {
                 $recept->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image_thumb.png");
             }
-            $recept->AddData("RECEPTNEV", $result[$i]["recept_neve"]);
-            $recept->AddData("IDO", $result[$i]["elk_ido"]);
-            $recept->AddData("ADAG", $result[$i]["adag"]);
-            $recept->AddData("NEHEZSEG", $result[$i]["nehezseg"]);
+            $recept->AddData("RECEPTNEV", $result["results"][$i]["recept_neve"]);
+            $recept->AddData("IDO", $result["results"][$i]["elk_ido"]);
+            $recept->AddData("ADAG", $result["results"][$i]["adag"]);
+            $recept->AddData("NEHEZSEG", $result["results"][$i]["nehezseg"]);
+            $recept->AddData("USER", $result["results"][$i]["veznev"]." ".$result["results"][$i]["kernev"]);
+            $avrScore = number_format($result["results"][$i]["avg_ertekeles"], 1);
+            $recept->AddData("SCORE", $avrScore);
 
-            //TODO Lekérdezni a többi adatot
-            $userId = $result[$i]["felh_id"]; //--> get user name with id
-            $recept->AddData("USER", "Ujvárossy Samu");
-            $recept->AddData("SCORE", "4.4");
-            $recept->AddData("STARSKEP", "content/stars/4_star.png");
+            if ($avrScore >= 4.5){
+                $recept->AddData("STARSKEP", $cfg["StarKepek"]."/5_star.png");
+            }
+            elseif($avrScore >= 3.5 && $avrScore < 4.5){
+                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/4_star.png");
+            }
+            elseif($avrScore >= 2.5 && $avrScore < 3.5){
+                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/3_star.png");
+            }
+            elseif($avrScore >= 1.5 && $avrScore < 2.5){
+                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/2_star.png");
+            }
+            elseif($avrScore >= 1 && $avrScore < 1.5){
+                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/1_star.png");
+            }
+            else {
+                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/0_star.png");
+            }
+
+
+
 
             //Card kiküldése
             $this->template->AddData("RECEPTCARDS", $recept);
         }
-            
-    
- 
     }
+
+
+
 }

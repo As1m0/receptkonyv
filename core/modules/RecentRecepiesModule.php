@@ -14,6 +14,8 @@ class RecentRecepiesModule implements IVisibleModuleBase
     {
         global $cfg;
         $this->template = Template::Load("recepies-slider.html");
+
+        //ORDER BY `created_at` -> legfrisebb receptek lekérdezése DB-ból
         
     }
 }
