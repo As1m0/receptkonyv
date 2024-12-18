@@ -25,7 +25,7 @@ class receptDatasheetPage implements IPageBase
             $data = Model::GetOneRecpieDB($receptID);
             Model::Disconnect();
 
-            print_r($data);
+            //print_r($data["reviews"]);
             
             //Recept adatainak betöltése
             $this->template->AddData("NEV", $data["recept_adatok"][0]["recept_neve"]);
@@ -35,26 +35,7 @@ class receptDatasheetPage implements IPageBase
             $this->template->AddData("LEIRAS", $data["recept_adatok"][0]["leiras"]);
             $avrScore =  number_format($data["reviews"][0]["avg_ertekeles"], 1);
             $this->template->AddData("ERTEKELESSZAM", $avrScore);
-
-            if ($avrScore >= 4.5){
-                $this->template->AddData("STARSPIC", $cfg["StarKepek"]."/5_star.png");
-            }
-            elseif($avrScore >= 3.5 && $avrScore < 4.5){
-                 $this->template->AddData("STARSPIC", $cfg["StarKepek"]."/4_star.png");
-            }
-            elseif($avrScore >= 2.5 && $avrScore < 3.5){
-                 $this->template->AddData("STARSPIC", $cfg["StarKepek"]."/3_star.png");
-            }
-            elseif($avrScore >= 1.5 && $avrScore < 2.5){
-                 $this->template->AddData("STARSPIC", $cfg["StarKepek"]."/2_star.png");
-            }
-            elseif($avrScore >= 1 && $avrScore < 1.5){
-                 $this->template->AddData("STARSPIC", $cfg["StarKepek"]."/1_star.png");
-            }
-            else {
-                 $this->template->AddData("STARSPIC", $cfg["StarKepek"]."/0_star.png");
-            }
-
+            $this->template->AddData("STARSPIC", Model::GetStarImg($avrScore));
             $this->template->AddData("KOMMENTSZAM", $data["reviews"][0]["comment_count"]);
             $this->template->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$data["recept_adatok"][0]["pic_name"].".jpg");
 
@@ -76,30 +57,15 @@ class receptDatasheetPage implements IPageBase
                 $review = Template::Load("comment-thumbnail.html");
                 $review->addData("TIMESTAMP", $data["reviews"][$j]["created_at"]);
                 $ratingScore = $data["reviews"][$j]["ertekeles"];
+                $review->addData("RATINGPIC",  Model::GetStarImg($ratingScore));
 
-                if ($ratingScore >= 4.5){
-                    $review->addData("RATINGPIC", $cfg["StarKepek"]."/5_star.png");
-                }
-                elseif($ratingScore >= 3.5 && $ratingScore < 4.5){
-                     $review->addData("RATINGPIC", $cfg["StarKepek"]."/4_star.png");
-                }
-                elseif($ratingScore >= 2.5 && $ratingScore < 3.5){
-                     $review->addData("RATINGPIC", $cfg["StarKepek"]."/3_star.png");
-                }
-                elseif($ratingScore >= 1.5 && $ratingScore < 2.5){
-                     $review->addData("RATINGPIC", $cfg["StarKepek"]."/2_star.png");
-                }
-                elseif($ratingScore >= 1 && $ratingScore < 1.5){
-                     $review->addData("RATINGPIC", $cfg["StarKepek"]."/1_star.png");
-                }
-                else {
-                     $review->addData("RATINGPIC", $cfg["StarKepek"]."/0_star.png");
+                if( $data["reviews"][$j]["pic_name"] !== null){
+                    $review->addData("KOMMENTERPIC", $cfg["ProfilKepek"]."/".$data["reviews"][$j]["pic_name"].".jpg");
+                } else {
+                    $review->addData("KOMMENTERPIC", $cfg["ProfilKepek"]."/empty_profilPic.jpg");
                 }
 
-                //TODO
-                $review->addData("KOMMENTERPIC", "content/pelda.png");
-                $review->addData("KOMMENTERNAME", "Kiss Béla");
-
+                $review->addData("KOMMENTERNAME", $data["reviews"][$j]["kernev"]." ".$data["reviews"][$j]["veznev"]);
                 $review->addData("KOMMENT", $data["reviews"][$j]["komment"]);
                 $this->template->addData("KOMMENTEK", $review);
             }

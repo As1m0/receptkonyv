@@ -236,17 +236,23 @@ abstract class Model
             $result->close();
             $stmt->close();
 
-            $stmt = self::$con->prepare("SELECT
+            $stmt = self::$con->prepare("
+                                        SELECT
                                             r.*,
                                             AVG(r.`ertekeles`) AS `avg_ertekeles`,
-                                             COUNT(r.`komment`) AS `comment_count`
+                                            COUNT(r.`komment`) AS `comment_count`,
+                                            COALESCE(f.`veznev`, null) AS `veznev`,
+                                            COALESCE(f.`kernev`, null) AS `kernev`,
+                                            COALESCE(f.`pic_name`, null) AS `pic_name`
                                         FROM
                                             `reviews` r
+                                        LEFT JOIN
+                                            `felhasznalok` f ON r.`felh_id` = f.`felh_id`
                                         WHERE
-                                            `recept_id` = ?
+                                            r.`recept_id` = ?
                                         GROUP BY
                                             r.`review_id`
-                                        ");
+                                    ");
             $stmt->bind_param("i", $recept_id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -331,5 +337,27 @@ abstract class Model
         }
     }
 
+    public static function GetStarImg(float $avrScore): string
+    {
+    global $cfg;
+        if ($avrScore >= 4.5){
+            return $cfg["StarKepek"]."/5_star.png";
+        }
+        elseif($avrScore >= 3.5 && $avrScore < 4.5){
+             return $cfg["StarKepek"]."/4_star.png";
+        }
+        elseif($avrScore >= 2.5 && $avrScore < 3.5){
+             return $cfg["StarKepek"]."/3_star.png";
+        }
+        elseif($avrScore >= 1.5 && $avrScore < 2.5){
+             return $cfg["StarKepek"]."/2_star.png";
+        }
+        elseif($avrScore >= 1 && $avrScore < 1.5){
+             return $cfg["StarKepek"]."/1_star.png";
+        }
+        else {
+             return $cfg["StarKepek"]."/0_star.png";
+        }
+    }
 
 }

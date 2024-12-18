@@ -58,25 +58,8 @@ class ReceptekPage implements IPageBase
             $recept->AddData("USER", $result["results"][$i]["veznev"]." ".$result["results"][$i]["kernev"]);
             $avrScore = number_format($result["results"][$i]["avg_ertekeles"], 1);
             $recept->AddData("SCORE", $avrScore);
+            $recept->AddData("STARSKEP", Model::GetStarImg($avrScore));
 
-            if ($avrScore >= 4.5){
-                $recept->AddData("STARSKEP", $cfg["StarKepek"]."/5_star.png");
-            }
-            elseif($avrScore >= 3.5 && $avrScore < 4.5){
-                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/4_star.png");
-            }
-            elseif($avrScore >= 2.5 && $avrScore < 3.5){
-                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/3_star.png");
-            }
-            elseif($avrScore >= 1.5 && $avrScore < 2.5){
-                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/2_star.png");
-            }
-            elseif($avrScore >= 1 && $avrScore < 1.5){
-                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/1_star.png");
-            }
-            else {
-                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/0_star.png");
-            }
 
 
             //Card kiküldése
