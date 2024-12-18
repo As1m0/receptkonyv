@@ -109,9 +109,17 @@ abstract class Model
         try
         {
             $stmt = self::$con->prepare("INSERT INTO `recept` (`recept_neve`, `kategoria`, `leiras`, `elk_ido`, `adag`, `nehezseg`, `felh_id`, `pic_name`) VALUES (?,?,?,?,?,?,?,?)");
-            $stmt->bind_param("sssiisis", $data["recept_neve"],$data["kategoria"],$data["leiras"],$data["elk_ido"],$data["adag"],$data["nehezseg"],$data["felh_id"],$data["pic_name"]);
+            $stmt->bind_param("sssiisis", $data["recept"]["recept_neve"],$data["recept"]["kategoria"],$data["recept"]["leiras"],$data["recept"]["elk_ido"],$data["recept"]["adag"],$data["recept"]["nehezseg"],$data["recept"]["felh_id"],$data["recept"]["pic_name"]);
             $stmt->execute();
+            $newId = self::$con->insert_id;
             $stmt->close();
+
+            foreach ($data["hozzavalok"] as $item) {
+                $ing_stmt = self::$con->prepare("INSERT INTO `hozzavalok`(`recept_id`, `nev`,`mennyiseg`,`mertekegyseg`) VALUES (?,?,?,?)");
+                $ing_stmt->bind_param("isss", $newId, $item["nev"], $item["mennyiseg"], $item["mertekegyseg"]);
+                $ing_stmt->execute();
+                $ing_stmt->close();
+            }
 
         }
         catch (Exception $ex)
@@ -119,24 +127,6 @@ abstract class Model
             throw new SQLException("A recept feltöltése sikertelen!", $ex);
         }
     }
-
-    public static function UploadIngredientsDB($data): void
-        {
-            if (!isset(self::$con) || self::$con === false) {
-                throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
-            }
-
-            try {
-                foreach ($data as $item) {
-                    $stmt = self::$con->prepare("INSERT INTO `hozzavalok`(`nev`,`mennyiseg`,`mertekegyseg`) VALUES (?,?,?)");
-                    $stmt->bind_param("sss", $item["nev"], $item["mennyiseg"], $item["mertekegyseg"]);
-                    $stmt->execute();
-                    $stmt->close();
-                }
-            } catch (Exception $ex) {
-                throw new SQLException("A hozzávalók feltöltése sikertelen!", $ex);
-            }
-        }
 
 
         public static function GetRecepiesDB(string $query = "", int $limit = 9): array

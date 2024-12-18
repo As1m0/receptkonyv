@@ -46,13 +46,13 @@ class UploadPage implements IPageBase
 
         if(isset($_POST["feltoltes"]))
         {
-         if(isset($_POST["name"])
-            && isset($_POST["category"])
-            && isset($_POST["time"])
-            && isset($_POST["nehezseg"])
-            && isset($_POST["adag"])
-            && isset($_POST["ingredients"])
-            && isset($_POST["leiras"]))
+         if(isset($_POST["name"]) && $_POST["name"] !== ""
+            && isset($_POST["category"]) && $_POST["category"] !== ""
+            && isset($_POST["time"]) && $_POST["time"] !== ""
+            && isset($_POST["nehezseg"]) && $_POST["nehezseg"] !== ""
+            && isset($_POST["adag"]) && $_POST["adag"] !== ""
+            && isset($_POST["ingredients"]) && count($_POST["ingredients"]) !== 0
+            && isset($_POST["leiras"]) && $_POST["leiras"] !== "")
             {
             $imgName = null;
                 
@@ -72,7 +72,7 @@ class UploadPage implements IPageBase
                         }
                         else
                         {
-                        throw new Exception("Ismeretlen hiba, a feltöltés megszakadt!");
+                        throw new Exception("Ismeretlen hiba, a kép feltöltése megszakadt!");
                         }
                     }
                     else
@@ -83,25 +83,31 @@ class UploadPage implements IPageBase
 
 
                 $cim = htmlspecialchars(trim($_POST["name"]));
-                $category = $_POST["category"];
-                $elkIdo = $_POST["time"];
-                $nehezseg = $_POST["nehezseg"];
-                $adag = $_POST["adag"];
-                $ingredients = $_POST["ingredients"];
-                //var_dump($ingredients);
+                $category = htmlspecialchars(trim($_POST["category"]));
+                $elkIdo = filter_var($_POST["time"], FILTER_VALIDATE_INT);
+                $nehezseg = htmlspecialchars(trim($_POST["nehezseg"]));
+                $adag = filter_var($_POST["adag"], FILTER_VALIDATE_INT);
+                $hozzavalok = $_POST["ingredients"];
                 $leiras = htmlspecialchars(trim($_POST["leiras"]));
 
-                $data = ["recept_neve" => $cim, "kategoria" => $category, "leiras" => $leiras, "elk_ido" => $elkIdo, "adag" => $adag, "nehezseg" => $nehezseg, "felh_id" => $_SESSION["userID"], "pic_name" => $imgName];
+                $data["recept"] = ["recept_neve" => $cim, "kategoria" => $category, "leiras" => $leiras, "elk_ido" => $elkIdo, "adag" => $adag, "nehezseg" => $nehezseg, "felh_id" => $_SESSION["userID"], "pic_name" => $imgName];
 
+                //Hozzávalók validálása
+                foreach ($hozzavalok as $key => $ingredient) {
+                    $hozzavalok[$key]['mennyiseg'] = filter_var($ingredient['mennyiseg'], FILTER_VALIDATE_INT);
+                    $hozzavalok[$key]['nev'] = htmlspecialchars(trim($ingredient['nev']));
+                    $hozzavalok[$key]['mertekegyseg'] = htmlspecialchars(trim($ingredient['mertekegyseg']));
+                }
+                $data["hozzavalok"] = $hozzavalok;
+
+                //adatbázis feltöltés
                 Model::Connect();
-                //Model::UploadIngredientsDB($ingredients);
                 Model::UploadReceptDB($data);
                 Model::Disconnect();
 
                 $this->template->AddData("RESULT", "Sikeres recept feltöltés!");
                 $this->template->AddData("COLOR", "green");
                 $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='index.php?p=account';}, 1500);</script>");
-
             }
             else
             {

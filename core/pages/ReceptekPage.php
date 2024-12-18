@@ -79,11 +79,12 @@ class ReceptekPage implements IPageBase
             }
 
 
-
-
             //Card kiküldése
             $this->template->AddData("RECEPTCARDS", $recept);
         }
+
+
+        $this->template->AddData("PAGES", $result["total_count"]);
     }
 
 
