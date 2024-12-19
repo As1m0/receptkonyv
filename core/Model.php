@@ -256,21 +256,20 @@ abstract class Model
             $stmt->close();
 
             $stmt = self::$con->prepare("
-                                        SELECT
-                                            r.*,
-                                            AVG(r.`ertekeles`) AS `avg_ertekeles`,
-                                            COUNT(r.`komment`) AS `comment_count`,
-                                            COALESCE(f.`veznev`, null) AS `veznev`,
-                                            COALESCE(f.`kernev`, null) AS `kernev`,
-                                            COALESCE(f.`pic_name`, null) AS `pic_name`
+                                       SELECT
+                                        r.*,
+                                        (SELECT AVG(r2.`ertekeles`) FROM `reviews` r2 WHERE r2.`recept_id` = r.`recept_id`) AS `avg_ertekeles`,
+                                        (SELECT COUNT(r3.`komment`) FROM `reviews` r3 WHERE r3.`recept_id` = r.`recept_id` AND r3.`komment` != '') AS `comment_count`,
+                                        (SELECT COUNT(r4.`ertekeles`) FROM `reviews` r4 WHERE r4.`recept_id` = r.`recept_id`) AS `ertekeles_count`,
+                                        COALESCE(f.`veznev`, null) AS `veznev`,
+                                        COALESCE(f.`kernev`, null) AS `kernev`,
+                                        COALESCE(f.`pic_name`, null) AS `pic_name`
                                         FROM
-                                            `reviews` r
-                                        LEFT JOIN
-                                            `felhasznalok` f ON r.`felh_id` = f.`felh_id`
-                                        WHERE
-                                            r.`recept_id` = ?
-                                        GROUP BY
-                                            r.`review_id`
+                                        `reviews` r
+                                         LEFT JOIN
+                                        `felhasznalok` f ON r.`felh_id` = f.`felh_id`
+                                         WHERE
+                                        r.`recept_id` = ?
                                     ");
             $stmt->bind_param("i", $recept_id);
             $stmt->execute();

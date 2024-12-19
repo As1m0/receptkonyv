@@ -34,16 +34,15 @@ class receptDatasheetPage implements IPageBase
             $this->template->AddData("ADAG", $data["recept_adatok"][0]["adag"]);
             $this->template->AddData("NEHEZSEG", $data["recept_adatok"][0]["nehezseg"]);
             $this->template->AddData("LEIRAS", $data["recept_adatok"][0]["leiras"]);
-            if (!empty($data["reviews"])){
-                $avrScore =  intval($data["reviews"][0]["avg_ertekeles"]);
-                $this->template->AddData("KOMMENTSZAM", $data["reviews"][0]["comment_count"]);
+            
+            if (!empty($data["reviews"][0]["avg_ertekeles"] != null)){
+                $this->template->AddData("STARSPIC", Model::GetStarImg($data["reviews"][0]["avg_ertekeles"]));
             } else {
-                $avrScore = 0;
-                $this->template->AddData("KOMMENTSZAM", "0");
+                $this->template->AddData("STARSPIC", Model::GetStarImg(0));
+                
             }
-
-            $this->template->AddData("ERTEKELESSZAM", $avrScore);
-            $this->template->AddData("STARSPIC", Model::GetStarImg($avrScore));
+            $this->template->AddData("KOMMENTSZAM", $data["reviews"][0]["comment_count"]);
+            $this->template->AddData("ERTEKELESSZAM", $data["reviews"][0]["ertekeles_count"]);
             
             if ($data["recept_adatok"][0]["pic_name"] != null){
                 $this->template->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$data["recept_adatok"][0]["pic_name"].".jpg");
@@ -82,7 +81,7 @@ class receptDatasheetPage implements IPageBase
 
                     $review->addData("KOMMENTERNAME", $data["reviews"][$j]["kernev"]." ".$data["reviews"][$j]["veznev"]);
                     $review->addData("KOMMENT", $data["reviews"][$j]["komment"]);
-                    $this->template->addData("KOMMENTEK", $review);  
+                    $this->template->addData("KOMMENTEK", $review);
                 }
             } else {
                 $this->template->addData("KOMMENTEK", "<p class=\"text-center small my-5\"><i>nem érkezett még hozzászólás...</i></p>");

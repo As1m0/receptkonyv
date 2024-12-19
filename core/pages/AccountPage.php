@@ -35,50 +35,56 @@ class AccountPage implements IPageBase
         Model::Connect();
         $result = Model::GetRecepiesDB("", 9, $_SESSION["userID"]);
         Model::Disconnect();
+        //print_r($result);
 
-        //recept cardok feltöltése
-        for ($i = 0 ; $i < count($result["results"]); $i++)
+        if ($result["total_count"] !== 0)
         {
-            //card template
-            $recept = Template::Load("user-recept-card.html");
-            //card feltöltése
-            $recept_id = $result["results"][$i]["recept_id"];
-            $recept->AddData("RECEPTID", $recept_id);
-            $recept->AddData("RECEPTLINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$recept_id}");
-            if ($result["results"][$i]["pic_name"] !== null) {
-                $recept->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$result["results"][$i]["pic_name"]."_thumb.jpg");
-            } else {
-                $recept->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image_thumb.png");
-            }
-            $recept->AddData("RECEPTNEV", $result["results"][$i]["recept_neve"]);
-            $recept->AddData("IDO", $result["results"][$i]["elk_ido"]);
-            $recept->AddData("ADAG", $result["results"][$i]["adag"]);
-            $recept->AddData("NEHEZSEG", $result["results"][$i]["nehezseg"]);
-            $avrScore = number_format($result["results"][$i]["avg_ertekeles"], 1);
-            $recept->AddData("SCORE", $avrScore);
+        //recept cardok feltöltése
+            for ($i = 0 ; $i < count($result["results"]); $i++)
+            {
+                //card template
+                $recept = Template::Load("user-recept-card.html");
+                //card feltöltése
+                $recept_id = $result["results"][$i]["recept_id"];
+                $recept->AddData("RECEPTID", $recept_id);
+                $recept->AddData("RECEPTLINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$recept_id}");
+                if ($result["results"][$i]["pic_name"] !== null) {
+                    $recept->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$result["results"][$i]["pic_name"]."_thumb.jpg");
+                } else {
+                    $recept->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image_thumb.png");
+                }
+                $recept->AddData("RECEPTNEV", $result["results"][$i]["recept_neve"]);
+                $recept->AddData("IDO", $result["results"][$i]["elk_ido"]);
+                $recept->AddData("ADAG", $result["results"][$i]["adag"]);
+                $recept->AddData("NEHEZSEG", $result["results"][$i]["nehezseg"]);
+                $avrScore = number_format($result["results"][$i]["avg_ertekeles"], 1);
+                $recept->AddData("SCORE", $avrScore);
 
-            if ($avrScore >= 4.5){
-                $recept->AddData("STARSKEP", $cfg["StarKepek"]."/5_star.png");
-            }
-            elseif($avrScore >= 3.5 && $avrScore < 4.5){
-                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/4_star.png");
-            }
-            elseif($avrScore >= 2.5 && $avrScore < 3.5){
-                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/3_star.png");
-            }
-            elseif($avrScore >= 1.5 && $avrScore < 2.5){
-                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/2_star.png");
-            }
-            elseif($avrScore >= 1 && $avrScore < 1.5){
-                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/1_star.png");
-            }
-            else {
-                 $recept->AddData("STARSKEP", $cfg["StarKepek"]."/0_star.png");
-            }
+                if ($avrScore >= 4.5){
+                    $recept->AddData("STARSKEP", $cfg["StarKepek"]."/5_star.png");
+                }
+                elseif($avrScore >= 3.5 && $avrScore < 4.5){
+                    $recept->AddData("STARSKEP", $cfg["StarKepek"]."/4_star.png");
+                }
+                elseif($avrScore >= 2.5 && $avrScore < 3.5){
+                    $recept->AddData("STARSKEP", $cfg["StarKepek"]."/3_star.png");
+                }
+                elseif($avrScore >= 1.5 && $avrScore < 2.5){
+                    $recept->AddData("STARSKEP", $cfg["StarKepek"]."/2_star.png");
+                }
+                elseif($avrScore >= 1 && $avrScore < 1.5){
+                    $recept->AddData("STARSKEP", $cfg["StarKepek"]."/1_star.png");
+                }
+                else {
+                    $recept->AddData("STARSKEP", $cfg["StarKepek"]."/0_star.png");
+                }
 
 
-            //Card kiküldése
-            $this->template->AddData("RECEPTEK", $recept);
+                //Card kiküldése
+                $this->template->AddData("RECEPTEK", $recept);
+            }
+        } else {
+            $this->template->AddData("RECEPTEK", "<p class=\"text-center small\">még nem töltöttél fel receptet..</p>");
         }
 
         $this->template->AddData("RECEPTSZAM", $result["total_count"]);
