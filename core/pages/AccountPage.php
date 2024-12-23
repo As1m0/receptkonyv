@@ -32,7 +32,7 @@ class AccountPage implements IPageBase
         $this->template->AddData("EMAIL", $_SESSION["usermail"]);
 
         //DB lekérés
-        $result = Model::GetRecepiesDB("", 9, $_SESSION["userID"]);
+        $result = Model::GetRecepies("", 9, $_SESSION["userID"]);
         //print_r($result);
 
         if ($result["total_count"] !== 0)

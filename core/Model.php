@@ -98,194 +98,8 @@ abstract class Model
         }
     }
 
-    public static function UploadReceptDB(array $data): void
-    {
 
-        if(!isset(self::$con) || self::$con === false)
-        {
-            throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
-        }
-        
-        try
-        {
-            $stmt = self::$con->prepare("INSERT INTO `recept` (`recept_neve`, `kategoria`, `leiras`, `elk_ido`, `adag`, `nehezseg`, `felh_id`, `pic_name`) VALUES (?,?,?,?,?,?,?,?)");
-            $stmt->bind_param("sssiisis", $data["recept"]["recept_neve"],$data["recept"]["kategoria"],$data["recept"]["leiras"],$data["recept"]["elk_ido"],$data["recept"]["adag"],$data["recept"]["nehezseg"],$data["recept"]["felh_id"],$data["recept"]["pic_name"]);
-            $stmt->execute();
-            $newId = self::$con->insert_id;
-            $stmt->close();
-
-            foreach ($data["hozzavalok"] as $item) {
-                $ing_stmt = self::$con->prepare("INSERT INTO `hozzavalok`(`recept_id`, `nev`,`mennyiseg`,`mertekegyseg`) VALUES (?,?,?,?)");
-                $ing_stmt->bind_param("isss", $newId, $item["nev"], $item["mennyiseg"], $item["mertekegyseg"]);
-                $ing_stmt->execute();
-                $ing_stmt->close();
-            }
-
-        }
-        catch (Exception $ex)
-        {
-            throw new DBException("A recept feltöltése sikertelen!", $ex);
-        }
-    }
-
-    public static function UploadReviewDB(array $data) : void
-    {
-        if(!isset(self::$con) || self::$con === false)
-        {
-            throw new DBException("Az adatbázishoz még nem jött létre kapcsolat!", null);
-        }
-        
-        try
-        {
-            $stmt = self::$con->prepare("INSERT INTO `reviews` (`recept_id`, `felh_id`, `komment`, `ertekeles`) VALUES (?,?,?,?)");
-            $stmt->bind_param("iisi", $data["recept_id"], $data["felh_id"], $data["komment"], $data["ertekeles"]);
-            $stmt->execute();
-            $stmt->close();
-        }
-        catch (Exception $ex)
-        {
-            throw new DBException("A recept feltöltése sikertelen!", $ex);
-        }
-    }
-
-    public static function GetRecepiesDB(string $query = "", int $limit = 9, ?int $userId = null): array
-    {
-    if (!isset(self::$con) || self::$con === false) {
-        throw new DBException("Az adatbázishoz még nem jött létre kapcsolat!", null);
-    }
-
-    try {
-        // Keresési kifejezés előkészítése
-        $searchQuery = "%$query%";
-
-        // Dinamikus WHERE feltétel létrehozása
-        $userCondition = $userId !== null ? "AND r.felh_id = ?" : "";
-
-        // Teljes találatok számának lekérdezése
-        $countStmt = self::$con->prepare("
-            SELECT COUNT(*) AS total_count
-            FROM recept r
-            LEFT JOIN felhasznalok f ON r.felh_id = f.felh_id
-            WHERE r.recept_neve LIKE ? $userCondition
-        ");
-        
-        if ($userId !== null) {
-            $countStmt->bind_param("si", $searchQuery, $userId);
-        } else {
-            $countStmt->bind_param("s", $searchQuery);
-        }
-        
-        $countStmt->execute();
-        $countResult = $countStmt->get_result()->fetch_assoc();
-        $totalCount = $countResult['total_count'];
-        $countStmt->close();
-
-        // Adatok lekérdezése LIMIT-el
-        $stmt = self::$con->prepare("
-            SELECT
-                r.recept_id,
-                r.recept_neve,
-                r.elk_ido,
-                r.adag,
-                r.nehezseg,
-                r.pic_name,
-                COALESCE(f.veznev, 'Nincs adat') AS veznev,
-                COALESCE(f.kernev, 'Nincs adat') AS kernev,
-                COALESCE(AVG(rv.ertekeles), 0) AS avg_ertekeles
-            FROM
-                recept r
-            LEFT JOIN
-                felhasznalok f ON r.felh_id = f.felh_id
-            LEFT JOIN
-                reviews rv ON r.recept_id = rv.recept_id
-            WHERE
-                r.recept_neve LIKE ? $userCondition
-            GROUP BY
-                r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name
-            LIMIT ?
-        ");
-        
-        if ($userId !== null) {
-            $stmt->bind_param("sii", $searchQuery, $userId, $limit);
-        } else {
-            $stmt->bind_param("si", $searchQuery, $limit);
-        }
-
-        $stmt->execute();
-
-        // Adatok beolvasása
-        $result = $stmt->get_result();
-        $data = [];
-        while ($row = $result->fetch_assoc()) {
-            $data[] = $row;
-        }
-        $stmt->close();
-
-        // Eredmények visszaadása találatok számával együtt
-        return [
-            'total_count' => $totalCount,
-            'results' => $data
-        ];
-    } catch (Exception $ex) {
-        throw new DBException("A receptek lekérdezése sikertelen!", $ex);
-    }
-}
-    public static function GetOneRecpieDB(int $recept_id) : array
-    {
-        if(!isset(self::$con) || self::$con === false)
-        {
-            throw new DBException("Az adatbázishoz még nem jött létre kapcsolat!", null);
-        }
-
-        try {
-
-            $data = [];
-        
-
-            $queries = [
-                "recept_adatok" => "SELECT * FROM `recept` WHERE `recept_id` = ?",
-                "hozzavalok" => "SELECT * FROM `hozzavalok` WHERE `recept_id` = ?",
-                "reviews" => "
-                    SELECT
-                        r.*,
-                        (SELECT AVG(r2.`ertekeles`) FROM `reviews` r2 WHERE r2.`recept_id` = r.`recept_id`) AS `avg_ertekeles`,
-                        (SELECT COUNT(r3.`komment`) FROM `reviews` r3 WHERE r3.`recept_id` = r.`recept_id` AND r3.`komment` != '') AS `comment_count`,
-                        (SELECT COUNT(r4.`ertekeles`) FROM `reviews` r4 WHERE r4.`recept_id` = r.`recept_id`) AS `ertekeles_count`,
-                        COALESCE(f.`veznev`, null) AS `veznev`,
-                        COALESCE(f.`kernev`, null) AS `kernev`,
-                        COALESCE(f.`pic_name`, null) AS `pic_name`
-                    FROM
-                        `reviews` r
-                    LEFT JOIN
-                        `felhasznalok` f ON r.`felh_id` = f.`felh_id`
-                    WHERE
-                        r.`recept_id` = ?"
-            ];
-        
-            foreach ($queries as $key => $sql) {
-                $stmt = self::$con->prepare($sql);
-                $stmt->bind_param("i", $recept_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                $data[$key] = $result->fetch_all(MYSQLI_ASSOC);
-                $result->close();
-                $stmt->close();
-            }
-        
-            return $data;
-
-        }
-        catch (Exception $ex)
-        {
-            throw new DBException("Az adatok lekérdezése sikertelen!", $ex);
-        }
-    }
-
-
-
-
-
-    // Use DBHandler
+    // Use DBHandler class
 
 
     public static function Login(string $email, string $pass): bool
@@ -331,6 +145,149 @@ abstract class Model
         new DBParam(DBTypes::String, $data["pic_name"]) ]);
     }
 
+    public static function RecepieFullData(int $recept_id): array
+    {
+        $data = [];
+
+        $result1 = DBHandler::RunQuery("SELECT * FROM recept WHERE recept_id = ?", [new DBParam(DBTypes::Int, $recept_id)]);
+        $data["recept_adatok"] = $result1->fetch_all(MYSQLI_ASSOC);
+
+        $result2 = DBHandler::RunQuery("SELECT * FROM hozzavalok WHERE recept_id = ?", [new DBParam(DBTypes::Int, $recept_id)]);
+        $data["hozzavalok"] = $result2->fetch_all(MYSQLI_ASSOC);
+
+
+        $result3= DBHandler::RunQuery("
+                                   SELECT
+                                    r.*,
+                                    (SELECT AVG(r2.ertekeles) FROM reviews r2 WHERE r2.recept_id = r.recept_id) AS avg_ertekeles,
+                                    (SELECT COUNT(r3.komment) FROM reviews r3 WHERE r3.recept_id = r.recept_id AND r3.komment != '') AS comment_count,
+                                    (SELECT COUNT(r4.ertekeles) FROM reviews r4 WHERE r4.recept_id = r.recept_id) AS ertekeles_count,
+                                    COALESCE(f.veznev, null) AS veznev,
+                                    COALESCE(f.kernev, null) AS kernev,
+                                    COALESCE(f.pic_name, null) AS pic_name
+                                    FROM
+                                    reviews r
+                                     LEFT JOIN
+                                    felhasznalok f ON r.felh_id = f.felh_id
+                                     WHERE
+                                    r.recept_id = ?
+                                ", [new DBParam(DBTypes::Int, $recept_id)]);
+
+        $data["reviews"] = $result3->fetch_all(MYSQLI_ASSOC);
+
+        return $data;
+    }
+
+
+    public static function UploadReview(array $data) : void
+    {
+        DBHandler::RunQuery(
+        "INSERT INTO `reviews` (`recept_id`, `felh_id`, `komment`, `ertekeles`) VALUES (?,?,?,?)",
+        [ new DBParam(DBTypes::Int, $data["recept_id"]),
+        new DBParam(DBTypes::Int, $data["felh_id"]),
+        new DBParam(DBTypes::String, $data["komment"]),
+        new DBParam(DBTypes::Int, $data["ertekeles"])] );
+    }
+
+
+    public static function UploadRecept(array $data): void
+    {
+            $insert_id = DBHandler::RunQuery("INSERT INTO `recept` (`recept_neve`, `kategoria`, `leiras`, `elk_ido`, `adag`, `nehezseg`, `felh_id`, `pic_name`) VALUES (?,?,?,?,?,?,?,?)",
+            [ new DBParam(DBTypes::String, $data["recept"]["recept_neve"]),
+            new DBParam(DBTypes::String, $data["recept"]["kategoria"]),
+            new DBParam(DBTypes::String, $data["recept"]["leiras"]),
+            new DBParam(DBTypes::Int, $data["recept"]["elk_ido"]),
+            new DBParam(DBTypes::Int, $data["recept"]["adag"]),
+            new DBParam(DBTypes::String, $data["recept"]["nehezseg"]),
+            new DBParam(DBTypes::Int, $data["recept"]["felh_id"]),
+            new DBParam(DBTypes::String, $data["recept"]["pic_name"])
+            ],
+            true);
+
+            foreach ($data["hozzavalok"] as $item) {
+                DBHandler::RunQuery("INSERT INTO `hozzavalok`(`recept_id`, `nev`,`mennyiseg`,`mertekegyseg`) VALUES (?,?,?,?)",
+                [ new DBParam(DBTypes::Int, $insert_id),
+                new DBParam(DBTypes::String, $item["nev"]),
+                new DBParam(DBTypes::String, $item["mennyiseg"]),
+                new DBParam(DBTypes::String, $item["mertekegyseg"]) ]);
+            }
+    }
+
+    public static function GetRecepies(string $query = "", int $limit = 9, ?int $userId = null): array
+    {
+
+        // Keresési kifejezés előkészítése
+        $searchQuery = "%$query%";
+
+        // Dinamikus WHERE feltétel létrehozása
+        $userCondition = $userId !== null ? "AND r.felh_id = ?" : "";
+
+        if ($userId !== null) {
+            $param = [new DBParam(DBTypes::String, $searchQuery), new DBParam(DBTypes::Int, $userId)];
+            }
+            else
+            {
+            $param =  [new DBParam(DBTypes::String, $searchQuery)];
+            }
+            
+        // Találatok számának lekérdezése
+        $countStmt = DBHandler::RunQuery("
+            SELECT COUNT(*) AS total_count
+            FROM recept r
+            LEFT JOIN felhasznalok f ON r.felh_id = f.felh_id
+            WHERE r.recept_neve LIKE ? $userCondition
+            ", $param);
+    
+        $countResult = $countStmt->fetch_assoc();
+        $totalCount = $countResult['total_count'];
+
+        // Adatok lekérdezése LIMIT-el
+        if ($userId !== null) {
+            $param2 = [new DBParam(DBTypes::String, $searchQuery), new DBParam(DBTypes::Int, $userId), new DBParam(DBTypes::Int, $limit)];
+            }
+            else
+            {
+            $param2 =  [new DBParam(DBTypes::String, $searchQuery), new DBParam(DBTypes::Int, $limit)];
+            }
+        
+        $result = DBHandler::RunQuery("
+            SELECT
+                r.recept_id,
+                r.recept_neve,
+                r.elk_ido,
+                r.adag,
+                r.nehezseg,
+                r.pic_name,
+                COALESCE(f.veznev, 'Nincs adat') AS veznev,
+                COALESCE(f.kernev, 'Nincs adat') AS kernev,
+                COALESCE(AVG(rv.ertekeles), 0) AS avg_ertekeles
+            FROM
+                recept r
+            LEFT JOIN
+                felhasznalok f ON r.felh_id = f.felh_id
+            LEFT JOIN
+                reviews rv ON r.recept_id = rv.recept_id
+            WHERE
+                r.recept_neve LIKE ? $userCondition
+            GROUP BY
+                r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name
+            LIMIT ?
+        ",
+        $param2
+        );
+
+        // Adatok beolvasása
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        // Eredmények visszaadása találatok számával együtt
+        return [
+            'total_count' => $totalCount,
+            'results' => $data
+        ];
+    }
 
 }
 

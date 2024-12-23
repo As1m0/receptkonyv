@@ -24,11 +24,11 @@ class ReceptekPage implements IPageBase
         {
             Controller::RunModule("SearchKeyLoggerModule", [ "searcKey" => $_GET[$cfg["searchKey"]]]);
             $query = htmlspecialchars($_GET[$cfg["searchKey"]]);
-            $result = Model::GetRecepiesDB($query);
+            $result = Model::GetRecepies($query);
         }
         else
         {
-            $result = Model::GetRecepiesDB();
+            $result = Model::GetRecepies();
         }
         //var_dump($result);
         

@@ -43,7 +43,7 @@ abstract class DBHandler
         }
     }
     
-    public static function RunQuery(string $sql, array $params) : mysqli_result | bool
+    public static function RunQuery(string $sql, array $params, bool $getId = false) : mixed
     {
         try
         {
@@ -60,6 +60,12 @@ abstract class DBHandler
             //TODO: Referencia szerinti átadásra átalakítani!
             @call_user_func_array([$stmt, 'bind_param'], $paramArray);
             $stmt->execute();
+
+            if ($getId !== false)
+            {
+            return self::$con->insert_id;
+            }
+
             return $stmt->get_result();
         }
         catch (Exception $ex)
