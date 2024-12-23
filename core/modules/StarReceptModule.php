@@ -15,10 +15,8 @@ class StarReceptModule implements IVisibleModuleBase
         global $cfg;
         $this->template = Template::Load("star-recept-module.html");
 
-        Model::Connect();
         $result = Model::GetOneRecpieDB($cfg["heroRecepieID"]);
-        Model::Disconnect();
-
+        
         //print_r($result);
 
         //Star adatainak betöltése

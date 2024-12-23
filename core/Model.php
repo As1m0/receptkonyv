@@ -84,7 +84,7 @@ abstract class Model
         {
             throw new DBException("Az adatbázis csatlakozás sikertelen!", $ex);
         }
-    } 
+    }
     
     public static function Disconnect() : void
     {
@@ -274,12 +274,7 @@ abstract class Model
         
             return $data;
 
-        } catch (Exception $e) {
-            // Handle exceptions
-            error_log("Error fetching recipe data: " . $e->getMessage());
-            return null;
         }
-        
         catch (Exception $ex)
         {
             throw new DBException("Az adatok lekérdezése sikertelen!", $ex);
@@ -289,70 +284,53 @@ abstract class Model
 
 
 
-    public static function RegisterDB(array $datas):void
+
+    // Use DBHandler
+
+
+    public static function Login(string $email, string $pass): bool
     {
-        if(!isset(self::$con) || self::$con === false)
+        $result = DBHandler::RunQuery("SELECT * FROM `felhasznalok` WHERE email = ? AND `password_hash` = ?",
+        [ new DBParam(DBTypes::String, $email), new DBParam(DBTypes::String, $pass)] );
+        if($result->num_rows > 0)
         {
-            throw new DBException("Az adatbázishoz még nem jött létre kapcsolat!", null);
-        }
-        try
-        {
-            $stmt = self::$con->prepare("INSERT INTO `felhasznalok` (`veznev`,`kernev`,`email`,`password_hash`, `pic_name`) VALUES (?,?,?,?,?)");
-            $stmt->bind_param("sssss", $datas["veznev"], $datas["kernev"], $datas["email"], $datas["password_hash"], $datas["pic_name"]);
-            $stmt->execute();
-            $stmt->close();
-        }
-        catch (Exception $ex)
-        {
-            throw new DBException("A felhasználó rögzítése sikertelen!", $ex);
-        }
-    }
-
-    public static function LoginDB($datas):bool
-    {
-        if(!isset(self::$con) || self::$con === false)
-        {
-            throw new DBException("Az adatbázishoz még nem jött létre kapcsolat!", null);
-        }
-        try
-        {
-            $stmt = self::$con->prepare("SELECT * FROM `felhasznalok` WHERE `email` = ? AND `password_hash` = ?");
-            $stmt->bind_param("ss", $datas["email"], $datas["password_hash"]);
-            $stmt->execute();
-
-            $result = $stmt->get_result();
-            $data = $result->fetch_all(MYSQLI_ASSOC);
-
-            $result->close();
-            $stmt->close();
-
+            $data = $result->fetch_assoc();
             if(!empty($data))
             {
                 //save user info to SESSION
                 $_SESSION["loggedIn"] = true;
-                $_SESSION["userID"] = $data[0]["felh_id"];
-                $_SESSION["username"] =  $data[0]["kernev"];
-                $_SESSION["userfullname"] = $data[0]["veznev"] . " " . $data[0]["kernev"];
-                if ($data[0]["pic_name"] !== null)
+                $_SESSION["userID"] = $data["felh_id"];
+                $_SESSION["username"] =  $data["kernev"];
+                $_SESSION["userfullname"] = $data["veznev"] . " " . $data["kernev"];
+                if ($data["pic_name"] !== null)
                 {
-                    $_SESSION["userpic"] = $data[0]["pic_name"];
+                    $_SESSION["userpic"] = $data["pic_name"];
                 }
                 else
                 {
                     $_SESSION["userpic"] = "empty_profilPic";
                 }
-                $_SESSION["usermail"] = $data[0]["email"];
+                $_SESSION["usermail"] = $data["email"];
                 return true;
             }
-            else
-            {
-                return false;
-            }
         }
-        catch (Exception $ex)
+        else
         {
-            throw new DBException("A bejelentkezés sikertelen!", $ex);
+            return false;
         }
     }
 
+
+    public static function Register(array $data): void
+    {
+        DBHandler::RunQuery("INSERT INTO `felhasznalok` (`veznev`,`kernev`,`email`,`password_hash`, `pic_name`) VALUES (?,?,?,?,?)",
+        [ new DBParam(DBTypes::String, $data["veznev"]),
+        new DBParam(DBTypes::String, $data["kernev"]),
+        new DBParam(DBTypes::String, $data["email"]),
+        new DBParam(DBTypes::String, $data["password_hash"]),
+        new DBParam(DBTypes::String, $data["pic_name"]) ]);
+    }
+
+
 }
+

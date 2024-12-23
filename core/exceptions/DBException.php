@@ -1,6 +1,6 @@
 <?php
 
-class DBLException extends Exception
+class DBException extends Exception
 {
     public function __construct(string $message, int $code = 0, Throwable $previous = null)
     {

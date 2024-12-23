@@ -21,9 +21,7 @@ class receptDatasheetPage implements IPageBase
             $receptID = intval(htmlspecialchars($_GET[$cfg["receptId"]]));
 
             // DB Recept betöltése
-            Model::Connect();
             $data = Model::GetOneRecpieDB($receptID);
-            Model::Disconnect();
 
             //print_r($data["reviews"]);
             
@@ -123,9 +121,7 @@ class receptDatasheetPage implements IPageBase
             $rating = filter_var(trim($_POST["rating"]), FILTER_VALIDATE_INT);
             $data = [ "komment" => $review, "ertekeles" => $rating, "recept_id" => $receptID, "felh_id" => $_SESSION["userID"] ];
             //DB insert komment
-            Model::Connect();
             Model::UploadReviewDB($data);
-            Model::Disconnect();
         }
 
     }

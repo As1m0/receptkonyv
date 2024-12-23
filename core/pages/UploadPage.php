@@ -101,9 +101,7 @@ class UploadPage implements IPageBase
                 $data["hozzavalok"] = $hozzavalok;
 
                 //adatbázis feltöltés
-                Model::Connect();
                 Model::UploadReceptDB($data);
-                Model::Disconnect();
 
                 $this->template->AddData("RESULT", "Sikeres recept feltöltés!");
                 $this->template->AddData("COLOR", "green");

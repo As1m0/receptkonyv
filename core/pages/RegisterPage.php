@@ -69,6 +69,10 @@ class RegisterPage implements IPageBase
                 throw new Exception("A megadott kép nem megfelelő fomrátumú!");
                 }
             }
+            else
+            {
+                $imgName = "";
+            }
 
                 if( mb_strlen($vezNev) >= 3
                     && mb_strlen($kerNev) >= 3
@@ -78,12 +82,10 @@ class RegisterPage implements IPageBase
                 {
                     $pass = hash("sha256", trim($_POST["pass"]));
                     //Upload to database
-                    Model::Connect();
-                    Model::RegisterDB(array("veznev" => $vezNev, "kernev" => $kerNev, "email" => $email, "password_hash" => $pass, "pic_name" => $imgName));
-                    Model::Disconnect();
+                    Model::Register(array("veznev" => $vezNev, "kernev" => $kerNev, "email" => $email, "password_hash" => $pass, "pic_name" => $imgName));
                     
-                    $result["reg"]["info"] = "Sikeres regisztráció!";
-                    $result["reg"]["success"] = true;
+                        $result["reg"]["info"] = "Sikeres regisztráció!";
+                        $result["reg"]["success"] = true;
                 }
                 else
                 {

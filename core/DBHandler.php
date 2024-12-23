@@ -43,7 +43,7 @@ abstract class DBHandler
         }
     }
     
-    public static function RunQuery(string $sql, array $params) : mysqli_result
+    public static function RunQuery(string $sql, array $params) : mysqli_result | bool
     {
         try
         {

@@ -22,21 +22,16 @@ class ReceptekPage implements IPageBase
         
         if (isset($_GET[$cfg["searchKey"]]))
         {
-             Controller::RunModule("SearchKeyLoggerModule", [ "searcKey" => $_GET[$cfg["searchKey"]]]);
-
+            Controller::RunModule("SearchKeyLoggerModule", [ "searcKey" => $_GET[$cfg["searchKey"]]]);
             $query = htmlspecialchars($_GET[$cfg["searchKey"]]);
-
-            Model::Connect();
             $result = Model::GetRecepiesDB($query);
-            Model::Disconnect();
         }
         else
         {
-            Model::Connect();
             $result = Model::GetRecepiesDB();
-            Model::Disconnect();
         }
         //var_dump($result);
+        
         //kapott DB adatok feldolgozása
         for ($i = 0 ; $i < count($result["results"]); $i++)
         {

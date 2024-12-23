@@ -22,8 +22,7 @@ class LoginPage implements IPageBase
                     $email = htmlspecialchars(trim($_POST["email"]));
                     $pass = hash("sha256", trim($_POST["pass"]));
 
-                    Model::Connect();
-                    if (Model::LoginDB([ "email" => $email, "password_hash" => $pass ]))
+                    if (Model::Login($email, $pass))
                     {
                         $result["login"]["info"] = "Sikeres bejelentkezés!";
                         $result["login"]["success"] = true;
@@ -32,7 +31,6 @@ class LoginPage implements IPageBase
                     {
                         $result["login"]["info"] = "Hibás felhasználónév / jelszó!";
                     }
-                    Model::Disconnect();
 
                 }
             }
@@ -60,11 +58,11 @@ class LoginPage implements IPageBase
         {
             if(isset($_SESSION["visitedPage"]) && $_SESSION["visitedPage"] !== "")
             {
-                $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='{$_SESSION["visitedPage"]}';}, 1500);</script>");
+                 $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='{$_SESSION["visitedPage"]}';}, 1500);</script>");
             }
             else
             {
-                $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='{$cfg["mainPage"]}.php';}, 1500);</script>");
+                 $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='{$cfg["mainPage"]}.php';}, 1500);</script>");
             }
         }
     }

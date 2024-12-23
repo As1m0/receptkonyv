@@ -14,7 +14,8 @@ abstract class Controller
 
         try
         {
-            //DBHandler::Init();
+            DBHandler::Init();
+            Model::Connect();
             View::setBaseTemplate(Template::Load($cfg["mainPageTemplate"]));
             $pageData = Model::GetPageData($page);
             if(class_exists($pageData["class"]) && in_array("IPageBase", class_implements($pageData["class"])))
@@ -68,7 +69,8 @@ abstract class Controller
         {
             try
             {
-               //DBHandler::Disconnect();
+               DBHandler::Disconnect();
+               Model::Disconnect();
             }
             catch (Exception $ex)
             {
