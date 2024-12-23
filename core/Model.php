@@ -2,7 +2,6 @@
 
 abstract class Model
 {
-    private static mysqli $con;
 
     public static function GetPageData(string $page) : array
     {
@@ -69,34 +68,6 @@ abstract class Model
         }
     }
     
-
-
-    public static function Connect() : void
-    {
-        global $cfg;
-        $driver = new mysqli_driver();
-        $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
-        try
-        {
-            self::$con = new mysqli($cfg["db"]["hostname"], $cfg["db"]["username"], $cfg["db"]["pass"], $cfg["db"]["db"], $cfg["db"]["port"]);
-        }
-        catch (Exception $ex)
-        {
-            throw new DBException("Az adatbázis csatlakozás sikertelen!", $ex);
-        }
-    }
-    
-    public static function Disconnect() : void
-    {
-        try
-        {
-            self::$con->close();
-        }
-        catch (Exception $ex)
-        {
-            throw new SQLException("Az adatbázis lecsatlakozása sikertelen!", $ex);
-        }
-    }
 
 
     // Use DBHandler class
@@ -287,6 +258,12 @@ abstract class Model
             'total_count' => $totalCount,
             'results' => $data
         ];
+    }
+
+    public static function GetRecentRecepies($limit = 4) : array
+    {
+        $result = DBHandler::RunQuery("SELECT `recept_id`, `recept_neve`, `elk_ido`, `nehezseg`, `felh_id`, `pic_name`, `adag` FROM `recept` ORDER BY `created_at` LIMIT ?", [new DBParam(DBTypes::Int, $limit)]);
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
 }

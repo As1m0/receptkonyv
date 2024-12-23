@@ -22,6 +22,11 @@ class receptDatasheetPage implements IPageBase
 
             // DB Recept betöltése
             $data = Model::RecepieFullData($receptID);
+            
+            if(empty($data["recept_adatok"]))
+            {
+                Header("Location: index.php?p=404");
+            }
 
             //print_r($data["reviews"]);
             
