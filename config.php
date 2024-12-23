@@ -3,6 +3,8 @@ $cfg = [];
 
 $cfg["debug"] = true;
 
+$cfg["heroRecepieID"] = 50;
+
 $cfg["debugErrorPage"] = "DebugError.html";
 $cfg["maintanceTemplate"] = "maintance.html";
 $cfg["PageNotFoundTemplate"] = "404.html";
@@ -17,7 +19,7 @@ $cfg["pageKey"] = "p";
 $cfg["receptId"] = "r";
 $cfg["searchKey"] = "q";
 
-//navigation
+//Navigation
 $cfg["mainPage"] = "index";
 $cfg["mainPageTemplate"] = "index.html";
 $cfg["defaultContentFlag"] = "CONTENT";
@@ -25,11 +27,11 @@ $cfg["defaultNavFlag"] = "NAVIGATION";
 $cfg["defaultFooterFlag"] = "FOOTER";
 
 //Database
-$cfg["DB"] = "ReceptkonyvDB";
-$cfg["DBhostname"] = "localhost";
-$cfg["DBusername"] = "webpage";
-$cfg["DBPass"] = "receptkonyv";
-$cfg["PORT"] = 3306;
+$cfg["db"]["db"] = "ReceptkonyvDB";
+$cfg["db"]["hostname"] = "localhost";
+$cfg["db"]["username"] = "webpage";
+$cfg["db"]["pass"] = "receptkonyv";
+$cfg["db"]["port"] = 3306;
 
 //Picture handling
 $cfg["foodPicSize1"] = 1200;

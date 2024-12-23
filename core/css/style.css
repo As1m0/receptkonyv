@@ -544,6 +544,8 @@ margin: auto;
     max-width: 1200px;
 }
 
+
+
 .star-parameters ul li {
     color: white !important;
     display: inline-block;
@@ -562,12 +564,16 @@ margin: auto;
     opacity: .8;
 }
 
-#star-recept-kep{
+.star-recept-kep{
     width: 100%;     
     height: 100%;     
     object-fit: cover;
     object-position: center;
+    transition: all ease .2;
+}
 
+.star-recept-kep:hover{
+    opacity: .8;
 }
 
 .wrap{

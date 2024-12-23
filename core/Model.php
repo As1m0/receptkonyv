@@ -51,7 +51,7 @@ abstract class Model
         }
         else
         {
-            throw new Exception("A tartalmakat tároló JSON feldolgozása meghiúsult!");
+            throw new  ("A tartalmakat tároló JSON feldolgozása meghiúsult!");
         }
     }
     
@@ -78,13 +78,13 @@ abstract class Model
         $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
         try
         {
-            self::$con = new mysqli($cfg["DBhostname"], $cfg["DBusername"], $cfg["DBPass"], $cfg["DB"], $cfg["PORT"]);
+            self::$con = new mysqli($cfg["db"]["hostname"], $cfg["db"]["username"], $cfg["db"]["pass"], $cfg["db"]["db"], $cfg["db"]["port"]);
         }
         catch (Exception $ex)
         {
-            throw new SQLException("Az adatbázis csatlakozás sikertelen!", $ex);
+            throw new DBException("Az adatbázis csatlakozás sikertelen!", $ex);
         }
-    }
+    } 
     
     public static function Disconnect() : void
     {
@@ -124,7 +124,7 @@ abstract class Model
         }
         catch (Exception $ex)
         {
-            throw new SQLException("A recept feltöltése sikertelen!", $ex);
+            throw new DBException("A recept feltöltése sikertelen!", $ex);
         }
     }
 
@@ -132,7 +132,7 @@ abstract class Model
     {
         if(!isset(self::$con) || self::$con === false)
         {
-            throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
+            throw new DBException("Az adatbázishoz még nem jött létre kapcsolat!", null);
         }
         
         try
@@ -144,14 +144,14 @@ abstract class Model
         }
         catch (Exception $ex)
         {
-            throw new SQLException("A recept feltöltése sikertelen!", $ex);
+            throw new DBException("A recept feltöltése sikertelen!", $ex);
         }
     }
 
     public static function GetRecepiesDB(string $query = "", int $limit = 9, ?int $userId = null): array
     {
     if (!isset(self::$con) || self::$con === false) {
-        throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
+        throw new DBException("Az adatbázishoz még nem jött létre kapcsolat!", null);
     }
 
     try {
@@ -227,62 +227,62 @@ abstract class Model
             'results' => $data
         ];
     } catch (Exception $ex) {
-        throw new SQLException("A receptek lekérdezése sikertelen!", $ex);
+        throw new DBException("A receptek lekérdezése sikertelen!", $ex);
     }
 }
     public static function GetOneRecpieDB(int $recept_id) : array
     {
         if(!isset(self::$con) || self::$con === false)
         {
-            throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
+            throw new DBException("Az adatbázishoz még nem jött létre kapcsolat!", null);
         }
 
-        try
-        {
-            $stmt = self::$con->prepare("SELECT * FROM `recept` WHERE `recept_id` = ?");
-            $stmt->bind_param("i", $recept_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $data["recept_adatok"] = $result->fetch_all(MYSQLI_ASSOC);
-            $result->close();
-            $stmt->close();
+        try {
 
-            $stmt = self::$con->prepare("SELECT * FROM `hozzavalok` WHERE `recept_id` = ?");
-            $stmt->bind_param("i", $recept_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $data["hozzavalok"] = $result->fetch_all(MYSQLI_ASSOC);
-            $result->close();
-            $stmt->close();
+            $data = [];
+        
 
-            $stmt = self::$con->prepare("
-                                       SELECT
-                                        r.*,
-                                        (SELECT AVG(r2.`ertekeles`) FROM `reviews` r2 WHERE r2.`recept_id` = r.`recept_id`) AS `avg_ertekeles`,
-                                        (SELECT COUNT(r3.`komment`) FROM `reviews` r3 WHERE r3.`recept_id` = r.`recept_id` AND r3.`komment` != '') AS `comment_count`,
-                                        (SELECT COUNT(r4.`ertekeles`) FROM `reviews` r4 WHERE r4.`recept_id` = r.`recept_id`) AS `ertekeles_count`,
-                                        COALESCE(f.`veznev`, null) AS `veznev`,
-                                        COALESCE(f.`kernev`, null) AS `kernev`,
-                                        COALESCE(f.`pic_name`, null) AS `pic_name`
-                                        FROM
-                                        `reviews` r
-                                         LEFT JOIN
-                                        `felhasznalok` f ON r.`felh_id` = f.`felh_id`
-                                         WHERE
-                                        r.`recept_id` = ?
-                                    ");
-            $stmt->bind_param("i", $recept_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $data["reviews"] = $result->fetch_all(MYSQLI_ASSOC);
-            $result->close();
-            $stmt->close();
-
+            $queries = [
+                "recept_adatok" => "SELECT * FROM `recept` WHERE `recept_id` = ?",
+                "hozzavalok" => "SELECT * FROM `hozzavalok` WHERE `recept_id` = ?",
+                "reviews" => "
+                    SELECT
+                        r.*,
+                        (SELECT AVG(r2.`ertekeles`) FROM `reviews` r2 WHERE r2.`recept_id` = r.`recept_id`) AS `avg_ertekeles`,
+                        (SELECT COUNT(r3.`komment`) FROM `reviews` r3 WHERE r3.`recept_id` = r.`recept_id` AND r3.`komment` != '') AS `comment_count`,
+                        (SELECT COUNT(r4.`ertekeles`) FROM `reviews` r4 WHERE r4.`recept_id` = r.`recept_id`) AS `ertekeles_count`,
+                        COALESCE(f.`veznev`, null) AS `veznev`,
+                        COALESCE(f.`kernev`, null) AS `kernev`,
+                        COALESCE(f.`pic_name`, null) AS `pic_name`
+                    FROM
+                        `reviews` r
+                    LEFT JOIN
+                        `felhasznalok` f ON r.`felh_id` = f.`felh_id`
+                    WHERE
+                        r.`recept_id` = ?"
+            ];
+        
+            foreach ($queries as $key => $sql) {
+                $stmt = self::$con->prepare($sql);
+                $stmt->bind_param("i", $recept_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $data[$key] = $result->fetch_all(MYSQLI_ASSOC);
+                $result->close();
+                $stmt->close();
+            }
+        
             return $data;
+
+        } catch (Exception $e) {
+            // Handle exceptions
+            error_log("Error fetching recipe data: " . $e->getMessage());
+            return null;
         }
+        
         catch (Exception $ex)
         {
-            throw new SQLException("Az adatok lekérdezése sikertelen!", $ex);
+            throw new DBException("Az adatok lekérdezése sikertelen!", $ex);
         }
     }
 
@@ -293,7 +293,7 @@ abstract class Model
     {
         if(!isset(self::$con) || self::$con === false)
         {
-            throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
+            throw new DBException("Az adatbázishoz még nem jött létre kapcsolat!", null);
         }
         try
         {
@@ -304,7 +304,7 @@ abstract class Model
         }
         catch (Exception $ex)
         {
-            throw new SQLException("A felhasználó rögzítése sikertelen!", $ex);
+            throw new DBException("A felhasználó rögzítése sikertelen!", $ex);
         }
     }
 
@@ -312,7 +312,7 @@ abstract class Model
     {
         if(!isset(self::$con) || self::$con === false)
         {
-            throw new SQLException("Az adatbázishoz még nem jött létre kapcsolat!", null);
+            throw new DBException("Az adatbázishoz még nem jött létre kapcsolat!", null);
         }
         try
         {
@@ -351,30 +351,7 @@ abstract class Model
         }
         catch (Exception $ex)
         {
-            throw new SQLException("A bejelentkezés sikertelen!", $ex);
-        }
-    }
-
-    public static function GetStarImg(float $avrScore): string
-    {
-    global $cfg;
-        if ($avrScore >= 4.5){
-            return $cfg["StarKepek"]."/5_star.png";
-        }
-        elseif($avrScore >= 3.5 && $avrScore < 4.5){
-             return $cfg["StarKepek"]."/4_star.png";
-        }
-        elseif($avrScore >= 2.5 && $avrScore < 3.5){
-             return $cfg["StarKepek"]."/3_star.png";
-        }
-        elseif($avrScore >= 1.5 && $avrScore < 2.5){
-             return $cfg["StarKepek"]."/2_star.png";
-        }
-        elseif($avrScore >= 1 && $avrScore < 1.5){
-             return $cfg["StarKepek"]."/1_star.png";
-        }
-        else {
-             return $cfg["StarKepek"]."/0_star.png";
+            throw new DBException("A bejelentkezés sikertelen!", $ex);
         }
     }
 

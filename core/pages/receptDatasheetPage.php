@@ -33,17 +33,18 @@ class receptDatasheetPage implements IPageBase
             $this->template->AddData("IDO", $data["recept_adatok"][0]["elk_ido"]);
             $this->template->AddData("ADAG", $data["recept_adatok"][0]["adag"]);
             $this->template->AddData("NEHEZSEG", $data["recept_adatok"][0]["nehezseg"]);
-            $this->template->AddData("LEIRAS", $data["recept_adatok"][0]["leiras"]);
+            $this->template->AddData("LEIRAS", nl2br($data["recept_adatok"][0]["leiras"])); //nl2br -> add line brakes to HTML
             
-            if (!empty($data["reviews"][0]["avg_ertekeles"] != null)){
-                $this->template->AddData("STARSPIC", Model::GetStarImg($data["reviews"][0]["avg_ertekeles"]));
-            } else {
-                $this->template->AddData("STARSPIC", Model::GetStarImg(0));
-                
-            }
-            $this->template->AddData("KOMMENTSZAM", $data["reviews"][0]["comment_count"]);
-            $this->template->AddData("ERTEKELESSZAM", $data["reviews"][0]["ertekeles_count"]);
-            
+            if ( isset($data["reviews"][0])) {
+                $this->template->AddData("STARSPIC", Template::GetStarImg($data["reviews"][0]["avg_ertekeles"]));
+                $this->template->AddData("KOMMENTSZAM", $data["reviews"][0]["comment_count"]);
+                $this->template->AddData("ERTEKELESSZAM", $data["reviews"][0]["ertekeles_count"]);
+                } else {
+                $this->template->AddData("STARSPIC", Template::GetStarImg(0));
+                $this->template->AddData("KOMMENTSZAM", "0");
+                $this->template->AddData("ERTEKELESSZAM", "0");
+                }
+
             if ($data["recept_adatok"][0]["pic_name"] != null){
                 $this->template->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$data["recept_adatok"][0]["pic_name"].".jpg");
             } else {
@@ -71,7 +72,7 @@ class receptDatasheetPage implements IPageBase
 
                     $review->addData("TIMESTAMP", substr($data["reviews"][$j]["created_at"], 0, 10));
                     $ratingScore = $data["reviews"][$j]["ertekeles"];
-                    $review->addData("RATINGPIC",  Model::GetStarImg($ratingScore));
+                    $review->addData("RATINGPIC",  Template::GetStarImg($ratingScore));
 
                     if( $data["reviews"][$j]["pic_name"] != null){
                         $review->addData("KOMMENTERPIC", $cfg["ProfilKepek"]."/".$data["reviews"][$j]["pic_name"].".jpg");
@@ -88,7 +89,13 @@ class receptDatasheetPage implements IPageBase
             }
 
 
+            if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] !== false)
+            {
+                $this->template->addData("WRITEREVIEW", Template::Load("write-review-block.html"));
+            }
 
+
+            // TODO
             //Hasonló receptek betöltése
             $receptThumb = Template::Load("recept-thumbnail.html");
             $receptThumb->AddData("RECEPTKEP", "https://cdn.mindmegette.hu/2024/04/cNfIfBYPwpvl1tAzwvSqehQ4nF42_Gm7adWhewfYfrI/fill/0/0/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50L2FiNzg4Y2RjNGVmNzQwOGFiMzQ1NWRhZTFkNjc0NmQ0.jpg");

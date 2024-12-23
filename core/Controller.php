@@ -14,6 +14,7 @@ abstract class Controller
 
         try
         {
+            //DBHandler::Init();
             View::setBaseTemplate(Template::Load($cfg["mainPageTemplate"]));
             $pageData = Model::GetPageData($page);
             if(class_exists($pageData["class"]) && in_array("IPageBase", class_implements($pageData["class"])))
@@ -65,8 +66,17 @@ abstract class Controller
         }
         finally
         {
+            try
+            {
+               //DBHandler::Disconnect();
+            }
+            catch (Exception $ex)
+            {
+                //do nothing...
+            }
             View::PrintFinalTemplate();
         }
+            
     }
     
     public static function RunModule(string $moduleName, array $data = []) : null|Template

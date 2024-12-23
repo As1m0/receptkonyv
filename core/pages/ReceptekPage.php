@@ -58,7 +58,7 @@ class ReceptekPage implements IPageBase
             $recept->AddData("USER", $result["results"][$i]["veznev"]." ".$result["results"][$i]["kernev"]);
             $avrScore = number_format($result["results"][$i]["avg_ertekeles"], 1);
             $recept->AddData("SCORE", $avrScore);
-            $recept->AddData("STARSKEP", Model::GetStarImg($avrScore));
+            $recept->AddData("STARSKEP", Template::GetStarImg($avrScore));
 
 
 

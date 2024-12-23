@@ -105,4 +105,27 @@ class Template
         $template = file_get_contents($cfg["templateFolder"]."/".$filename);
         return new Template($template);
     }
+
+    public static function GetStarImg(float $avrScore): string
+    {
+    global $cfg;
+        if ($avrScore >= 4.5){
+            return $cfg["StarKepek"]."/5_star.png";
+        }
+        elseif($avrScore >= 3.5 && $avrScore < 4.5){
+             return $cfg["StarKepek"]."/4_star.png";
+        }
+        elseif($avrScore >= 2.5 && $avrScore < 3.5){
+             return $cfg["StarKepek"]."/3_star.png";
+        }
+        elseif($avrScore >= 1.5 && $avrScore < 2.5){
+             return $cfg["StarKepek"]."/2_star.png";
+        }
+        elseif($avrScore >= 1 && $avrScore < 1.5){
+             return $cfg["StarKepek"]."/1_star.png";
+        }
+        else {
+             return $cfg["StarKepek"]."/0_star.png";
+        }
+    }
 }
