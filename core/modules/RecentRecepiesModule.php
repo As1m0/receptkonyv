@@ -16,7 +16,7 @@ class RecentRecepiesModule implements IVisibleModuleBase
         
         $this->template = Template::Load("recepies-slider.html");
 
-        $data = Model::GetRecentRecepies();
+        $data = Model::GetLatestRecepies($cfg["SliderNum"]);
 
         foreach ($data as $recept){
             $card = Template::Load("slider-recepie-card.html");

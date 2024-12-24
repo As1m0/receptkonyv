@@ -4,6 +4,7 @@ $cfg = [];
 $cfg["debug"] = true;
 
 $cfg["heroRecepieID"] = 50;
+$cfg["SliderNum"] = 5;
 
 $cfg["debugErrorPage"] = "DebugError.html";
 $cfg["maintanceTemplate"] = "maintance.html";

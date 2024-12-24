@@ -260,9 +260,10 @@ abstract class Model
         ];
     }
 
-    public static function GetRecentRecepies($limit = 4) : array
+    public static function GetLatestRecepies($limit) : array
     {
-        $result = DBHandler::RunQuery("SELECT `recept_id`, `recept_neve`, `elk_ido`, `nehezseg`, `felh_id`, `pic_name`, `adag` FROM `recept` ORDER BY `created_at` LIMIT ?", [new DBParam(DBTypes::Int, $limit)]);
+        $result = DBHandler::RunQuery("SELECT `recept_id`, `recept_neve`, `elk_ido`, `nehezseg`, `felh_id`, `pic_name`, `adag` FROM `recept` ORDER BY `created_at` DESC LIMIT ?",
+                                        [new DBParam(DBTypes::Int, $limit)]);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
