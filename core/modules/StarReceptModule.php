@@ -25,9 +25,20 @@ class StarReceptModule implements IVisibleModuleBase
         $this->template->AddData("IDO", $result["recept_adatok"][0]["elk_ido"]);
         $this->template->AddData("ADAG", $result["recept_adatok"][0]["adag"]);
         $this->template->AddData("NEHEZSEG", $result["recept_adatok"][0]["nehezseg"]);
-        $this->template->AddData("ERTEKELESSZAM", $result["reviews"][0]["ertekeles_count"]);
-        $this->template->AddData("KOMMENTSZAM", $result["reviews"][0]["comment_count"]);
-        $this->template->AddData("STARSPIC", Template::GetStarImg($result["reviews"][0]["avg_ertekeles"]));
+
+        if (!empty($result["reviews"][0]))
+        {
+            $this->template->AddData("ERTEKELESSZAM", $result["reviews"][0]["ertekeles_count"]);
+            $this->template->AddData("KOMMENTSZAM", $result["reviews"][0]["comment_count"]);
+            $this->template->AddData("STARSPIC", Template::GetStarImg($result["reviews"][0]["avg_ertekeles"]));
+        }
+        else
+        {
+            $this->template->AddData("ERTEKELESSZAM", 0);
+            $this->template->AddData("KOMMENTSZAM", 0);
+            $this->template->AddData("STARSPIC", Template::GetStarImg(0));
+        }
+
 
         if ($result["recept_adatok"][0]["pic_name"] !== null) {
             $this->template->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$result["recept_adatok"][0]["pic_name"].".jpg");
