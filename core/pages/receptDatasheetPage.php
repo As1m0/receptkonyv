@@ -125,7 +125,6 @@ class receptDatasheetPage implements IPageBase
             $review = htmlspecialchars(trim($_POST["review"]));
             $rating = filter_var(trim($_POST["rating"]), FILTER_VALIDATE_INT);
             $data = [ "komment" => $review, "ertekeles" => $rating, "recept_id" => $receptID, "felh_id" => $_SESSION["userID"] ];
-            //DB insert komment
             Model::UploadReview($data);
         }
 

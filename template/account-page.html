@@ -39,3 +39,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    function deleteRecepie(receptId) {
+        const userResponse = confirm("Biztosan törölni akarod ezt a receptet?");
+        if (userResponse) {
+            console.log("törlés: " + receptId);
+        }
+    }
+</script>

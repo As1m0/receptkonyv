@@ -521,7 +521,7 @@ margin: auto;
     padding: 0 10px;
 }
 
-#delete-recept{
+.delete-recept{
     color: red;
 }
 
