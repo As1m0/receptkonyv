@@ -29,11 +29,11 @@ class AccountPage implements IPageBase
         //Profil adatok
         $this->template->AddData("SRC", $cfg["ProfilKepek"] ."/".$_SESSION["userpic"]. ".jpg");
         $this->template->AddData("NAME", $_SESSION["userfullname"]);
+        $this->template->AddData("USERID", $_SESSION["userID"]);
         $this->template->AddData("EMAIL", $_SESSION["usermail"]);
 
         //DB lekérés
         $result = Model::GetRecepies("", 9, $_SESSION["userID"]);
-        //print_r($result);
 
         if ($result["total_count"] !== 0)
         {
@@ -67,6 +67,25 @@ class AccountPage implements IPageBase
 
         $this->template->AddData("RECEPTSZAM", $result["total_count"]);
 
+        if(isset($_POST["delete-recepie"]))
+        {
+            $receptId = filter_var(trim($_POST["delete-recepie"]), FILTER_VALIDATE_INT);
+            Model::DeleteRecepie($receptId);
+            $feedback= "A recept törlése sikeres!";
+        }
 
+        if(isset($_POST["delete-user"]))
+        {
+            $userId = filter_var(trim($_POST["delete-user"]), FILTER_VALIDATE_INT);
+            Model::DeleteUser($userId);
+            Header("Location: index.php?logout=true");
+        }
+
+        if(isset($feedback) && $feedback !== ""){
+            $this->template->AddData("RESULT", $feedback);
+            $feedback = "";
+            $this->template->AddData("COLOR", "green");
+            $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='index.php?p=account';}, 1500);</script>");
+        }
     }
 }

@@ -17,8 +17,6 @@ class StarReceptModule implements IVisibleModuleBase
 
         $result = Model::RecepieFullData($cfg["heroRecepieID"]);
         
-        //print_r($result);
-
         //Star adatainak betöltése
         $this->template->AddData("LINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$result["recept_adatok"][0]["recept_id"]}");
         $this->template->AddData("NEV", $result["recept_adatok"][0]["recept_neve"]);

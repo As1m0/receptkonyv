@@ -1,3 +1,4 @@
+<h6 class="text-center" style="background-color:%!COLOR!%; padding: 5px; color: white;">%!RESULT!%</h6>
 <div class="wrapper">
     <div class="row">
         <div class="col-md-3 p-5 white rounded mt-3">
@@ -10,8 +11,8 @@
                     <p class="my-3">%!RECEPTSZAM!% feltöltött recept</p>
                 </div>
                 <div class="buttons text-center">
-                    <a href="#" class="btn btn-default"><small>Szerkesztés</small></a>
-                    <a href="#" class="btn mt-1" id="delete"><small>Profil törlése</small></a>
+                    <form method="post">
+                    <a href="#" class="btn mt-1" id="delete" onclick="deleteUser(%!USERID!%)"><small>Profil törlése</small></a></form>
                 </div>
 
             </div>
@@ -44,7 +45,37 @@
     function deleteRecepie(receptId) {
         const userResponse = confirm("Biztosan törölni akarod ezt a receptet?");
         if (userResponse) {
-            console.log("törlés: " + receptId);
+            const form = event.target.closest("form");
+                if (form) {
+                    const hiddenInput = document.createElement("input");
+                    hiddenInput.type = "hidden";
+                    hiddenInput.name = "delete-recepie";
+                    hiddenInput.value = receptId;
+                    form.appendChild(hiddenInput);
+                    form.submit();
+                } else {
+                    console.error("No form found for the button!");
+                }
+        }
+    }
+
+    function deleteUser(userID)
+    {
+        const userResponse = confirm("Biztosan törölni akarod a profilodat? (Minden hozzátartozó recept és hozzászólás is törlődni fog!)");
+        if (userResponse) {
+            const form = event.target.closest("form");
+                if (form) {
+                    const hiddenInput = document.createElement("input");
+                    hiddenInput.type = "hidden";
+                    hiddenInput.name = "delete-user";
+                    hiddenInput.value = userID;
+                    form.appendChild(hiddenInput);
+                    form.submit();
+                } else {
+                    console.error("No form found for the button!");
+                }
         }
     }
 </script>
+
+%!SCRIPT!%
