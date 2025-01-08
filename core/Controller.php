@@ -56,6 +56,10 @@ abstract class Controller
                             View::getBaseTemplate()->AddData($cfg["defaultNavFlag"], Controller::RunModule("NavigationModule"));
                             View::getBaseTemplate()->AddData($cfg["defaultFooterFlag"], Controller::RunModule("FooterModule"));
                         }
+                        elseif($pageData["parent"] == "adminGroup")
+                        {
+                            View::getBaseTemplate()->AddData($cfg["defaultNavFlag"], Controller::RunModule("AdminNavModule"));
+                        }
                     }
                 }
                 else

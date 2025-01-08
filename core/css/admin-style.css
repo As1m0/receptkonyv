@@ -1,3 +1,20 @@
-body{
-    background-color: aliceblue;
+body {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+#admin-nav-section {
+    height: 100vh;
+    color: white;
+    background-color: rgb(8, 7, 27);
+}
+
+#admin-body-section {
+    background-color: rgb(233, 232, 251);
+    height: 100vh;
+}
+
+#admin-welcome-text{
+    font-size: 80px;
 }
