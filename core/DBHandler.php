@@ -73,7 +73,7 @@ abstract class DBHandler
         }
         catch (Exception $ex)
         {
-            throw new DBException("Az SQL parancs futtatása sikertelen!", $ex);
+            throw new DBException("Az SQL parancs futtatása sikertelen!");
         }
     }
 }

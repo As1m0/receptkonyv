@@ -21,9 +21,13 @@ abstract class Controller
             {
                 throw new PermissionDeniedException("A megadott oldal elérése tiltott!");
             }
-            if(isset($_SESSION["groupMember"]) && $_SESSION["groupMember"] <= $pageData["permission"])
+            if (isset($_SESSION["groupMember"]) && $_SESSION["groupMember"] < $pageData["permission"])
             {
                 throw new PermissionDeniedException("A megadott oldal eléréséhez magasabb felhasználói szint szükséges!");
+            }
+            if (!isset($_SESSION["groupMember"]) && $pageData["permission"] !== 0)
+            {
+                throw new PermissionDeniedException("A megadott oldal eléréséhez be kell jelentkezned!");
             }
             if(class_exists($pageData["class"]) && in_array("IPageBase", class_implements($pageData["class"])))
             {
@@ -34,7 +38,7 @@ abstract class Controller
                 {
                     if($pageData["fullTemplate"] === 1)
                     {
-                        View::setBaseTemplate(Template::Load($pageData["template"]));
+                        View::setBaseTemplate($result);
                     }
                     else
                     {
@@ -46,9 +50,12 @@ abstract class Controller
                         View::setBaseTemplate(Template::Load($parentData["template"]));
                         View::getBaseTemplate()->AddData($cfg["defaultContentFlag"], $result);
 
-                        View::getBaseTemplate()->AddData("BGIMAGE", $cfg["contentFolder"]."/".Model::LoadText("body", "bg-img")["text"]);
-                        View::getBaseTemplate()->AddData($cfg["defaultNavFlag"], Controller::RunModule("NavigationModule"));
-                        View::getBaseTemplate()->AddData($cfg["defaultFooterFlag"], Controller::RunModule("FooterModule"));
+                        if($pageData["parent"] == "indexGroup")
+                        {
+                            View::getBaseTemplate()->AddData("BGIMAGE", $cfg["contentFolder"]."/".Model::LoadText("bg-img"));
+                            View::getBaseTemplate()->AddData($cfg["defaultNavFlag"], Controller::RunModule("NavigationModule"));
+                            View::getBaseTemplate()->AddData($cfg["defaultFooterFlag"], Controller::RunModule("FooterModule"));
+                        }
                     }
                 }
                 else

@@ -17,25 +17,19 @@ abstract class Model
           }
     }
     
-    public static function LoadText(string $page, string $flag) : array
+    public static function LoadText(string $flag) : string
     {
-        global $cfg;
-        $contentJson = json_decode(file_get_contents($cfg["contentFolder"]."/content.json"), true);
-        if($contentJson !== null)
-        {
-            if(isset($contentJson[$page]) && isset($contentJson[$page][$flag]))
+       
+            $result = DBHandler::RunQuery("SELECT `content` FROM `content` WHERE `flag` = ?", [new DBParam(DBTypes::String, $flag)]);
+            if($result->num_rows > 0)
             {
-                return ["flag" => $flag, "text" => $contentJson[$page][$flag]];
+                $data = $result->fetch_assoc();
+                return $data["content"];
             }
             else
             {
-                throw new NotFoundException("A megadott oldal ($page) és a megadott flag ($flag) nem található a tartlmak között!");
+                throw new NotFoundException("A  megadott flag ($flag) nem található az adatbázisban!");
             }
-        }
-        else
-        {
-            throw new  ("A tartalmakat tároló JSON feldolgozása meghiúsult!");
-        }
     }
     
     public static function GetModules(string|null $module = null) : array

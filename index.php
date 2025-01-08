@@ -10,6 +10,7 @@ require_once("autoload.php");
 session_start();
 if(isset($_GET['logout']) && $_GET['logout'] == true)
 {
+    unset($_SESSION);
     session_unset();
     session_destroy();
     header("Location: {$cfg['mainPage']}.php");

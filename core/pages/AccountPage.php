@@ -24,7 +24,7 @@ class AccountPage implements IPageBase
         }
 
         //cover kép
-        $this->template->AddData("COVERIMG", $cfg["contentFolder"]."/".Model::LoadText("account", "cover")["text"]);
+        $this->template->AddData("COVERIMG", $cfg["contentFolder"]."/".Model::LoadText("account-cover"));
        
         //Profil adatok
         $this->template->AddData("SRC", $cfg["ProfilKepek"] ."/".$_SESSION["userpic"]. ".jpg");

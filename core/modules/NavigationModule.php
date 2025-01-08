@@ -14,13 +14,17 @@ class NavigationModule implements IVisibleModuleBase
     {
         global $cfg;
         $this->template = Template::Load("navigation.html");
-        $this->template->AddData("LOGO", $cfg["contentFolder"]."/".Model::LoadText("navigation", "logo")["text"]);
+        $this->template->AddData("LOGO", $cfg["contentFolder"]."/".Model::LoadText("nav-logo"));
         if(isset( $_SESSION["loggedIn"]) && $_SESSION["loggedIn"] ==! false)
         {
             $this->template->addData("NAVITEMUPLOAD", Template::Load("navItemUpload.html"));
             $AccountTemplate = Template::Load("navItemLogin.html");
             $AccountTemplate->addData("NAME", $_SESSION["username"]);
             $AccountTemplate->addData("IMG", $cfg["ProfilKepek"] ."/".$_SESSION["userpic"]. "_thumb.jpg");
+            if(isset($_SESSION["groupMember"]) && $_SESSION["groupMember"] >= 1)
+            {
+                $AccountTemplate->addData("ADMIN", Template::Load("nav-admin-item.html"));
+            }
             $this->template->addData("NAVITEMUPLOAD", $AccountTemplate);
 
         }

@@ -42,7 +42,7 @@ class MainSearchModule implements IVisibleModuleBase
         }
 
 
-        $this->template->AddData("IMG", $cfg["contentFolder"]."/".Model::LoadText("mainSearch", "cover")["text"]);
-        $this->template->AddData("WELCOME", Model::LoadText("mainSearch", "welcome")["text"]);
+        $this->template->AddData("IMG", $cfg["contentFolder"]."/".Model::LoadText("search-cover"));
+        $this->template->AddData("WELCOME", Model::LoadText("welcome-text"));
     }
 }
