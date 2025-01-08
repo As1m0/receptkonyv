@@ -19,7 +19,6 @@ abstract class Model
     
     public static function LoadText(string $flag) : string
     {
-       
             $result = DBHandler::RunQuery("SELECT `content` FROM `content` WHERE `flag` = ?", [new DBParam(DBTypes::String, $flag)]);
             if($result->num_rows > 0)
             {
@@ -248,6 +247,48 @@ abstract class Model
         $result = DBHandler::RunQuery("SELECT `recept_id`, `recept_neve`, `elk_ido`, `nehezseg`, `felh_id`, `pic_name`, `adag` FROM `recept` ORDER BY `created_at` DESC LIMIT ?",
                                         [new DBParam(DBTypes::Int, $limit)]);
         return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public static function GetAllUserData(): array
+    {
+        $result = DBHandler::RunQuery("SELECT * FROM `felhasznalok` WHERE 1", []);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public static function GetSearchLog(): array
+    {
+        global $cfg;
+        $data = array();
+        $logFilePath = $cfg["contentFolder"]."/search_log.log";
+        if (file_exists($logFilePath)) {
+            $handle = fopen($logFilePath, "r");
+        
+            if ($handle) {
+                while (($line = fgets($handle)) !== false) {
+                   $data[] = $line;
+                }
+                fclose($handle);
+                return $data;
+            } else {
+                throw new Exception("Sikertelen a fájl olvasása.");
+            }
+        } else {
+            throw new NotFoundException("A search log fájl nem elérhető");
+        }
+
+    }
+
+    public static function DeleteUser(int $id)
+    {
+        DBHandler::RunQuery("DELETE FROM `reviews` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $id)]);
+        $result = DBHandler::RunQuery("SELECT `recept_id` FROM `recept` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $id)]);
+        $recept_ids = $result->fetch_all(MYSQLI_ASSOC);
+        if(!empty($recept_ids)){
+            foreach($recept_ids as $recept_id){
+                DBHandler::RunQuery("DELETE FROM `hozzavalok` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $recept_id["recept_id"])]);
+            }
+        }
+        DBHandler::RunQuery("DELETE FROM `felhasznalok` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $id)]);
     }
 
 }

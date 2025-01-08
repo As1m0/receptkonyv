@@ -1,0 +1,46 @@
+<h3>Felhasználók listája</h3>
+
+%!RESULT!%
+
+<table id="search-table" class="table table-sm table-dark table-stripped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Név</th>
+            <th>Email cím</th>
+            <th>Group member</th>
+            <th>Létrehozva</th>
+            <th>Profilkép fáljnév</th>
+            <th>Opció</th>
+        </tr>
+    </thead>
+    <tbody>
+        %!USERS!%
+    </tbody>
+</table>
+
+<script>
+
+    let submitButtons = document.getElementsByClassName("submit-btn");
+
+    for (let i = 0; i < submitButtons.length; i++) {
+        submitButtons[i].addEventListener("click", (event) => {
+            event.preventDefault();
+            const userResponse = confirm("Biztosan törölni akarod ezt a felhasználót? (minden hozzá tartozó komment és recept is törlődni fog!!!)");
+            if (userResponse) {
+                const form = event.target.closest("form");
+                if (form) {
+                    const hiddenInput = document.createElement("input");
+                    hiddenInput.type = "hidden";
+                    hiddenInput.name = "delete";
+                    hiddenInput.value = "ok";
+                    form.appendChild(hiddenInput);
+                    form.submit();
+                } else {
+                    console.error("No form found for the button!");
+                }
+            }
+        });
+    }
+
+</script>

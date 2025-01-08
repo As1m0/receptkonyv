@@ -5,16 +5,24 @@ body {
 }
 
 #admin-nav-section {
-    height: 100vh;
     color: white;
     background-color: rgb(8, 7, 27);
 }
 
 #admin-body-section {
     background-color: rgb(233, 232, 251);
-    height: 100vh;
 }
 
-#admin-welcome-text{
+#admin-welcome-text {
     font-size: 80px;
+}
+
+#search-table {
+    overflow-y: scroll;
+    height: 90vh;
+    display: block;
+}
+
+#search-table td {
+    width: 300px;
 }
