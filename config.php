@@ -9,6 +9,7 @@ $cfg["SliderNum"] = 5;
 $cfg["debugErrorPage"] = "DebugError.html";
 $cfg["maintanceTemplate"] = "maintance.html";
 $cfg["PageNotFoundTemplate"] = "404.html";
+$cfg["PermissionDeniedTemplate"] = "permission_denied.html";
 
 $cfg["contentFolder"] = "content";
 $cfg["templateFolder"] = "template";

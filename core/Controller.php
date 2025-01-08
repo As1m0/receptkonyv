@@ -17,6 +17,14 @@ abstract class Controller
             DBHandler::Init();
             View::setBaseTemplate(Template::Load($cfg["mainPageTemplate"]));
             $pageData = Model::GetPageData($page);
+            if($pageData["enabled"] !== 1)
+            {
+                throw new PermissionDeniedException("A megadott oldal elérése tiltott!");
+            }
+            if(isset($_SESSION["groupMember"]) && $_SESSION["groupMember"] <= $pageData["permission"])
+            {
+                throw new PermissionDeniedException("A megadott oldal eléréséhez magasabb felhasználói szint szükséges!");
+            }
             if(class_exists($pageData["class"]) && in_array("IPageBase", class_implements($pageData["class"])))
             {
                 $pageObject = new $pageData["class"]();
@@ -24,13 +32,20 @@ abstract class Controller
                 $result = $pageObject->GetTemplate();
                 if($result !== null)
                 {
-                    if($pageData["fullTemplate"])
+                    if($pageData["fullTemplate"] === 1)
                     {
                         View::setBaseTemplate(Template::Load($pageData["template"]));
                     }
                     else
                     {
+                        $parentData = Model::GetPageData($pageData["parent"]);
+                        if($parentData["enabled"] !== 1)
+                        {
+                            throw new PermissionDeniedException("A megadott oldal elérése tiltott!");
+                        }
+                        View::setBaseTemplate(Template::Load($parentData["template"]));
                         View::getBaseTemplate()->AddData($cfg["defaultContentFlag"], $result);
+
                         View::getBaseTemplate()->AddData("BGIMAGE", $cfg["contentFolder"]."/".Model::LoadText("body", "bg-img")["text"]);
                         View::getBaseTemplate()->AddData($cfg["defaultNavFlag"], Controller::RunModule("NavigationModule"));
                         View::getBaseTemplate()->AddData($cfg["defaultFooterFlag"], Controller::RunModule("FooterModule"));
@@ -48,7 +63,13 @@ abstract class Controller
         }
         catch (NotFoundException $ex)
         {
-           View::setBaseTemplate(Template::Load($cfg["PageNotFoundTemplate"]));
+            View::setBaseTemplate(Template::Load($cfg["PageNotFoundTemplate"]));
+            View::getBaseTemplate()->AddData($cfg["defaultContentFlag"], $ex->getMessage());
+        }
+        catch (PermissionDeniedException $ex)
+        {
+            View::setBaseTemplate(Template::Load($cfg["PermissionDeniedTemplate"]));
+            View::getBaseTemplate()->AddData($cfg["defaultContentFlag"], $ex->getMessage());
         }
         catch (Exception $ex)
         {
@@ -81,10 +102,10 @@ abstract class Controller
     
     public static function RunModule(string $moduleName, array $data = []) : null|Template
     {
-        $modules = Model::GetModules();
-        if(isset($modules[$moduleName]) && class_exists($moduleName))
+        $modules = Model::GetModules($moduleName);
+        if(class_exists($moduleName))
         {
-            if($modules[$moduleName]["enabled"] === true)
+            if($modules[0]["enabled"] === 1)
             {
                 if(in_array("IVisibleModuleBase", class_implements($moduleName)))
                 {

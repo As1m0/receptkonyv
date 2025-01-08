@@ -1,16 +1,16 @@
 {
     "ContactModule":
-            {
-                "enabled" : true
-            },
+        {
+            "enabled" : true
+        },
     "VisitLoggerModule":
-            {
-                "enabled" : true
-            },
+        {
+            "enabled" : true
+        },
     "ImageCustomUpload":
-            {
-                "enabled" : true
-            },
+        {
+            "enabled" : true
+        },
     "NavigationModule":
         { 
             "enabled" : true

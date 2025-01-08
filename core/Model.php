@@ -5,32 +5,16 @@ abstract class Model
 
     public static function GetPageData(string $page) : array
     {
-        global $cfg;
-        $pagesJson = json_decode(file_get_contents($cfg["contentFolder"]."/pages.json"), true);
-        if($pagesJson !== null)
-        {
-            $pageData = null;
-            foreach ($pagesJson as $p)
-            {
-                if($p["page"] == $page)
-                {
-                    $pageData = $p;
-                    break;
-                }
-            }
-            if($pageData !== null)
-            {
-                return $pageData;
-            }
-            else
-            {
-                throw new NotFoundException("A megadott oldal nem található!");
-            }
-        }
-        else
-        {
-            throw new Exception("Az oldalak feldolgozása hibára futott!");
-        }
+          //return ["page" => $page, "template" => "main.html", "fullTemplate" => false, "Class" => "IndexPage", "parent" => null | <pageKey>];
+          $result = DBHandler::RunQuery("SELECT * FROM `pages` WHERE `pageKey` = ?", [new DBParam(DBTypes::String, $page)]);
+          if($result->num_rows > 0)
+          {
+              return $result->fetch_assoc();
+          }
+          else
+          {
+              throw new NotFoundException("A megadott oldal nem található!");
+          }
     }
     
     public static function LoadText(string $page, string $flag) : array
@@ -54,30 +38,34 @@ abstract class Model
         }
     }
     
-    public static function GetModules() : array
+    public static function GetModules(string|null $module = null) : array
     {
         global $cfg;
-        $moduleJson = json_decode(file_get_contents($cfg["contentFolder"]."/modules.json"), true);
-        if($moduleJson !== null)
+        if($module == null)
         {
-            return $moduleJson;
+            $result = DBHandler::RunQuery("SELECT * FROM `modules`");
         }
         else
         {
-            throw new Exception("A modulokat tartalmazó JSON feldolgozása meghiúsult!");
+            $result = DBHandler::RunQuery("SELECT * FROM `modules` WHERE `name` = ?", [new DBParam(DBTypes::String, $module)]);
+        }
+        if($result->num_rows > 0)
+        {
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+        else
+        {
+            throw new NotFoundException("A megadott modul, vagy összességében modul, nem található!");
         }
     }
     
-
-
-    // Use DBHandler class
 
 
     public static function Login(string $email, string $pass): bool
     {
         $result = DBHandler::RunQuery("SELECT * FROM `felhasznalok` WHERE email = ? AND `password_hash` = ?",
         [ new DBParam(DBTypes::String, $email), new DBParam(DBTypes::String, $pass)] );
-        if($result->num_rows > 0)
+        if($result->num_rows === 1)
         {
             $data = $result->fetch_assoc();
             if(!empty($data))
@@ -87,6 +75,7 @@ abstract class Model
                 $_SESSION["userID"] = $data["felh_id"];
                 $_SESSION["username"] =  $data["kernev"];
                 $_SESSION["userfullname"] = $data["veznev"] . " " . $data["kernev"];
+                $_SESSION["groupMember"] = $data["groupMember"];
                 if ($data["pic_name"] !== null)
                 {
                     $_SESSION["userpic"] = $data["pic_name"];

@@ -43,22 +43,25 @@ abstract class DBHandler
         }
     }
     
-    public static function RunQuery(string $sql, array $params, bool $getId = false) : mixed
+    public static function RunQuery(string $sql, array $params = [], bool $getId = false) : mixed
     {
         try
         {
             $stmt = self::$con->prepare($sql);
-            $types = "";
-            $values = [];
-            foreach($params as $p)
+            if(count($params) > 0)
             {
-                $types .= $p->getType()->value;
-                $values[] = $p->getParam();
+                $types = "";
+                $values = [];
+                foreach($params as $p)
+                {
+                    $types .= $p->getType()->value;
+                    $values[] = $p->getParam();
+                }
+                //$stmt->bind_params("típusok", $p1, $p2...)
+                $paramArray = array_merge([$types], $values);
+                //TODO: Referencia szerinti átadásra átalakítani!
+                @call_user_func_array([$stmt, 'bind_param'], $paramArray);
             }
-            //$stmt->bind_params("típusok", $p1, $p2...)
-            $paramArray = array_merge([$types], $values);
-            //TODO: Referencia szerinti átadásra átalakítani!
-            @call_user_func_array([$stmt, 'bind_param'], $paramArray);
             $stmt->execute();
 
             if ($getId !== false)

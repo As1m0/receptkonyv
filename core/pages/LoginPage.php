@@ -15,7 +15,7 @@ class LoginPage implements IPageBase
 
         if(isset($_POST["login"]))
         {
-            if(isset($_POST["email"]) && isset($_POST["pass"]))
+            if(isset($_POST["email"]) && trim($_POST["email"]) != "" && isset($_POST["pass"]) && trim($_POST["pass"]) != "")
             {
                 if(filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL))
                 {
@@ -31,7 +31,6 @@ class LoginPage implements IPageBase
                     {
                         $result["login"]["info"] = "Hibás felhasználónév / jelszó!";
                     }
-
                 }
             }
             else
