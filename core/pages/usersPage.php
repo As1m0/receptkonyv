@@ -12,6 +12,27 @@ class usersPage implements IPageBase
     public function Run(array $pageData): void
     {
         $this->template = Template::Load($pageData["template"]);
+
+        if(isset($_POST["editUser"]))
+        {
+            if(isset($_POST["mail"]) && trim($_POST["mail"]) !== "" && isset($_POST["name"]) && trim($_POST["name"]) !== "" && isset($_POST["groupMember"]) && trim($_POST["groupMember"]) !== "" && isset($_POST["userID"]) && $_POST["userID"] !== "")
+            {
+                $userID = filter_var($_POST["userID"], FILTER_VALIDATE_INT);
+                $email = filter_input(INPUT_POST, "mail", FILTER_VALIDATE_EMAIL);
+                $name = htmlspecialchars(trim($_POST["name"]));
+                $nameArray = explode(" ", $name);
+                $veznev = $nameArray[0];
+                $kernev = $nameArray[1];
+                $groupMember = filter_var($_POST["groupMember"], FILTER_VALIDATE_INT);
+                Model::UpdateUser($userID, $veznev, $kernev, $email, $groupMember);
+                $result = "Felhasználó sikeresen módosítva!";
+            }
+        }
+
+        if(isset($result)){
+            $this->template->AddData("RESULT", "<p style=\"color: green;\">{$result}</p>");
+        }
+
         $data= "";
         $userData = Model::GetAllUserData();
         for($i=0; $i<count($userData); $i++)
@@ -40,26 +61,6 @@ class usersPage implements IPageBase
             }
         }
 
-        if(isset($_POST["editUser"]))
-        {
-            if(isset($_POST["mail"]) && trim($_POST["mail"]) !== "" && isset($_POST["name"]) && trim($_POST["name"]) !== "" && isset($_POST["groupMember"]) && trim($_POST["groupMember"]) !== "" && isset($_POST["userID"]) && $_POST["userID"] !== "")
-            {
-                $userID = filter_var($_POST["userID"], FILTER_VALIDATE_INT);
-                $email = filter_input(INPUT_POST, "mail", FILTER_VALIDATE_EMAIL);
-                $name = htmlspecialchars(trim($_POST["name"]));
-                $nameArray = explode(" ", $name);
-                $veznev = $nameArray[0];
-                $kernev = $nameArray[1];
-                $groupMember = filter_var($_POST["groupMember"], FILTER_VALIDATE_INT);
-                Model::UpdateUser($userID, $veznev, $kernev, $email, $groupMember);
-                $result = "Felhasználó sikeresen módosítva!";
-            }
-        }
-
-        if(isset($result)){
-            $this->template->AddData("RESULT", "<p style=\"color: green;\">{$result}</p>");
-        }
-            
         
     }
 

@@ -32,6 +32,14 @@ class AccountPage implements IPageBase
         $this->template->AddData("USERID", $_SESSION["userID"]);
         $this->template->AddData("EMAIL", $_SESSION["usermail"]);
 
+
+        if(isset($_POST["delete-recepie"]))
+        {
+            $receptId = filter_var(trim($_POST["delete-recepie"]), FILTER_VALIDATE_INT);
+            Model::DeleteRecepie($receptId);
+            $feedback= "A recept törlése sikeres!";
+        }
+
         //DB lekérés
         $result = Model::GetRecepies("", 9, $_SESSION["userID"]);
 
@@ -67,12 +75,6 @@ class AccountPage implements IPageBase
 
         $this->template->AddData("RECEPTSZAM", $result["total_count"]);
 
-        if(isset($_POST["delete-recepie"]))
-        {
-            $receptId = filter_var(trim($_POST["delete-recepie"]), FILTER_VALIDATE_INT);
-            Model::DeleteRecepie($receptId);
-            $feedback= "A recept törlése sikeres!";
-        }
 
         if(isset($_POST["delete-user"]))
         {
@@ -88,7 +90,6 @@ class AccountPage implements IPageBase
             $this->template->AddData("RESULT", $feedback);
             $feedback = "";
             $this->template->AddData("COLOR", "green");
-            $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='index.php?p=account';}, 1500);</script>");
         }
     }
 }

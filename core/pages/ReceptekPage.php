@@ -30,7 +30,6 @@ class ReceptekPage implements IPageBase
         {
             $result = Model::GetRecepies();
         }
-        //var_dump($result);
         
         //kapott DB adatok feldolgozása
         for ($i = 0 ; $i < count($result["results"]); $i++)
@@ -55,13 +54,9 @@ class ReceptekPage implements IPageBase
             $recept->AddData("SCORE", $avrScore);
             $recept->AddData("STARSKEP", Template::GetStarImg($avrScore));
 
-
-
             //Card kiküldése
             $this->template->AddData("RECEPTCARDS", $recept);
         }
-
-
         $this->template->AddData("PAGES", $result["total_count"]);
     }
 

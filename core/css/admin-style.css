@@ -26,3 +26,8 @@ body {
 #search-table td {
     width: 300px;
 }
+
+#back-to-hp{
+    position: absolute;
+    bottom: 80px;
+}

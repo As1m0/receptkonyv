@@ -16,9 +16,20 @@ class receptDatasheetPage implements IPageBase
         
         $this->template = Template::Load($pageData["template"]);
 
+
+
         if(isset($_GET[$cfg["receptId"]]) && $_GET[$cfg["receptId"]] !== "")
         {
             $receptID = intval(htmlspecialchars($_GET[$cfg["receptId"]]));
+
+            //írt comment feldolgozása
+            if(isset($_POST["UserReview"]))
+            {
+                $review = htmlspecialchars(trim($_POST["review"]));
+                $rating = filter_var(trim($_POST["rating"]), FILTER_VALIDATE_INT);
+                $data = [ "komment" => $review, "ertekeles" => $rating, "recept_id" => $receptID, "felh_id" => $_SESSION["userID"] ];
+                Model::UploadReview($data);
+            }
 
             // DB Recept betöltése
             $data = Model::RecepieFullData($receptID);
@@ -27,8 +38,6 @@ class receptDatasheetPage implements IPageBase
             {
                 Header("Location: index.php?p=404");
             }
-
-            //print_r($data["reviews"]);
             
             //Recept adatainak betöltése
             $this->template->AddData("NEV", $data["recept_adatok"][0]["recept_neve"]);
@@ -114,18 +123,6 @@ class receptDatasheetPage implements IPageBase
         {
             //A recept nem található
             Header("Location: index.php?p=404");
-        }
-
-
-
-
-        //írt comment feldolgozása
-        if(isset($_POST["UserReview"]))
-        {
-            $review = htmlspecialchars(trim($_POST["review"]));
-            $rating = filter_var(trim($_POST["rating"]), FILTER_VALIDATE_INT);
-            $data = [ "komment" => $review, "ertekeles" => $rating, "recept_id" => $receptID, "felh_id" => $_SESSION["userID"] ];
-            Model::UploadReview($data);
         }
 
     }

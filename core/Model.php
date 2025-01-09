@@ -51,6 +51,29 @@ abstract class Model
             throw new NotFoundException("A megadott modul, vagy összességében modul, nem található!");
         }
     }
+
+    public static function GetSearchLog(): array
+    {
+        global $cfg;
+        $data = array();
+        $logFilePath = $cfg["contentFolder"]."/search_log.log";
+        if (file_exists($logFilePath)) {
+            $handle = fopen($logFilePath, "r");
+        
+            if ($handle) {
+                while (($line = fgets($handle)) !== false) {
+                   $data[] = $line;
+                }
+                fclose($handle);
+                return $data;
+            } else {
+                throw new Exception("Sikertelen a fájl olvasása.");
+            }
+        } else {
+            throw new NotFoundException("A search log fájl nem elérhető");
+        }
+
+    }
     
 
 
@@ -255,28 +278,6 @@ abstract class Model
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public static function GetSearchLog(): array
-    {
-        global $cfg;
-        $data = array();
-        $logFilePath = $cfg["contentFolder"]."/search_log.log";
-        if (file_exists($logFilePath)) {
-            $handle = fopen($logFilePath, "r");
-        
-            if ($handle) {
-                while (($line = fgets($handle)) !== false) {
-                   $data[] = $line;
-                }
-                fclose($handle);
-                return $data;
-            } else {
-                throw new Exception("Sikertelen a fájl olvasása.");
-            }
-        } else {
-            throw new NotFoundException("A search log fájl nem elérhető");
-        }
-
-    }
 
     public static function DeleteUser(int $id): void
     {
@@ -292,13 +293,6 @@ abstract class Model
         DBHandler::RunQuery("DELETE FROM `felhasznalok` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $id)]);
     }
 
-    public static function DeleteRecepie(int $receptId): void
-    {
-        DBHandler::RunQuery("DELETE FROM `hozzavalok` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $receptId)]);
-        DBHandler::RunQuery("DELETE FROM `reviews` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $receptId)]);
-        DBHandler::RunQuery("DELETE FROM `recept` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $receptId)]);
-    }
-
     public static function UpdateUser(int $userID, string $veznev, string $kernev, string $email, int $groupMember) : void
     {
         DBHandler::RunQuery("UPDATE `felhasznalok` SET `veznev` = ?, `kernev` = ?, `email` = ?,  `groupMember` = ? WHERE `felh_id` = ?", [
@@ -309,6 +303,15 @@ abstract class Model
             new DBParam(DBTypes::Int, $userID)
         ]);
     }
+
+    public static function DeleteRecepie(int $receptId): void
+    {
+        DBHandler::RunQuery("DELETE FROM `hozzavalok` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $receptId)]);
+        DBHandler::RunQuery("DELETE FROM `reviews` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $receptId)]);
+        DBHandler::RunQuery("DELETE FROM `recept` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $receptId)]);
+    }
+
+
 
 }
 

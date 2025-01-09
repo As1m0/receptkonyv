@@ -21,7 +21,6 @@ class IndexPage implements IPageBase
         catch (Exception $ex)
         {
             Logger::WriteLog($ex->getMessage(), LogLevel::Error);
-            //print($ex->getMessage());
         }
     }
 }
