@@ -2,7 +2,33 @@
 
 %!RESULT!%
 
-<table id="search-table" class="table table-sm table-dark table-stripped">
+<div id="editModal" style="display:none;" class="form-control">
+    <div>
+        <h3>Felhasználó módosítása</h3>
+        <form id="editForm" method="post">
+            <input type="hidden" id="editUserId">
+            <div class="form-group">
+                <label for="userName">Name:</label>
+                <input class="form-control" type="text" id="userName">
+            </div>
+            <div class="form-group">
+                <label for="userEmail">Email:</label>
+                <input class="form-control" type="email" id="userEmail">
+            </div>
+            <div class="form-group">
+                <label for="groupMem">Group Member:</label>
+                <input class="form-control" type="numnber" id="groupMem">
+            </div>
+            <div class="my-3">
+                <button type="submit" id="saveChanges" class="btn btn-success" name="editUser">Save</button>
+                <button type="button" class="btn btn-danger" id="cancelEdit">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<table id="search-table" class="table table-sm table-dark table-striped">
     <thead>
         <tr>
             <th>ID</th>
@@ -11,7 +37,7 @@
             <th>Group member</th>
             <th>Létrehozva</th>
             <th>Profilkép fáljnév</th>
-            <th>Opció</th>
+            <th colspan="2">Opciók</th>
         </tr>
     </thead>
     <tbody>
@@ -42,5 +68,70 @@
             }
         });
     }
+
+
+    const editBtn = document.getElementsByClassName("edit-btn");
+    const editModal = document.getElementById("editModal");
+    const editForm = document.getElementById("editForm");
+    const userNameInput = document.getElementById("userName");
+    const userEmailInput = document.getElementById("userEmail");
+    const groupMember = document.getElementById("groupMem");
+    const editUserIdInput = document.getElementById("editUserId");
+
+    // Open the editor
+    for (let i = 0; i < editBtn.length; i++) {
+        editBtn[i].addEventListener("click", (event) => {
+
+            const row = event.target.closest("tr");
+            const userId = row.cells[0].textContent;
+            const userName = row.cells[1].textContent;
+            const userEmail = row.cells[2].textContent;
+            const groupMem = row.cells[3].textContent;
+
+            editUserIdInput.value = userId;
+            userNameInput.value = userName;
+            userEmailInput.value = userEmail;
+            groupMember.value = groupMem;
+
+            editModal.style.display = "block";
+
+        });
+    }
+
+    //hide editor
+    document.getElementById("cancelEdit").addEventListener("click", () => {
+        editModal.style.display = "none";
+    });
+
+
+    //save changes
+    document.getElementById("saveChanges").addEventListener("click", () => {
+
+        const hiddenInput0 = document.createElement("input");
+        hiddenInput0.type = "hidden";
+        hiddenInput0.name = "userID";
+        hiddenInput0.value = editUserIdInput.value;
+        editForm.appendChild(hiddenInput0);
+
+        const hiddenInput = document.createElement("input");
+        hiddenInput.type = "hidden";
+        hiddenInput.name = "mail";
+        hiddenInput.value = userEmailInput.value;
+        editForm.appendChild(hiddenInput);
+
+        const hiddenInput1 = document.createElement("input");
+        hiddenInput1.type = "hidden";
+        hiddenInput1.name = "groupMember";
+        hiddenInput1.value = groupMember.value;
+        editForm.appendChild(hiddenInput1);
+
+        const hiddenInput2 = document.createElement("input");
+        hiddenInput2.type = "hidden";
+        hiddenInput2.name = "name";
+        hiddenInput2.value = userNameInput.value;
+        editForm.appendChild(hiddenInput2);
+
+        editForm.submit();
+    });
 
 </script>

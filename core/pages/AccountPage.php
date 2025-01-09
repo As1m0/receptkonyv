@@ -77,7 +77,10 @@ class AccountPage implements IPageBase
         if(isset($_POST["delete-user"]))
         {
             $userId = filter_var(trim($_POST["delete-user"]), FILTER_VALIDATE_INT);
-            Model::DeleteUser($userId);
+            if($userId == $_SESSION["userID"])
+            {
+                Model::DeleteUser($_SESSION["userID"]);
+            }
             Header("Location: index.php?logout=true");
         }
 

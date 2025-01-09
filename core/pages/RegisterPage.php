@@ -71,7 +71,7 @@ class RegisterPage implements IPageBase
             }
             else
             {
-                $imgName = "";
+                $imgName = null;
             }
 
                 if( mb_strlen($vezNev) >= 3

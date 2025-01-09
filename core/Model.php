@@ -299,5 +299,16 @@ abstract class Model
         DBHandler::RunQuery("DELETE FROM `recept` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $receptId)]);
     }
 
+    public static function UpdateUser(int $userID, string $veznev, string $kernev, string $email, int $groupMember) : void
+    {
+        DBHandler::RunQuery("UPDATE `felhasznalok` SET `veznev` = ?, `kernev` = ?, `email` = ?,  `groupMember` = ? WHERE `felh_id` = ?", [
+            new DBParam(DBTypes::String, $veznev),
+            new DBParam(DBTypes::String, $kernev),
+            new DBParam(DBTypes::String, $email),
+            new DBParam(DBTypes::Int, $groupMember),
+            new DBParam(DBTypes::Int, $userID)
+        ]);
+    }
+
 }
 
