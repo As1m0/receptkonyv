@@ -613,3 +613,12 @@ margin: auto;
     padding: 20px;
     box-sizing: border-box;
 }
+
+.textarea-td{
+    width: 300px;
+}
+
+#content-table{
+    width: 80% !important;
+    max-width: 800px;
+}

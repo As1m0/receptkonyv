@@ -17,13 +17,25 @@ abstract class Model
           }
     }
     
-    public static function LoadText(string $flag) : string
-    {
-            $result = DBHandler::RunQuery("SELECT `content` FROM `content` WHERE `flag` = ?", [new DBParam(DBTypes::String, $flag)]);
-            if($result->num_rows > 0)
+    public static function LoadText(string|null $flag = null) : mixed
+    {       
+            if($flag != null)
+            {
+                $result = DBHandler::RunQuery("SELECT `content` FROM `content` WHERE `flag` = ?", [new DBParam(DBTypes::String, $flag)]);
+            }
+            else
+            {
+                $result = DBHandler::RunQuery("SELECT * FROM `content` WHERE 1", []);
+            }
+            
+            if($result->num_rows > 0 && $flag != null)
             {
                 $data = $result->fetch_assoc();
                 return $data["content"];
+            }
+            elseif($result->num_rows > 0)
+            {
+                return $result->fetch_all(MYSQLI_ASSOC);
             }
             else
             {
@@ -310,6 +322,24 @@ abstract class Model
         DBHandler::RunQuery("DELETE FROM `reviews` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $receptId)]);
         DBHandler::RunQuery("DELETE FROM `recept` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $receptId)]);
     }
+
+    public static function ModifyText(string $flag, string $content) : bool
+    {
+        try{
+            DBHandler::RunQuery("UPDATE `content` SET `content` = ? WHERE `flag` = ?",
+                [
+                new DBParam(DBTypes::String, $content),
+                new DBParam(DBTypes::String, $flag)
+                ]);
+            return true;
+            }
+            catch(Exception)
+            {
+            return false;
+            }
+    }
+
+
 
 
 

@@ -25,42 +25,44 @@ class usersPage implements IPageBase
                 $kernev = $nameArray[1];
                 $groupMember = filter_var($_POST["groupMember"], FILTER_VALIDATE_INT);
                 Model::UpdateUser($userID, $veznev, $kernev, $email, $groupMember);
-                $result = "Felhasználó sikeresen módosítva!";
+                $this->template->AddData("RESULT", "Felhasználó sikeresen módosítva!");
+                $this->template->AddData("COLOR", "green");
             }
         }
 
-        if(isset($result)){
-            $this->template->AddData("RESULT", "<p style=\"color: green;\">{$result}</p>");
-        }
-
-        $data= "";
-        $userData = Model::GetAllUserData();
-        for($i=0; $i<count($userData); $i++)
-        {
-            $data .= "<tr>";
-            $data .= "<td>{$userData[$i]["felh_id"]}</td>";
-            $data .= "<td>{$userData[$i]["veznev"]} {$userData[$i]["kernev"]}</td>";
-            $data .= "<td>{$userData[$i]["email"]}</td>";
-            $data .= "<td>{$userData[$i]["groupMember"]}</td>";
-            $data .= "<td>{$userData[$i]["created_at"]}</td>";
-            $data .= "<td>{$userData[$i]["pic_name"]}</td>";
-            $data .= "<td style=\"width: 100px;\"><input type=\"button\" class=\"btn btn-primary edit-btn\" value=\"módosít\" name=\"edit\"></td>";
-            $data .= "<td style=\"width: 100px;\"><form method=\"post\">
-            <input type=\"submit\" class=\"btn btn-danger submit-btn\" value=\"törlés\" name=\"delete\">
-            <input type=\"hidden\" name=\"user\" value=\"{$userData[$i]["felh_id"]}\">
-            </form></td>";
-            $data .= "</tr>";
-        }
-        $this->template->AddData("USERS", $data);
-       
         if(isset($_POST["delete"]) && $_POST["delete"] == "ok"){
             if(isset($_POST["user"]))
             {
                Model::DeleteUser($_POST["user"]);
-                $result = "A felhasználó törlése sikeres!";
+               $this->template->AddData("RESULT", "Felhasználó törlése sikeres!");
+               $this->template->AddData("COLOR", "green");
             }
         }
 
+        $userData = Model::GetAllUserData();
+        if(!empty($userData))
+        {
+            foreach( $userData as $data )
+            {
+                $row = Template::Load("user-row.html");
+                $row->AddData("ID", $data["felh_id"]);
+                $row->AddData("NEV", $data["veznev"]." ".$data["kernev"]);
+                $row->AddData("EMAIL", $data["email"]);
+                $row->AddData("GROUP", $data["groupMember"]);
+                $row->AddData("DATE", $data["created_at"]);
+                if($data["pic_name"] != null)
+                {
+                    $row->AddData("PIC", $data["pic_name"]);
+                }
+                
+                $this->template->AddData("USERS", $row);
+            }
+        }
+        else
+        {
+            $this->template->AddData("RESULT", "Nem taláható felhasználó");
+            $this->template->AddData("COLOR", "red");
+        }
         
     }
 
