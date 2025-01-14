@@ -12,39 +12,4 @@
     </tbody>
 </table>
 
-<script>
-    // Function to find the most common element in the table
-function findMostCommonElement() {
-    const table = document.getElementById('search-table');
-    const rows = table.querySelectorAll('tbody tr');
-
-    // Create a map to store occurrences of each search term
-    const frequencyMap = new Map();
-
-    rows.forEach(row => {
-        const searchTerm = row.children[1].textContent.trim(); // Get the text from the second column
-
-        // Update the frequency map
-        frequencyMap.set(searchTerm, (frequencyMap.get(searchTerm) || 0) + 1);
-    });
-
-    // Find the most common element
-    let mostCommon = null;
-    let maxCount = 0;
-
-    frequencyMap.forEach((count, term) => {
-        if (count > maxCount) {
-            mostCommon = term;
-            maxCount = count;
-        }
-    });
-
-    console.log(`The most common element is: "${mostCommon}" with ${maxCount} occurrences.`);
-    document.getElementById("result").innerHTML = `A leggyakrabban keresett kifejezés: "${mostCommon}" ${maxCount} kereséssel.`;
-    return mostCommon;
-}
-
-// Run the function
-findMostCommonElement();
-
-</script>
+<script src="core/scripts/searchLog.js"></script>

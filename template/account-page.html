@@ -11,6 +11,7 @@
                     <p class="my-3">%!RECEPTSZAM!% feltöltött recept</p>
                 </div>
                 <div class="buttons text-center">
+                    <a href="index.php?logout=true" class="btn btn-default mt-1">Kijelentkezés</a>
                     <form method="post">
                     <a href="#" class="btn mt-1" id="delete" onclick="deleteUser(%!USERID!%)"><small>Profil törlése</small></a></form>
                 </div>
@@ -41,39 +42,6 @@
     </div>
 </div>
 
-<script>
-    function deleteRecepie(receptId) {
-        const userResponse = confirm("Biztosan törölni akarod ezt a receptet?");
-        if (userResponse) {
-            const form = event.target.closest("form");
-                if (form) {
-                    const hiddenInput = document.createElement("input");
-                    hiddenInput.type = "hidden";
-                    hiddenInput.name = "delete-recepie";
-                    hiddenInput.value = receptId;
-                    form.appendChild(hiddenInput);
-                    form.submit();
-                } else {
-                    console.error("No form found for the button!");
-                }
-        }
-    }
+<div style="height: 500px;"></div>
 
-    function deleteUser(userID)
-    {
-        const userResponse = confirm("Biztosan törölni akarod a profilodat? (Minden hozzátartozó recept és hozzászólás is törlődni fog!)");
-        if (userResponse) {
-            const form = event.target.closest("form");
-                if (form) {
-                    const hiddenInput = document.createElement("input");
-                    hiddenInput.type = "hidden";
-                    hiddenInput.name = "delete-user";
-                    hiddenInput.value = userID;
-                    form.appendChild(hiddenInput);
-                    form.submit();
-                } else {
-                    console.error("No form found for the button!");
-                }
-        }
-    }
-</script>
+<script src="core/scripts/accountPage.js"></script>
