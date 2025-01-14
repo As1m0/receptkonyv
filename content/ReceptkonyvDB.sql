@@ -446,13 +446,6 @@ ALTER TABLE `reviews`
 --
 
 --
--- Constraints for table `content`
---
-ALTER TABLE `content`
-  ADD CONSTRAINT `content_ibfk_1` FOREIGN KEY (`pageKey`) REFERENCES `pages` (`pageKey`),
-  ADD CONSTRAINT `content_pages_FK` FOREIGN KEY (`pageKey`) REFERENCES `pages` (`pageKey`);
-
---
 -- Constraints for table `hozzavalok`
 --
 ALTER TABLE `hozzavalok`
