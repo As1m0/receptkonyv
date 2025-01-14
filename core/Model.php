@@ -5,7 +5,6 @@ abstract class Model
 
     public static function GetPageData(string $page) : array
     {
-          //return ["page" => $page, "template" => "main.html", "fullTemplate" => false, "Class" => "IndexPage", "parent" => null | <pageKey>];
           $result = DBHandler::RunQuery("SELECT * FROM `pages` WHERE `pageKey` = ?", [new DBParam(DBTypes::String, $page)]);
           if($result->num_rows > 0)
           {
@@ -18,7 +17,7 @@ abstract class Model
     }
     
     public static function LoadText(string|null $flag = null) : mixed
-    {       
+    {
             if($flag != null)
             {
                 $result = DBHandler::RunQuery("SELECT `content` FROM `content` WHERE `flag` = ?", [new DBParam(DBTypes::String, $flag)]);
@@ -41,6 +40,23 @@ abstract class Model
             {
                 throw new NotFoundException("A  megadott flag ($flag) nem található az adatbázisban!");
             }
+    }
+
+    public static function ModifyText(string $flag, string $content) : bool
+    {
+        try
+        {
+            DBHandler::RunQuery("UPDATE `content` SET `content` = ? WHERE `flag` = ?",
+                [
+                new DBParam(DBTypes::String, $content),
+                new DBParam(DBTypes::String, $flag)
+                ]);
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
     
     public static function GetModules(string|null $module = null) : array
@@ -86,7 +102,6 @@ abstract class Model
         }
 
     }
-    
 
 
     public static function Login(string $email, string $pass): bool
@@ -110,7 +125,7 @@ abstract class Model
                 }
                 else
                 {
-                    $_SESSION["userpic"] = "empty_profilPic";
+                $_SESSION["userpic"] = "empty_profilPic";
                 }
                 $_SESSION["usermail"] = $data["email"];
                 return true;
@@ -125,12 +140,19 @@ abstract class Model
 
     public static function Register(array $data): void
     {
-        DBHandler::RunQuery("INSERT INTO `felhasznalok` (`veznev`,`kernev`,`email`,`password_hash`, `pic_name`) VALUES (?,?,?,?,?)",
-        [ new DBParam(DBTypes::String, $data["veznev"]),
-        new DBParam(DBTypes::String, $data["kernev"]),
-        new DBParam(DBTypes::String, $data["email"]),
-        new DBParam(DBTypes::String, $data["password_hash"]),
-        new DBParam(DBTypes::String, $data["pic_name"]) ]);
+        try{
+            DBHandler::RunQuery("INSERT INTO `felhasznalok` (`veznev`,`kernev`,`email`,`password_hash`, `pic_name`) VALUES (?,?,?,?,?)",
+            [ new DBParam(DBTypes::String, $data["veznev"]),
+            new DBParam(DBTypes::String, $data["kernev"]),
+            new DBParam(DBTypes::String, $data["email"]),
+            new DBParam(DBTypes::String, $data["password_hash"]),
+            new DBParam(DBTypes::String, $data["pic_name"]) ]);
+        }
+        catch(Exception $ex)
+        {
+            throw new DBException($ex->GetMessage());
+        }
+        
     }
 
     public static function RecepieFullData(int $recept_id): array
@@ -201,7 +223,7 @@ abstract class Model
             }
     }
 
-    public static function GetRecepies(string $query = "", int $limit = 9, ?int $userId = null): array
+    public static function GetRecepies(string $query = "", int $limit = 15, ?int $userId = null): array
     {
 
         // Keresési kifejezés előkészítése
@@ -323,21 +345,7 @@ abstract class Model
         DBHandler::RunQuery("DELETE FROM `recept` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $receptId)]);
     }
 
-    public static function ModifyText(string $flag, string $content) : bool
-    {
-        try{
-            DBHandler::RunQuery("UPDATE `content` SET `content` = ? WHERE `flag` = ?",
-                [
-                new DBParam(DBTypes::String, $content),
-                new DBParam(DBTypes::String, $flag)
-                ]);
-            return true;
-            }
-            catch(Exception)
-            {
-            return false;
-            }
-    }
+
 
 
 

@@ -20,13 +20,14 @@ class MainSearchModule implements IVisibleModuleBase
             $query = urldecode(htmlspecialchars($_GET[$cfg["searchKey"]]));
             //SEARCH IN DATABASE
 
-
-            $talalatokSzama = 3; //from database
-            $this->template->AddData("RESULT", "Keresés: <i>{$query}</i> receptre <span>{$talalatokSzama}</span> találat...");
+            $result = Model::GetRecepies($query);
+            $this->template->AddData("PLACEHOLDER", $query);
+            $this->template->AddData("RESULT", "Keresés: <i>{$query}</i> receptre <span>{$result["total_count"]}</span> találat...");
         }
         else
         {
             $this->template->addData("RESULT", "122 recept közül..."); //From database
+            $this->template->AddData("PLACEHOLDER", "Keresés...");
         }
  
 
@@ -37,7 +38,6 @@ class MainSearchModule implements IVisibleModuleBase
                 $query = htmlspecialchars($_POST["query"]);
                 $encodedQuery = urlencode($query);
                 header("Location: {$cfg["mainPage"]}.php?{$cfg["pageKey"]}=receptek&{$cfg["searchKey"]}={$encodedQuery}");
-                //Logger::WriteLog("keresés: ".$query, LogLevel::Info);
             }
         }
 
