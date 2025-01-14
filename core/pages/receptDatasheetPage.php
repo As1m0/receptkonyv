@@ -31,6 +31,16 @@ class receptDatasheetPage implements IPageBase
                 Model::UploadReview($data);
             }
 
+            //Komment törlése
+            if(isset($_POST["delete"]))
+            {
+                if(isset($_POST["comment_id"]) && $_POST["comment_id"] != "")
+                {
+                    $kommentID = htmlspecialchars(trim($_POST["comment_id"]));
+                    Model::DeleteReview($kommentID);
+                }
+            }
+
             // DB Recept betöltése
             $data = Model::RecepieFullData($receptID);
             
@@ -78,9 +88,20 @@ class receptDatasheetPage implements IPageBase
 
             //Reviews
             if (!empty($data["reviews"])){
+                //print_r($data["reviews"]);
                 for ($j=0; $j<count($data["reviews"]); $j++)
                 {
                     $review = Template::Load("comment-thumbnail.html");
+
+                    $review->AddData("REVID", $data["reviews"][$j]["review_id"]);
+                    if(isset($_SESSION["userID"]) && $_SESSION["userID"] == $data["reviews"][$j]["felh_id"])
+                    {
+                        $review->AddData("DISP", "block");
+                    }
+                    else
+                    {
+                        $review->AddData("DISP", "none");
+                    }
 
                     $review->addData("TIMESTAMP", substr($data["reviews"][$j]["created_at"], 0, 10));
                     $ratingScore = $data["reviews"][$j]["ertekeles"];

@@ -7,18 +7,18 @@
             </div>
         </div>
         <div class="col-sm-9 mt-2">
-            <!--
-            <div class="review-delete-btn">
-                <button id="rev-del-btn" type="submit" class="btn btn-outline-danger">törlés</button>
-            </div>
-            -->
             <div class="mx-3">
+                <div class="com-del-block" style="display: %!DISP!%">
+                    <form method="post">
+                        <input type="hidden" name="comment_id" value="%!REVID!%">
+                        <input type="submit" name="delete" value="x" class="com-del-btn">
+                    </form>
+                </div>
                 <small class="time-stamp">%!TIMESTAMP!%</small><br>
                 <img class="review-star" src="%!RATINGPIC!%" alt="stars" class="mt-2">
                 <p class="comment-text">%!KOMMENT!%</p>
             </div>
         </div>
-
     </div>
-    <div class="devider-small"></div>
+    
 </div>

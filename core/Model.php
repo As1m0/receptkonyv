@@ -200,6 +200,12 @@ abstract class Model
     }
 
 
+    public static function DeleteReview(int $kommentID) : void
+    {
+        DBHandler::RunQuery("DELETE FROM `reviews` WHERE `review_id` = ?", [new DBParam(DBTypes::Int,  $kommentID)]);
+    }
+
+
     public static function UploadRecept(array $data): void
     {
             $insert_id = DBHandler::RunQuery("INSERT INTO `recept` (`recept_neve`, `kategoria`, `leiras`, `elk_ido`, `adag`, `nehezseg`, `felh_id`, `pic_name`) VALUES (?,?,?,?,?,?,?,?)",

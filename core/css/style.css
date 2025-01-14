@@ -447,6 +447,27 @@ footer {
     color: white;
 }
 
+.com-del-block{
+    display: block;
+    float: right;
+}
+
+.com-del-btn{
+    color: rgb(253, 93, 93);
+    border-radius: 50%;
+    text-align: center;
+    width: 23px;
+    height: 23px;
+    border: none;
+    outline: none;
+}
+
+.com-del-block form input:hover{
+    background-color: rgb(253, 93, 93);
+    color: white;
+    cursor: pointer;
+}
+
 /*              recept slider         */
 
 .slider{

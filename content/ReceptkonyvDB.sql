@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 09, 2025 at 09:26 AM
+-- Generation Time: Jan 14, 2025 at 04:31 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -37,11 +37,13 @@ CREATE TABLE `content` (
 --
 
 INSERT INTO `content` (`flag`, `content`) VALUES
+('about-cover', 'about-cover-img.jpg'),
+('about-text', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean mattis est nec nibh interdum, nec lacinia mi accumsan. In tristique, sapien vitae ultricies finibus, felis risus rutrum ex, quis vehicula ipsum eros nec massa. Integer iaculis, orci in eleifend varius, purus sapien molestie ex, eget pharetra leo augue ut quam. Fusce semper malesuada dui, eu eleifend nulla rutrum vel. Phasellus elementum maximus arcu nec mollis. Morbi dictum nibh mauris, eu viverra lorem ultrices non. Praesent luctus mi quis nibh venenatis, sit amet efficitur dui fermentum. Ut tempor fermentum lectus.\r\n\r\nDuis id enim suscipit, malesuada libero non, luctus eros. Sed et auctor est. Cras tempus laoreet neque in pellentesque. Curabitur egestas odio sem, sit amet maximus augue mattis vel. Proin imperdiet justo et commodo viverra. Donec venenatis nunc sit amet lectus malesuada mollis. In convallis eros vel aliquam feugiat. Proin odio neque, vehicula vel tincidunt eu, viverra id purus.'),
 ('account-cover', 'search-background-img.jpg'),
 ('bg-img', 'background-pattern.png'),
 ('nav-logo', 'logo.png'),
 ('search-cover', 'search-background-img.jpg'),
-('welcome-text', 'Receptek mindenkinek.');
+('welcome-text', 'Receptek mindenkinek!');
 
 -- --------------------------------------------------------
 
@@ -66,13 +68,13 @@ CREATE TABLE `felhasznalok` (
 
 INSERT INTO `felhasznalok` (`felh_id`, `veznev`, `kernev`, `email`, `password_hash`, `pic_name`, `created_at`, `groupMember`) VALUES
 (1, 'Ujvárossy', 'Ábel', 'ujvarossyabel@gmail.com', '436972c11b206f80d55dec5b2bb1a26e0d7ad56fbd6ebe2249fc45df643991f5', '4953d17588caf7', '2024-12-12 13:46:07', 1),
-(2, 'Ujvárossy', 'Sámuel', 'ujvarossysamu@gmail.com', '436972c11b206f80d55dec5b2bb1a26e0d7ad56fbd6ebe2249fc45df643991f5', NULL, '2024-12-12 13:48:49', 0),
-(3, 'Kiss', 'János', 'kisjanos@test.hu', '436972c11b206f80d55dec5b2bb1a26e0d7ad56fbd6ebe2249fc45df643991f5', '4953d17588caf7', '2024-12-16 10:13:36', 0),
+(2, 'Ujvárossy', 'Samu', 'ujvarossysamu@gmail.com', '436972c11b206f80d55dec5b2bb1a26e0d7ad56fbd6ebe2249fc45df643991f5', NULL, '2024-12-12 13:48:49', 1),
+(3, 'Kiss', 'János', 'kisjanos@test.com', '436972c11b206f80d55dec5b2bb1a26e0d7ad56fbd6ebe2249fc45df643991f5', '4953d17588caf7', '2024-12-16 10:13:36', 0),
 (5, 'Ujvárossy', 'Ábel', 'ujvarossyabel@test.hu', '436972c11b206f80d55dec5b2bb1a26e0d7ad56fbd6ebe2249fc45df643991f5', 'a01668a0f5df92', '2024-12-16 12:10:33', 1),
 (6, 'Nagy', 'Balázs', 'nagybalazs@test.hu', '436972c11b206f80d55dec5b2bb1a26e0d7ad56fbd6ebe2249fc45df643991f5', NULL, '2024-12-16 12:14:41', 0),
 (7, 'Kovács', 'József', 'kovacsjozsef@test.hu', '436972c11b206f80d55dec5b2bb1a26e0d7ad56fbd6ebe2249fc45df643991f5', NULL, '2024-12-16 12:14:41', 0),
 (8, 'Kiss', 'Balázs', 'kisbalazs@test.hu', '436972c11b206f80d55dec5b2bb1a26e0d7ad56fbd6ebe2249fc45df643991f5', NULL, '2024-12-16 12:14:41', 0),
-(9, 'Ujvárossy', 'Lujza', 'ujvarossylujza@gmail.com', '436972c11b206f80d55dec5b2bb1a26e0d7ad56fbd6ebe2249fc45df643991f5', NULL, '2024-12-12 13:46:07', 0),
+(9, 'Ujvárossy', 'Lujza', 'ujvarossyLujza@gmail.com', '436972c11b206f80d55dec5b2bb1a26e0d7ad56fbd6ebe2249fc45df643991f5', NULL, '2024-12-12 13:46:07', 1),
 (10, 'Cserepes', 'Virág', 'cserepesvirag@test.hu', '436972c11b206f80d55dec5b2bb1a26e0d7ad56fbd6ebe2249fc45df643991f5', '5237616aacd0bc', '2024-12-19 12:30:54', 0);
 
 -- --------------------------------------------------------
@@ -245,6 +247,7 @@ CREATE TABLE `pages` (
 --
 
 INSERT INTO `pages` (`pageKey`, `template`, `fullTemplate`, `class`, `parent`, `enabled`, `permission`) VALUES
+('about', 'about.html', 0, 'AboutPage', 'indexGroup', 1, 0),
 ('account', 'account-page.html', 0, 'AccountPage', 'indexGroup', 1, 0),
 ('admin', 'admin_home.html', 0, 'adminHomePage', 'adminGroup', 1, 1),
 ('adminGroup', 'admin.html', 1, '', NULL, 1, 0),
@@ -349,8 +352,6 @@ INSERT INTO `reviews` (`review_id`, `recept_id`, `felh_id`, `komment`, `ertekele
 (45, 27, 3, 'Rémesen bonyolult, nem érte meg az időt.', 1, '2024-12-18 07:46:59'),
 (46, 46, 8, 'Nagyon tetszett.', 5, '2024-12-18 08:50:55'),
 (47, 46, 9, 'Nekem nem annyira tetszett.', 2, '2024-12-18 12:50:16'),
-(49, 9, 5, 'Egyszerű, de nagyszerű recept.', 4, '2024-12-18 18:21:49'),
-(50, 9, 5, '', 1, '2024-12-18 18:24:26'),
 (51, 9, 5, 'Nagyon finom volt a recept.', 5, '2024-12-19 11:57:10'),
 (52, 7, 5, '', 2, '2024-12-19 12:03:55'),
 (53, 7, 6, 'Szuper recept!', 5, '2024-12-19 12:29:09'),
@@ -359,7 +360,10 @@ INSERT INTO `reviews` (`review_id`, `recept_id`, `felh_id`, `komment`, `ertekele
 (57, 9, NULL, '', 4, '2024-12-20 12:32:46'),
 (59, 49, 5, 'Nagyon finom volt! :)', 4, '2024-12-23 09:12:47'),
 (60, 50, 5, 'Nekem a fűszerezése nem annyira tetszett, egyébként rendben volt.', 3, '2024-12-23 09:34:25'),
-(64, 59, 6, '', 3, '2025-01-01 18:09:26');
+(64, 59, 6, '', 3, '2025-01-01 18:09:26'),
+(75, NULL, 5, '', 4, '2025-01-09 17:06:14'),
+(79, 13, 5, '', 5, '2025-01-09 17:09:39'),
+(84, 9, 5, '', 3, '2025-01-14 15:29:51');
 
 --
 -- Indexes for dumped tables
@@ -421,25 +425,25 @@ ALTER TABLE `reviews`
 -- AUTO_INCREMENT for table `felhasznalok`
 --
 ALTER TABLE `felhasznalok`
-  MODIFY `felh_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `felh_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `hozzavalok`
 --
 ALTER TABLE `hozzavalok`
-  MODIFY `hozzavalo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=234;
+  MODIFY `hozzavalo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=242;
 
 --
 -- AUTO_INCREMENT for table `recept`
 --
 ALTER TABLE `recept`
-  MODIFY `recept_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `recept_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `review_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `review_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- Constraints for dumped tables
