@@ -1,0 +1,53 @@
+<div class="py-5" id="main-search" style="background-image: url('%!IMG!%');">
+    <h2 id="about-hl" class="text-center">Rólunk</h2>
+</div>
+
+<div class="container white p-5 mb-5">
+
+    <h6 class="text-center" style="background-color: %!COLOR!%; padding: 5px; color: white;">%!RESULT!%</h6>
+
+    <div class="w-75 m-auto">
+        <h2 class="primary-color mb-3">Amit rólunk érdemes tudni</h2>
+        <p class="my-3" id="about-text">%!ABOUT!%</p>
+    </div>
+
+    <div class="row my-5">
+        <h2 class="primary-color my-5 text-center">Számaink:</h2>
+        <div class="col-sm-6 text-center">
+            <div class="num-card" id="user-num">
+                <h2 class="primary-color big-number">%!USER!%</h2>
+                <h3>felhasználó</h3>
+            </div>
+        </div>
+        <div class="col-sm-6 text-center">
+            <div class="num-card"">
+                <h2 class="primary-color big-number">%!RECEPT!%</h2>
+                <h3>recept</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="devider"></div>
+
+    <div class="container w-75">
+        <h1 class="primary-color mt-5 text-center">Kérdésed van?</h1>
+        <h3 class="mt-1 text-center">írj nekünk!</h3>
+    
+        <form method="post" class="mt-5">
+            <div class="form-group my-3">
+                <label for="email">Email címed</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="pelda@mail.hu" required>
+            </div>
+            <div class="form-group my-3">
+                <label for="subj">Téma</label>
+                <input type="text" class="form-control" id="subj" name="subj" placeholder="Technikai probléma" required>
+            </div>
+            <div class="form-group my-3">
+                <label for="message">Üzenet</label>
+                <textarea class="form-control" id="message" name="message" placeholder="Szöveges üzenet..." cols="80" rows="20" required></textarea>
+            </div>
+            <input type="submit" class="btn btn-default w-100 my-3" value="Küldés" name="ok">
+        </form>
+    </div>
+
+</div>

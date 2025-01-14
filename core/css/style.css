@@ -13,6 +13,10 @@
     box-sizing: border-box;
 }
 
+.primary-color{
+    color: var(--primary-color)
+}
+
 body {
     background-color: var(--main-bg-color);
     background-repeat: repeat;
@@ -65,9 +69,6 @@ a {
     background-color: white;
 }
 
-.primary-color{
-    color: var(--primary-color);
-}
 
 
 /*              NAVBAR             */
@@ -621,4 +622,31 @@ margin: auto;
 #content-table{
     width: 80% !important;
     max-width: 800px;
+}
+
+/*            ABOUT             */
+
+#about-hl{
+    font-size: 60px;
+    color: white;
+    margin-top: 50px;
+}
+
+.big-number{
+    font-size: 120px;
+}
+
+.num-card{
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, .1);
+    width: 300px;
+    padding: 20px 0;
+    border-radius: 22px;
+}
+
+#user-num{
+    float: right;
+}
+
+#about-text{
+    font-size: 18px;
 }

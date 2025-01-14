@@ -345,6 +345,17 @@ abstract class Model
         DBHandler::RunQuery("DELETE FROM `recept` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $receptId)]);
     }
 
+    public static function GetNumbers() : array
+    {
+        $result1 = DBHandler::RunQuery("SELECT `recept_id` FROM `recept` WHERE 1", []);
+        $result2 = DBHandler::RunQuery("SELECT `felh_id` FROM `felhasznalok` WHERE 1", []);
+
+        $data["recept"] = count($result1->fetch_all(MYSQLI_ASSOC));
+        $data["felh"] = count($result2->fetch_all(MYSQLI_ASSOC));
+
+        return $data;
+    }
+
 
 
 

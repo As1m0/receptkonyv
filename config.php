@@ -35,6 +35,9 @@ $cfg["db"]["username"] = "webpage";
 $cfg["db"]["pass"] = "receptkonyv";
 $cfg["db"]["port"] = 3306;
 
+//Mail
+$cfg["serverMailAdress"] = "receptkonyv@mail.hu";
+
 //Picture handling
 $cfg["foodPicSize1"] = 1200;
 $cfg["foodPicSize2"] = 300;

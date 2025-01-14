@@ -22,11 +22,12 @@ class MainSearchModule implements IVisibleModuleBase
 
             $result = Model::GetRecepies($query);
             $this->template->AddData("PLACEHOLDER", $query);
+            $this->template->AddData("VALUE", $query);
             $this->template->AddData("RESULT", "Keresés: <i>{$query}</i> receptre <span>{$result["total_count"]}</span> találat...");
         }
         else
         {
-            $this->template->addData("RESULT", "122 recept közül..."); //From database
+            $this->template->addData("RESULT", ""); //From database
             $this->template->AddData("PLACEHOLDER", "Keresés...");
         }
  
