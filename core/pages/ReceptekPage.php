@@ -54,7 +54,6 @@ class ReceptekPage implements IPageBase
             $recept->AddData("SCORE", $avrScore);
             $recept->AddData("STARSKEP", Template::GetStarImg($avrScore));
 
-            //Card kiküldése
             $this->template->AddData("RECEPTCARDS", $recept);
         }
         $this->template->AddData("PAGES", $result["total_count"]);
