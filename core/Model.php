@@ -251,7 +251,7 @@ abstract class Model
     {
         try
         {
-        RecepieHandler::DeleteRecepies($receptId);
+        RecepieHandler::DeleteRecepie($receptId);
         }
         catch (Exception $ex)
         {
