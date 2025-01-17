@@ -13,7 +13,7 @@ class AboutPage implements IPageBase
     public function Run(array $pageData): void
     {
         global $cfg;
-
+ 
         $this->template = Template::Load($pageData["template"]);
 
         $this->template->AddData("IMG", $cfg["contentFolder"]."/".Model::LoadText("about-cover"));

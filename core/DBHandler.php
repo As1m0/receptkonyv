@@ -7,6 +7,7 @@ abstract class DBHandler
     public static function Init() : void
     {
         global $cfg;
+
         $driver = new mysqli_driver();
         $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
         try

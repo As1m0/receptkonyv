@@ -23,4 +23,8 @@ spl_autoload_register(function(string $type)
     {
         require_once("PHPMailer-master/src/$type.php");
     }
+    elseif(file_exists("api/$type.php"))
+    {
+        require_once("api/$type.php");
+    }
 });
