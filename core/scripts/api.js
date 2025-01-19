@@ -1,9 +1,7 @@
-
-
-let lastChecked = new Date().toISOString();
-let lastRecipeName = null; 
+let lastChecked = new Date(new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Budapest" })).getTime() + 3600000).toISOString();
 
 async function checkForNewRecipe() {
+
     try {
         const response = await fetch(`/Receptkonyv_CMS/api/APIHandler.php/check-new-recipe?lastChecked=${encodeURIComponent(lastChecked)}`);
         if (!response.ok) {
@@ -12,36 +10,45 @@ async function checkForNewRecipe() {
         const data = await response.json();
 
         if (data.status === 'success') {
-            const latestRecipe = data.newRecipe;
 
-            // Check if the recipe is new
-            if (lastRecipeName !== latestRecipe.recept_nev && latestRecipe !== "" ) {
-                console.log(`New recipe uploaded: ${latestRecipe}`);
-
-                //call function - pop-up-window
-
-
-                lastRecipeName = latestRecipe.recept_nev; 
-                lastChecked = new Date().toISOString();
-            } else {
-                //console.log('No new recipes.');
-                return;
+            if (Object.hasOwn(data, 'RecepieName') && Object.hasOwn(data, 'RecepieID')) {
+                const recepieName = data.RecepieName;
+                const recepieID = data.RecepieID;
+                popUpWindow(recepieName, recepieID);
             }
+
         } else {
             console.error('Error from API:', data.message);
         }
     } catch (error) {
         console.error('Error checking for new recipes:', error);
     }
+    lastChecked = new Date(new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Budapest" })).getTime() + 3600000).toISOString();
 }
 
-// Poll the server every 10 seconds
-setInterval(checkForNewRecipe, 3000);
+checkForNewRecipe();
+setInterval(checkForNewRecipe, 10000); //10 mp
 
+let popUpBlock = document.getElementById("pop-up");
+let receptLink = document.getElementById("pop-up-link");
+let NameText = document.getElementById("recepie-name");
+let closeBtn = document.getElementById("pop-cls-btn");
 
+closeBtn.addEventListener("click", closePopUp);
 
+function popUpWindow(recepieName, recepieID) {
+    NameText.textContent = recepieName;
+    receptLink.setAttribute("href", `index.php?p=recept-aloldal&r=${recepieID}`);
+    popUpBlock.style.display = "block";
+    popUpBlock.classList.add("slide-in");
+    setTimeout(closePopUp, 7000);
+}
 
-
-
-
-  
+function closePopUp() {
+    popUpBlock.classList.remove("slide-in");
+    popUpBlock.classList.add("fade-out");
+    setTimeout(() => {
+        popUpBlock.style.display = "none";
+        popUpBlock.classList.remove("fade-out");
+    }, 500);
+}

@@ -56,6 +56,7 @@ abstract class Controller
                             View::getBaseTemplate()->AddData("BGIMAGE", $cfg["contentFolder"]."/".Model::LoadText("bg-img"));
                             View::getBaseTemplate()->AddData($cfg["defaultNavFlag"], Controller::RunModule("NavigationModule"));
                             View::getBaseTemplate()->AddData($cfg["defaultFooterFlag"], Controller::RunModule("FooterModule"));
+                            View::getBaseTemplate()->AddData("POPUP", Template::Load("pop-up-block.html"));
                         }
                         elseif($pageData["parent"] == "adminGroup")
                         {

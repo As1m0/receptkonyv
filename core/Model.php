@@ -5,7 +5,7 @@ abstract class Model
 
     public static function CheckNewRecepie($lastChecked): array
     {
-        $result = DBHandler::RunQuery("SELECT `recept_neve` FROM `recept` WHERE `created_at` > ? LIMIT 1", [ new DBParam( DBTypes::String, $lastChecked) ]);
+        $result = DBHandler::RunQuery("SELECT `recept_neve`,`recept_id` FROM `recept` WHERE `created_at` > ? LIMIT 1", [ new DBParam( DBTypes::String, $lastChecked) ]);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 

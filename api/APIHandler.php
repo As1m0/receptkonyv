@@ -1,18 +1,14 @@
 <?php
-/*
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-*/
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 require_once("../config.php");
 require_once("../core/DBParam.php");
 require_once("../core/DBHandler.php");
 require_once("../core/Model.php");
 require_once("../core/Enums.php");
-
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
 if (strpos($_SERVER['REQUEST_URI'], '/api/') !== false) {
     handleApiRequest();
@@ -26,28 +22,29 @@ function handleApiRequest(): void
     try {
         $lastChecked = $_GET['lastChecked'] ?? null;
         
-
         if (!$lastChecked) {
             throw new Exception("Missing lastChecked parameter.");
         }
 
-        $lastChecked = str_replace("T", " ", $lastChecked);
+        $date = new DateTime($_GET['lastChecked']);
+        $formattedDate = $date->format('Y-m-d H:i:s');
 
         DBHandler::Init();
-        $data = Model::CheckNewRecepie($lastChecked);
+        $data = Model::CheckNewRecepie($formattedDate);
         DBHandler::Disconnect();
 
-        if (empty($data)) {
+        if (empty($data))
+        {
             $response = [
                 'status' => 'success',
-                "lastChecked" => $lastChecked,
-                'newRecipe' => ""
+                "lastChecked" => $formattedDate
             ];
         } else {
             $response = [
                 'status' => 'success',
-                "lastChecked" => $lastChecked,
-                'newRecipe' => $data[0]["recept_neve"]
+                "lastChecked" => $formattedDate,
+                'RecepieName' => $data[0]["recept_neve"],
+                'RecepieID' => $data[0]["recept_id"]
             ];
         }
 
