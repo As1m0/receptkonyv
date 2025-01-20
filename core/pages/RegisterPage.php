@@ -140,26 +140,22 @@ class RegisterPage implements IPageBase
                 die("Unsupported MIME type: " . $mime);
         }
 
-        // Get the original image dimensions
+
         $originalWidth = imagesx($img);
         $originalHeight = imagesy($img);
 
-        // Calculate the aspect ratio of the original image
         $aspectRatio = $originalWidth / $originalHeight;
 
-        // Resize the image to width1, maintaining the aspect ratio
-        $height1 = intval($width1 / $aspectRatio);  // Calculate height for width1
+        $height1 = intval($width1 / $aspectRatio);
         $canvas1 = imagecreatetruecolor($width1, $height1);
         imagecopyresampled($canvas1, $img, 0, 0, 0, 0, $width1, $height1, $originalWidth, $originalHeight);
-        imagejpeg($canvas1, $cfg["ProfilKepek"] . "/" . $name . ".jpg");  // Save the first resized image
+        imagejpeg($canvas1, $cfg["ProfilKepek"] . "/" . $name . ".jpg");
 
-        // Resize the image to width2, maintaining the aspect ratio
-        $height2 = intval($width2 / $aspectRatio);  // Calculate height for width2
+        $height2 = intval($width2 / $aspectRatio);
         $canvas2 = imagecreatetruecolor($width2, $height2);
         imagecopyresampled($canvas2, $img, 0, 0, 0, 0, $width2, $height2, $originalWidth, $originalHeight);
-        imagejpeg($canvas2, $cfg["ProfilKepek"] . "/" . $name . "_thumb.jpg");  // Save the second resized image with "_small" suffix
+        imagejpeg($canvas2, $cfg["ProfilKepek"] . "/" . $name . "_thumb.jpg");
 
-        // Clean up memory
         imagedestroy($canvas1);
         imagedestroy($canvas2);
         imagedestroy($img);

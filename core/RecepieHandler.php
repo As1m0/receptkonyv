@@ -35,7 +35,7 @@ abstract class RecepieHandler
         return $data;
     }
 
-    public static function GetRecepies(string $query = "", int $limit = 15, ?int $userId = null): array
+    public static function GetRecepies(string $query = "", int $limit = 50, ?int $userId = null): array
     {
 
         // Keresési kifejezés előkészítése

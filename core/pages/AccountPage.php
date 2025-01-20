@@ -41,7 +41,7 @@ class AccountPage implements IPageBase
         }
 
         //DB lekérés
-        $result = Model::GetRecepies("", 9, $_SESSION["userID"]);
+        $result = Model::GetRecepies("", 20, $_SESSION["userID"]);
 
         if ($result["total_count"] !== 0)
         {

@@ -1,7 +1,7 @@
 <?php
 $cfg = [];
 
-$cfg["debug"] = true;
+$cfg["debug"] = false;
 
 $cfg["heroRecepieID"] = 50;
 $cfg["SliderNum"] = 5;

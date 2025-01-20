@@ -211,7 +211,7 @@ abstract class Model
         }
     }
 
-    public static function GetRecepies(string $query = "", int $limit = 15, ?int $userId = null): array
+    public static function GetRecepies(string $query = "", int $limit = 50, ?int $userId = null): array
     {
         try
         {
