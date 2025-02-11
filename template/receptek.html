@@ -10,47 +10,53 @@
 
                 <div class="container">
                     <form method="post" id="szurok" name="szurok">
-                        <div class="form-group text-center">
+                        <div class="form-group text-center d-block">
                             <label for="category" class="form-label text-left">Kategória</label><br>
-                            <select class="from-control w-100 szuro-item" name="category" id="category">
-                                <option value="null" selected>-</option>
+                            <span class="remove-filter d-none" id="remove-category" onclick="removeFilter('category')">X</span>
+                            <select class="from-control w-100 szuro-item mt-2" name="category" id="category">
+                                <option value="%!CATEGORY!%" selected>%!CATEGORY!%</option>
                                 %!CATEGORIES!%
                             </select>
                         </div>
 
-                        <div class="form-group mt-3">
+                        <div class="form-group mt-3 d-block">
                             <label for="time" class="form-label">Elkészítési idő</label>
-                            <select class="form-select szuro-item" id="ido" name="ido">
-                                <option value="null" selected>-</option>
+                            <span class="remove-filter d-none" id="remove-time" onclick="removeFilter('time')">X</span>
+                            <select class="form-select szuro-item" id="time" name="time">
+                                <option value="%!TIME!%" selected>%!TIME!%</option>
                                 <option value="30>">30 perc alatti</option>
                                 <option value="30-60">30-60 perces</option>
                                 <option value="60-90">60-90 perces</option>
                                 <option value="90<">90 perc feletti</option>
                             </select>
                         </div>
-                        <div class="form-grou mt-3">
+                        <div class="form-group mt-3 d-block">
                             <label for="nehezseg" class="form-label">Nehézség</label>
+                            <span class="remove-filter d-none" id="remove-diff" onclick="removeFilter('nehezseg')">X</span>
                             <select class="form-select szuro-item" id="nehezseg" name="nehezseg">
-                                <option value="null" selected>-</option>
-                                <option value="kezdo">Kezdő</option>
-                                <option value="konnyu">Könnyű</option>
-                                <option value="kozepes">Közepes</option>
-                                <option value="nehez">Nehéz</option>
-                                <option value="profi">Profi</option>
+                                <option value="%!DIFF!%" selected>%!DIFF!%</option>
+                                <option value="Kezdő">Kezdő</option>
+                                <option value="Könnyű">Könnyű</option>
+                                <option value="Közepes">Közepes</option>
+                                <option value="Nehéz">Nehéz</option>
+                                <option value="Profi">Profi</option>
                             </select>
                         </div>
 
-                        <div class="form-grou mt-3">
-                            <label for="ertekeles" class="form-label">Értékelés</label>
-                            <select class="form-select szuro-item" id="ertekeles" name="ertekeles">
-                                <option value="null" selected>-</option>
-                                <option value="1">*</option>
-                                <option value="2">**</option>
-                                <option value="3">***</option>
-                                <option value="4">****</option>
-                                <option value="5">*****</option>
+                        <div class="form-group mt-3 d-block">
+                            <label for="review" class="form-label">Értékelés</label>
+                            <span class="remove-filter d-none" id="remove-review" onclick="removeFilter('review')">X</span>
+                            <select class="form-select szuro-item" id="review" name="review">
+                                <option value="%!RATING!%" selected>%!RATING!%</option>
+                                <option value="*">*</option>
+                                <option value="**">**</option>
+                                <option value="***">***</option>
+                                <option value="****">****</option>
+                                <option value="*****">*****</option>
                             </select>
                         </div>
+
+                        <input type="submit" class="form-control btn btn-default my-3" value="Szűrés">
 
                     </form>
 

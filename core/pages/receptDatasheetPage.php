@@ -93,7 +93,7 @@ class receptDatasheetPage implements IPageBase
                     $review = Template::Load("comment-thumbnail.html");
 
                     $review->AddData("REVID", $data["reviews"][$j]["review_id"]);
-                    if(isset($_SESSION["userID"]) && $_SESSION["userID"] == $data["reviews"][$j]["felh_id"] || $_SESSION["groupMember"] == 1)
+                    if((isset($_SESSION["userID"]) && $_SESSION["userID"] == $data["reviews"][$j]["felh_id"]) || (isset($_SESSION["groupMember"]) && $_SESSION["groupMember"] == 1))
                     {
                         $review->AddData("DISP", "block");
                     }

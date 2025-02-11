@@ -250,7 +250,7 @@ footer {
 .filter {
     margin: 0 10px;
     background-color: white;
-    height: 460px;
+    height: 485px;
     border-radius: 10px;
 }
 
@@ -721,6 +721,25 @@ margin: auto;
 
 #pop-cls-btn:hover{
     opacity: .8;
+}
+
+.d-block{
+    display: block;
+    position: relative;
+}
+
+.remove-filter{
+    color: red;
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 2px;
+}
+
+.text-left{
+    text-align: left;
+    position: absolute;
+    left: 0px;
 }
 
 @keyframes slideIn {

@@ -13,23 +13,55 @@ class ReceptekPage implements IPageBase
     public function Run(array $pageData): void
     {
         global $cfg;
-
+        
         $this->template = Template::Load($pageData["template"]);
         $this->template->AddData("MAINSEARCH", Controller::RunModule("MainSearchModule"));
         //szűróhöz kategóriák
         $this->template->AddData("CATEGORIES", Template::Load("foodCategories.html"));
 
-        
+        $serachData= [];
+
         if (isset($_GET[$cfg["searchKey"]]))
         {
+            $serachData["searchKey"] = htmlspecialchars(trim($_GET[$cfg["searchKey"]]));
             Controller::RunModule("SearchKeyLoggerModule", [ "searcKey" => $_GET[$cfg["searchKey"]]]);
-            $query = htmlspecialchars($_GET[$cfg["searchKey"]]);
-            $result = Model::GetRecepies($query);
+            $result = Model::GetRecepies($serachData["searchKey"]);
         }
         else
         {
             $result = Model::GetRecepies();
         }
+
+        if(isset($_POST["category"]) && $_POST["category"] !== "")
+        {
+            $serachData["category"] = htmlspecialchars($_POST["category"]);
+            $this->template->AddData("CATEGORY", $serachData["category"]);
+        }
+
+        if(isset($_POST["time"]) && $_POST["time"] !== "")
+        {
+            $serachData["time"] = htmlspecialchars($_POST["time"]);
+            $this->template->AddData("TIME", $serachData["time"]);
+        }
+
+        if(isset($_POST["nehezseg"]) && $_POST["nehezseg"] !== "")
+        {
+            $serachData["difficulty"] = htmlspecialchars($_POST["nehezseg"]);
+            $this->template->AddData("DIFF", $serachData["difficulty"]);
+        }
+
+        if(isset($_POST["review"]) && $_POST["review"] !== "")
+        {
+            $this->template->AddData("RATING", $_POST["review"]);
+            $serachData["rating"] = strlen(htmlspecialchars($_POST["review"]));
+            
+        }
+
+        //print_r($serachData);
+        $DBresult = Model::getDynamicQueryResults($serachData);
+        print_r($DBresult);
+
+
         
         //kapott DB adatok feldolgozása
         for ($i = 0 ; $i < count($result["results"]); $i++)
