@@ -13,7 +13,7 @@ $cfg["PermissionDeniedTemplate"] = "permission_denied.html";
 
 $cfg["contentFolder"] = "content";
 $cfg["templateFolder"] = "template";
-$cfg["defaultContentType"] = "text/html";
+$cfg["defaultContentType"] = "text/html; charset=utf-8";
 $cfg["templateFlag"] = "/%!([A-Z]+)!%/";
 
 //Keys
@@ -29,14 +29,14 @@ $cfg["defaultNavFlag"] = "NAVIGATION";
 $cfg["defaultFooterFlag"] = "FOOTER";
 
 //Database
-$cfg["db"]["db"] = "ReceptkonyvDB";
+$cfg["db"]["db"] = "receptko_ReceptkonyvDB";
 $cfg["db"]["hostname"] = "localhost";
-$cfg["db"]["username"] = "webpage";
-$cfg["db"]["pass"] = "receptkonyv";
+$cfg["db"]["username"] = "receptko_user";
+$cfg["db"]["pass"] = "Diamond92!";
 $cfg["db"]["port"] = 3306;
 
 //Mail
-$cfg["serverMailAdress"] = "receptkonyv@mail.hu";
+$cfg["serverMailAdress"] = "info@receptkonyved.hu";
 
 //Picture handling
 $cfg["foodPicSize1"] = 1200;

@@ -8,7 +8,7 @@ require_once("../config.php");
 require_once("../core/DBParam.php");
 require_once("../core/DBHandler.php");
 require_once("../core/Model.php");
-require_once("../core/Enums.php");
+require_once("../core/enums.php");
 
 if (strpos($_SERVER['REQUEST_URI'], '/api/') !== false) {
     handleApiRequest();

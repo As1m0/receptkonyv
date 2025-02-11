@@ -13,6 +13,11 @@ abstract class DBHandler
         try
         {
             self::$con = new mysqli($cfg["db"]["hostname"], $cfg["db"]["username"], $cfg["db"]["pass"], $cfg["db"]["db"], $cfg["db"]["port"]);
+            
+            if (!self::$con->set_charset("utf8mb4"))
+            {
+                die("Error loading character set utf8mb4: " . $mysqli->error);
+            }
         }
         catch (Exception $ex)
         {

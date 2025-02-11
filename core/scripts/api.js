@@ -3,7 +3,7 @@ let lastChecked = new Date(new Date(new Date().toLocaleString("en-US", { timeZon
 async function checkForNewRecipe() {
 
     try {
-        const response = await fetch(`/Receptkonyv_CMS/api/APIHandler.php/check-new-recipe?lastChecked=${encodeURIComponent(lastChecked)}`);
+        const response = await fetch(`https://www.receptkonyved.hu/api/APIHandler.php/check-new-recipe?lastChecked=${encodeURIComponent(lastChecked)}`);
         if (!response.ok) {
             throw new Error('Failed to fetch API');
         }
@@ -27,7 +27,7 @@ async function checkForNewRecipe() {
 }
 
 checkForNewRecipe();
-setInterval(checkForNewRecipe, 10000); //10 mp
+setInterval(checkForNewRecipe, 30000); //30 mp
 
 let popUpBlock = document.getElementById("pop-up");
 let receptLink = document.getElementById("pop-up-link");
