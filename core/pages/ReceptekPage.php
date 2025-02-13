@@ -21,6 +21,13 @@ class ReceptekPage implements IPageBase
 
         $searchData= [];
 
+        if(isset($_GET["cat"]) && $_GET["cat"] !== "")
+        {
+            $encodedCategory= urldecode($_GET["cat"]);
+            $this->template->AddData("CATEGORY", $encodedCategory);
+            $searchData["category"] = strtolower($encodedCategory);
+        }
+
         if (isset($_GET[$cfg["searchKey"]]))
         {
             $searchData["searchKey"] = htmlspecialchars(trim($_GET[$cfg["searchKey"]]));
