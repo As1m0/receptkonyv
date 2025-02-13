@@ -94,7 +94,7 @@ class UploadPage implements IPageBase
 
                 //Hozzávalók validálása
                 foreach ($hozzavalok as $key => $ingredient) {
-                    $hozzavalok[$key]['mennyiseg'] = filter_var($ingredient['mennyiseg'], FILTER_VALIDATE_INT);
+                    $hozzavalok[$key]['mennyiseg'] = floatval($ingredient['mennyiseg']);
                     $hozzavalok[$key]['nev'] = htmlspecialchars(trim($ingredient['nev']));
                     $hozzavalok[$key]['mertekegyseg'] = htmlspecialchars(trim($ingredient['mertekegyseg']));
                 }

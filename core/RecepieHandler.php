@@ -129,7 +129,7 @@ abstract class RecepieHandler
             DBHandler::RunQuery("INSERT INTO `hozzavalok`(`recept_id`, `nev`,`mennyiseg`,`mertekegyseg`) VALUES (?,?,?,?)",
             [ new DBParam(DBTypes::Int, $insert_id),
             new DBParam(DBTypes::String, $item["nev"]),
-            new DBParam(DBTypes::String, $item["mennyiseg"]),
+            new DBParam(DBTypes::Double, $item["mennyiseg"]),
             new DBParam(DBTypes::String, $item["mertekegyseg"]) ]);
         }
     }
