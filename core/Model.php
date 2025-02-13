@@ -278,55 +278,78 @@ abstract class Model
         }
     }
 
-    public static function getDynamicQueryResults(array $serachData): mixed
+    public static function getDynamicQueryResults(array $serachData): array
     {
-        // Base query
-        $query = "SELECT * FROM recept";
-        
+
         // Initialize an array for conditions and params
         $conditions = [];
         $params = [];
 
-        // Add conditions for the dynamic search data
-
         // Check for searchKey and add condition
         if (isset($serachData["searchKey"])) {
-            $conditions[] = "name LIKE ?";
+            $conditions[] = "`recept_neve` LIKE ?";
             $params[] = new DBParam(DBTypes::String, "%" . $serachData["searchKey"] . "%");
         }
 
         // Check for category and add condition
         if (isset($serachData["category"])) {
-            $conditions[] = "kategoria = ?";
+            $conditions[] = "`kategoria` = ?";
             $params[] = new DBParam(DBTypes::String, $serachData["category"]);
         }
 
-        // Check for time and add condition
-        if (isset($serachData["time"])) {
-            $conditions[] = "elk_ido = ?";
-            $params[] = new DBParam(DBTypes::Int, $serachData["time"]);
-        }
+
 
         // Check for difficulty and add condition
         if (isset($serachData["difficulty"])) {
-            $conditions[] = "nehezseg = ?";
+            $conditions[] = "`nehezseg` = ?";
             $params[] = new DBParam(DBTypes::String, $serachData["difficulty"]);
         }
 
         // Check for rating and add condition
         if (isset($serachData["rating"])) {
-            $conditions[] = "rating >= ?";
+            $conditions[] = "`rating` >= ?";
             $params[] = new DBParam(DBTypes::Int, $serachData["rating"]);
         }
 
-        // If there are conditions, add them to the query
-        if (count($conditions) > 0) {
-            $query .= " WHERE " . implode(" AND ", $conditions);
+        // Check for time and add condition
+        if (isset($serachData["time"])) {
+            $conditions[] = "`elk_ido` ".$serachData["time"];
         }
 
-        // Call the RunQuery method with the constructed query and parameters
-        return [$query, $params];
-        //return DBHandler::RunQuery($query, $params);
+
+        if (count($conditions) > 0) {
+            $finalconditions = implode(" AND ", $conditions);
+        }
+        else {
+            $finalconditions = "1";
+        }
+
+        $fullquery = "
+            SELECT
+                r.recept_id,
+                r.recept_neve,
+                r.elk_ido,
+                r.adag,
+                r.nehezseg,
+                r.pic_name,
+                COALESCE(f.veznev, 'Nincs adat') AS veznev,
+                COALESCE(f.kernev, 'Nincs adat') AS kernev,
+                COALESCE(AVG(rv.ertekeles), 0) AS avg_ertekeles
+            FROM
+                recept r
+            LEFT JOIN
+                felhasznalok f ON r.felh_id = f.felh_id
+            LEFT JOIN
+                reviews rv ON r.recept_id = rv.recept_id
+            WHERE
+                ". $finalconditions ."
+            GROUP BY
+                r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name
+        ";
+
+        $result = DBHandler::RunQuery($fullquery, $params);
+        return $result->fetch_all(MYSQLI_ASSOC);
+
     }
 
 

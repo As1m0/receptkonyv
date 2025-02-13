@@ -728,12 +728,22 @@ margin: auto;
     position: relative;
 }
 
-.remove-filter{
+.remove-filter, #remove-search{
     color: red;
     cursor: pointer;
     position: absolute;
     right: 5px;
     top: 2px;
+    animation: all ease .2s;
+}
+
+.remove-filter:hover, #remove-search:hover{
+    opacity: .4;
+}
+
+#remove-search{
+    top: 8px;
+    right: 22px;
 }
 
 .text-left{

@@ -83,7 +83,7 @@ class UploadPage implements IPageBase
 
 
                 $cim = htmlspecialchars(trim($_POST["name"]));
-                $category = htmlspecialchars(trim($_POST["category"]));
+                $category = strtolower(htmlspecialchars(trim($_POST["category"])));
                 $elkIdo = filter_var($_POST["time"], FILTER_VALIDATE_INT);
                 $nehezseg = htmlspecialchars(trim($_POST["nehezseg"]));
                 $adag = filter_var($_POST["adag"], FILTER_VALIDATE_INT);

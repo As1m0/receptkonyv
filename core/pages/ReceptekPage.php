@@ -19,77 +19,85 @@ class ReceptekPage implements IPageBase
         //szűróhöz kategóriák
         $this->template->AddData("CATEGORIES", Template::Load("foodCategories.html"));
 
-        $serachData= [];
+        $searchData= [];
 
         if (isset($_GET[$cfg["searchKey"]]))
         {
-            $serachData["searchKey"] = htmlspecialchars(trim($_GET[$cfg["searchKey"]]));
+            $searchData["searchKey"] = htmlspecialchars(trim($_GET[$cfg["searchKey"]]));
             Controller::RunModule("SearchKeyLoggerModule", [ "searcKey" => $_GET[$cfg["searchKey"]]]);
-            $result = Model::GetRecepies($serachData["searchKey"]);
-        }
-        else
-        {
-            $result = Model::GetRecepies();
         }
 
         if(isset($_POST["category"]) && $_POST["category"] !== "")
         {
-            $serachData["category"] = htmlspecialchars($_POST["category"]);
-            $this->template->AddData("CATEGORY", $serachData["category"]);
+            $this->template->AddData("CATEGORY", $_POST["category"]);
+            $searchData["category"] = strtolower(htmlspecialchars($_POST["category"]));
         }
 
         if(isset($_POST["time"]) && $_POST["time"] !== "")
         {
-            $serachData["time"] = htmlspecialchars($_POST["time"]);
-            $this->template->AddData("TIME", $serachData["time"]);
+            $this->template->AddData("TIME", $_POST["time"]);
+            switch ($_POST["time"])
+            {
+                case "30 perc alatti":
+                    $searchData["time"] = "< 30";
+                    break;
+                case "30-60 perces":
+                    $searchData["time"] = "BETWEEN 30 AND 60";
+                    break;
+                case "60-90 perces":
+                    $searchData["time"] = "BETWEEN 60 AND 90";
+                    break;
+                case "90 perc feletti":
+                    $searchData["time"] = "> 90";
+                    break;
+                default:
+                $searchData["time"] = "";
+            }
         }
 
         if(isset($_POST["nehezseg"]) && $_POST["nehezseg"] !== "")
         {
-            $serachData["difficulty"] = htmlspecialchars($_POST["nehezseg"]);
-            $this->template->AddData("DIFF", $serachData["difficulty"]);
+            $this->template->AddData("DIFF", $_POST["nehezseg"]);
+            $searchData["difficulty"] = strtolower(htmlspecialchars($_POST["nehezseg"]));
         }
 
         if(isset($_POST["review"]) && $_POST["review"] !== "")
         {
             $this->template->AddData("RATING", $_POST["review"]);
-            $serachData["rating"] = strlen(htmlspecialchars($_POST["review"]));
+            $searchData["rating"] = strlen(htmlspecialchars($_POST["review"]));
             
         }
 
-        //print_r($serachData);
-        $DBresult = Model::getDynamicQueryResults($serachData);
-        print_r($DBresult);
+        $DBresult = Model::getDynamicQueryResults($searchData);
 
 
-        
-        //kapott DB adatok feldolgozása
-        for ($i = 0 ; $i < count($result["results"]); $i++)
+        if(count($DBresult) != 0)
         {
-            //card template
-            $recept = Template::Load("recept-card.html");
-            //card feltöltése
-            $recept_id = $result["results"][$i]["recept_id"];
-            $recept->AddData("RECEPTID", $recept_id);
-            $recept->AddData("RECEPTLINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$recept_id}");
-            if ($result["results"][$i]["pic_name"] !== null) {
-                $recept->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$result["results"][$i]["pic_name"]."_thumb.jpg");
-            } else {
-                $recept->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image_thumb.png");
-            }
-            $recept->AddData("RECEPTNEV", $result["results"][$i]["recept_neve"]);
-            $recept->AddData("IDO", $result["results"][$i]["elk_ido"]);
-            $recept->AddData("ADAG", $result["results"][$i]["adag"]);
-            $recept->AddData("NEHEZSEG", $result["results"][$i]["nehezseg"]);
-            $recept->AddData("USER", $result["results"][$i]["veznev"]." ".$result["results"][$i]["kernev"]);
-            $avrScore = number_format($result["results"][$i]["avg_ertekeles"], 1);
-            $recept->AddData("SCORE", $avrScore);
-            $recept->AddData("STARSKEP", Template::GetStarImg($avrScore));
+            foreach($DBresult as $recept)
+            {
+                $receptCard = Template::Load("recept-card.html");
+                $receptCard->AddData("RECEPTID", $recept["recept_id"]);
+                $receptCard->AddData("RECEPTLINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$recept["recept_id"]}");
+                if ($recept["pic_name"] !== null) {
+                    $receptCard->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$recept["pic_name"]."_thumb.jpg");
+                } else {
+                    $receptCard->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image_thumb.png");
+                }
+                $receptCard->AddData("RECEPTNEV", $recept["recept_neve"]);
+                $receptCard->AddData("IDO", $recept["elk_ido"]);
+                $receptCard->AddData("ADAG", $recept["adag"]);
+                $receptCard->AddData("NEHEZSEG", $recept["nehezseg"]);
+                $receptCard->AddData("USER", $recept["veznev"]." ".$recept["kernev"]);
+                $avrScore = number_format($recept["avg_ertekeles"], 1);
+                $receptCard->AddData("SCORE", $avrScore);
+                $receptCard->AddData("STARSKEP", Template::GetStarImg($avrScore));
 
-            $this->template->AddData("RECEPTCARDS", $recept);
+                $this->template->AddData("RECEPTCARDS", $receptCard);
+            }
         }
-        $this->template->AddData("PAGES", $result["total_count"]);
+        
     }
+       
 
 
 
