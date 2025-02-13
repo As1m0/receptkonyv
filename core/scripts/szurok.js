@@ -29,3 +29,30 @@ filterElements.forEach(({ select }) => {
 
 
 CheckFilters();
+
+
+let RemoveSearchElement = document.getElementById("remove-search");
+let SearchInputElement = document.getElementById("search");
+let SearchForm = document.getElementById("text-search-form");
+
+function removeSearchBarValue() {
+    SearchInputElement.value = "";
+    SearchInputElement.dispatchEvent(new Event("input")); // Manually trigger input event to update UI
+    SearchInputElement.setAttribute("placeholder", "Keresés...");
+    RemoveSearchElement.classList.add("d-none");
+    //setTimeout(() => { SearchForm.submit(); }, 0);
+}
+
+function checkInputBox() {
+    if (SearchInputElement.value.trim() === "") {
+        RemoveSearchElement.classList.add("d-none");
+    } else {
+        RemoveSearchElement.classList.remove("d-none");
+    }
+}
+
+SearchInputElement.addEventListener("input", checkInputBox);
+RemoveSearchElement.addEventListener("click", removeSearchBarValue);
+
+// Initial check
+checkInputBox();

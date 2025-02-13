@@ -19,29 +19,6 @@
 
 
 <script>
-let RemoveSearchElement = document.getElementById("remove-search");
-let SearchInputElement = document.getElementById("search");
-let SearchForm = document.getElementById("text-search-form");
 
-function removeSearchBar() {
-    SearchInputElement.value = "";
-    SearchInputElement.dispatchEvent(new Event("input")); // Manually trigger input event to update UI
-    SearchInputElement.setAttribute("placeholder", "Keresés...");
-    RemoveSearchElement.classList.add("d-none");
-}
-
-function checkInputBox() {
-    if (SearchInputElement.value.trim() === "") {
-        RemoveSearchElement.classList.add("d-none");
-    } else {
-        RemoveSearchElement.classList.remove("d-none");
-    }
-}
-
-SearchInputElement.addEventListener("input", checkInputBox);
-RemoveSearchElement.addEventListener("click", removeSearchBar);
-
-// Initial check
-checkInputBox();
 
 </script>
