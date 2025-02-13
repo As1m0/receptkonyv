@@ -101,7 +101,7 @@ class ReceptekPage implements IPageBase
                 $receptCard = Template::Load("recept-card.html");
                 $receptCard->AddData("RECEPTID", $recept["recept_id"]);
                 $receptCard->AddData("RECEPTLINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$recept["recept_id"]}");
-                if ($recept["pic_name"] !== null) {
+                if ($recept["pic_name"] !== null && file_exists($cfg["receptKepek"]."/".$recept["pic_name"]."_thumb.jpg")) {
                     $receptCard->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$recept["pic_name"]."_thumb.jpg");
                 } else {
                     $receptCard->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image_thumb.png");

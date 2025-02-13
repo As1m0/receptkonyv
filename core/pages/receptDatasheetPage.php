@@ -66,7 +66,7 @@ class receptDatasheetPage implements IPageBase
                 $this->template->AddData("ERTEKELESSZAM", "0");
                 }
 
-            if ($data["recept_adatok"][0]["pic_name"] != null){
+            if ($data["recept_adatok"][0]["pic_name"] != null && file_exists($cfg["receptKepek"]."/".$data["recept_adatok"][0]["pic_name"].".jpg")){
                 $this->template->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$data["recept_adatok"][0]["pic_name"].".jpg");
             } else {
                 $this->template->AddData("RECEPTKEP", $cfg["receptKepek"]."/no_image.png");
@@ -106,7 +106,7 @@ class receptDatasheetPage implements IPageBase
                     $ratingScore = $data["reviews"][$j]["ertekeles"];
                     $review->addData("RATINGPIC",  Template::GetStarImg($ratingScore));
 
-                    if( $data["reviews"][$j]["pic_name"] != null){
+                    if( $data["reviews"][$j]["pic_name"] != null && file_exists($cfg["ProfilKepek"]."/".$data["reviews"][$j]["pic_name"].".jpg")){
                         $review->addData("KOMMENTERPIC", $cfg["ProfilKepek"]."/".$data["reviews"][$j]["pic_name"].".jpg");
                     } else {
                         $review->addData("KOMMENTERPIC", $cfg["ProfilKepek"]."/empty_profilPic.jpg");
@@ -135,7 +135,6 @@ class receptDatasheetPage implements IPageBase
             $receptThumb->AddData("IDO", "25");
             $receptThumb->AddData("ADAG", "4");
             $receptThumb->AddData("NEHEZSEG", "Könnyű");
-            $receptThumb->AddData("RATINGPIC", "content/rating.png");
 
             $this->template->AddData("RECEPTTHUMBNAILS", $receptThumb);
         }

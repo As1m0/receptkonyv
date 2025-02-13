@@ -20,7 +20,14 @@ class NavigationModule implements IVisibleModuleBase
             $this->template->addData("NAVITEMUPLOAD", Template::Load("navItemUpload.html"));
             $AccountTemplate = Template::Load("navItemLogin.html");
             $AccountTemplate->addData("NAME", $_SESSION["username"]);
-            $AccountTemplate->addData("IMG", $cfg["ProfilKepek"] ."/".$_SESSION["userpic"]. "_thumb.jpg");
+            if(file_exists($cfg["ProfilKepek"] ."/".$_SESSION["userpic"]. "_thumb.jpg"))
+            {
+                $AccountTemplate->addData("IMG", $cfg["ProfilKepek"] ."/".$_SESSION["userpic"]. "_thumb.jpg");
+            }
+            else
+            {
+                $AccountTemplate->addData("IMG", $cfg["ProfilKepek"] ."/empty_profilPic_thumb.jpg");
+            }
             if(isset($_SESSION["groupMember"]) && $_SESSION["groupMember"] >= 1)
             {
                 $AccountTemplate->addData("ADMIN", Template::Load("nav-admin-item.html"));

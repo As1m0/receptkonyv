@@ -27,7 +27,15 @@ class AccountPage implements IPageBase
         $this->template->AddData("COVERIMG", $cfg["contentFolder"]."/".Model::LoadText("account-cover"));
        
         //Profil adatok
-        $this->template->AddData("SRC", $cfg["ProfilKepek"] ."/".$_SESSION["userpic"]. ".jpg");
+        if(file_exists($cfg["ProfilKepek"] ."/".$_SESSION["userpic"]. ".jpg"))
+        {
+            $this->template->AddData("SRC", $cfg["ProfilKepek"] ."/".$_SESSION["userpic"]. ".jpg");
+        }
+        else
+        {
+            $this->template->AddData("SRC", $cfg["ProfilKepek"] ."/empty_profilPic.jpg");
+        }
+        //$this->template->AddData("SRC", $cfg["ProfilKepek"] ."/".$_SESSION["userpic"]. ".jpg");
         $this->template->AddData("NAME", $_SESSION["userfullname"]);
         $this->template->AddData("USERID", $_SESSION["userID"]);
         $this->template->AddData("EMAIL", $_SESSION["usermail"]);
@@ -54,7 +62,7 @@ class AccountPage implements IPageBase
                 $recept_id = $result["results"][$i]["recept_id"];
                 $recept->AddData("RECEPTID", $recept_id);
                 $recept->AddData("RECEPTLINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$recept_id}");
-                if ($result["results"][$i]["pic_name"] !== null) {
+                if ($result["results"][$i]["pic_name"] !== null && file_exists($cfg["receptKepek"]."/".$result["results"][$i]["pic_name"]."_thumb.jpg")) {
                     $recept->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$result["results"][$i]["pic_name"]."_thumb.jpg");
                 } else {
                     $recept->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image_thumb.png");
