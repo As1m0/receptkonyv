@@ -150,7 +150,7 @@ class UploadPage implements IPageBase
         $height1 = intval($width1 / $aspectRatio);
         $canvas1 = imagecreatetruecolor($width1, $height1);
         imagecopyresampled($canvas1, $img, 0, 0, 0, 0, $width1, $height1, $originalWidth, $originalHeight);
-        imagejpeg($canvas1, $cfg["receptKepek"] . "/" . $name . ".jpg"); 
+        imagejpeg($canvas1, $cfg["receptKepek"] . "/" . $name . ".jpg");
 
         $height2 = intval($width2 / $aspectRatio);
         $canvas2 = imagecreatetruecolor($width2, $height2);
