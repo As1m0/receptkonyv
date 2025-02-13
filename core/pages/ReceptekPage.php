@@ -17,27 +17,37 @@ class ReceptekPage implements IPageBase
         $this->template = Template::Load($pageData["template"]);
         $this->template->AddData("MAINSEARCH", Controller::RunModule("MainSearchModule"));
         //szűróhöz kategóriák
-        $this->template->AddData("CATEGORIES", Template::Load("foodCategories.html"));
+        $categorySelect = Template::Load("category-select.html");
+        $categorySelect->AddData("CATEGORIES", Template::Load("foodCategories.html"));
+        
 
         $searchData= [];
 
+        
         if(isset($_GET["cat"]) && $_GET["cat"] !== "")
         {
             $encodedCategory= urldecode($_GET["cat"]);
-            $this->template->AddData("CATEGORY", $encodedCategory);
             $searchData["category"] = strtolower($encodedCategory);
+            $this->template->AddData("RECEPTCARDS", "<h2 class=\"primary-color\">{$encodedCategory} receptek</h2>");
         }
+        elseif(!isset($_POST["category"]))
+        {
+            $this->template->AddData("CATEGORYFILTER", $categorySelect);
+        }
+        
 
         if (isset($_GET[$cfg["searchKey"]]))
         {
             $searchData["searchKey"] = htmlspecialchars(trim($_GET[$cfg["searchKey"]]));
             Controller::RunModule("SearchKeyLoggerModule", [ "searcKey" => $_GET[$cfg["searchKey"]]]);
         }
+        
 
         if(isset($_POST["category"]) && $_POST["category"] !== "")
         {
-            $this->template->AddData("CATEGORY", $_POST["category"]);
+            $categorySelect->AddData("CATEGORY", $_POST["category"]);
             $searchData["category"] = strtolower(htmlspecialchars($_POST["category"]));
+            $this->template->AddData("CATEGORYFILTER", $categorySelect);
         }
 
         if(isset($_POST["time"]) && $_POST["time"] !== "")
@@ -106,6 +116,8 @@ class ReceptekPage implements IPageBase
         {
             $this->template->AddData("RECEPTCARDS", "<h4 class=\"text-center\">Nincs találat!</h4>");
         }
+
+
         
     }
        

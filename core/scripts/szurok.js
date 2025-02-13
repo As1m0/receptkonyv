@@ -1,6 +1,10 @@
 function removeFilter(inputId) {
-    document.getElementById(inputId).value = '';
-    document.querySelector('#szurok').submit();
+    const inputElement = document.getElementById(inputId);
+    if (inputElement) {
+        inputElement.value = '';
+        const form = document.querySelector('#szurok');
+        if (form) form.submit();
+    }
 }
 
 const filterElements = [
@@ -14,20 +18,24 @@ function CheckFilters() {
     filterElements.forEach(({ select, remove }) => {
         const selectElement = document.getElementById(select);
         const removeElement = document.getElementById(remove);
-        if (selectElement.value.trim() !== '') {
-            removeElement.classList.remove('d-none');
-        } else {
-            removeElement.classList.add('d-none');
+        if (selectElement && removeElement) {
+            if (selectElement.value.trim() !== '') {
+                removeElement.classList.remove('d-none');
+            } else {
+                removeElement.classList.add('d-none');
+            }
         }
     });
 }
 
-
 filterElements.forEach(({ select }) => {
-    document.getElementById(select).addEventListener('change', CheckFilters);
+    const selectElement = document.getElementById(select);
+    if (selectElement) {
+        selectElement.addEventListener('change', CheckFilters);
+    }
 });
 
-
 CheckFilters();
+
 
 
