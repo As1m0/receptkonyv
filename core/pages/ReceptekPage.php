@@ -16,30 +16,29 @@ class ReceptekPage implements IPageBase
         
         $this->template = Template::Load($pageData["template"]);
         $this->template->AddData("MAINSEARCH", Controller::RunModule("MainSearchModule"));
+
         //szűróhöz kategóriák
         $categorySelect = Template::Load("category-select.html");
         $categorySelect->AddData("CATEGORIES", Template::Load("foodCategories.html"));
         
-
         $searchData= [];
 
-        
+    
         if(isset($_GET["cat"]) && $_GET["cat"] !== "")
         {
             $encodedCategory= urldecode($_GET["cat"]);
             $searchData["category"] = strtolower($encodedCategory);
             $this->template->AddData("RECEPTCARDS", "<h2 class=\"primary-color\">{$encodedCategory} receptek</h2>");
         }
-        elseif(!isset($_POST["category"]))
+        
+        if(!isset($_GET["cat"]) && !isset($_POST["category"]))
         {
             $this->template->AddData("CATEGORYFILTER", $categorySelect);
         }
-        
 
-        if (isset($_GET[$cfg["searchKey"]]))
+        if(isset($_POST["category"]) && $_POST["category"] == "")
         {
-            $searchData["searchKey"] = htmlspecialchars(trim($_GET[$cfg["searchKey"]]));
-            Controller::RunModule("SearchKeyLoggerModule", [ "searcKey" => $_GET[$cfg["searchKey"]]]);
+            $this->template->AddData("CATEGORYFILTER", $categorySelect);
         }
         
 
@@ -48,6 +47,13 @@ class ReceptekPage implements IPageBase
             $categorySelect->AddData("CATEGORY", $_POST["category"]);
             $searchData["category"] = strtolower(htmlspecialchars($_POST["category"]));
             $this->template->AddData("CATEGORYFILTER", $categorySelect);
+        }
+
+                
+        if (isset($_GET[$cfg["searchKey"]]))
+        {
+            $searchData["searchKey"] = htmlspecialchars(trim($_GET[$cfg["searchKey"]]));
+            Controller::RunModule("SearchKeyLoggerModule", [ "searcKey" => $_GET[$cfg["searchKey"]]]);
         }
 
         if(isset($_POST["time"]) && $_POST["time"] !== "")
