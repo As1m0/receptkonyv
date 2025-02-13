@@ -1,15 +1,20 @@
-<ul class="navbar-nav" style="position: absolute; right: 10px;">
+
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="%!IMG!%" alt="Profile" style="width: 23px; border-radius: 50%; margin-right: 2px; margin-top: -5px;">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <img src="%!IMG!%" alt="Profile"
+                style="width: 23px; border-radius: 50%; margin-right: 2px; margin-top: -5px;">
             %!NAME!%
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
             <li><a class="dropdown-item" href="index.php?p=account">Receptjeim</a></li>
             <li><a class="dropdown-item" href="index.php?p=account">Profilom</a></li>
             %!ADMIN!%
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="index.php?logout=true" style="color: red;">Kijelentkezés</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item text-danger" href="index.php?logout=true">Kijelentkezés</a></li>
         </ul>
     </li>
-</ul>
+
+

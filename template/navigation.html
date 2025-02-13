@@ -1,40 +1,50 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light">
-    <ul class="navbar-nav mr-auto">
-        <li><a class="navbar-brand" href="index.php"><img src="%!LOGO!%" alt="receptkönyv logó" id="logo"></a></li>
-        <li>
-            <a class="nav-item nav-link" href="index.php">
-            Főoldal
-            </a>
-        </li>
-        <li>
-            <a class="nav-item nav-link" href="index.php?p=receptek">
-            Receptek
-            </a>
-        </li>
+    <div class="container-fluid">
+        <!-- Logo -->
+        <a class="navbar-brand" href="index.php">
+            <img src="%!LOGO!%" alt="receptkönyv logó" id="logo">
+        </a>
 
-        <ul class="navbar-nav">
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Kategóriák
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                <li><a class="dropdown-item" href="index.php?p=receptek&cat=Leves">Leves</a></li>
-                <li><a class="dropdown-item" href="index.php?p=receptek&cat=Előétel">Előétel</a></li>
-                <li><a class="dropdown-item" href="index.php?p=receptek&cat=Főétel">Főétel</a></li>
-                <li><a class="dropdown-item" href="index.php?p=receptek&cat=Köret">Köret</a></li>
-                <li><a class="dropdown-item" href="index.php?p=receptek&cat=Édesség">Édesség</a></li>
-                <li><a class="dropdown-item" href="index.php?p=receptek&cat=Vegán">Vegán</a></li>
+        <!-- Navbar Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible Menu -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">Főoldal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?p=receptek">Receptek</a>
+                </li>
+
+                <!-- Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Kategóriák
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                        <li><a class="dropdown-item" href="index.php?p=receptek&amp;cat=Leves">Leves</a></li>
+                        <li><a class="dropdown-item" href="index.php?p=receptek&amp;cat=Előétel">Előétel</a></li>
+                        <li><a class="dropdown-item" href="index.php?p=receptek&amp;cat=Főétel">Főétel</a></li>
+                        <li><a class="dropdown-item" href="index.php?p=receptek&amp;cat=Köret">Köret</a></li>
+                        <li><a class="dropdown-item" href="index.php?p=receptek&amp;cat=Édesség">Édesség</a></li>
+                        <li><a class="dropdown-item" href="index.php?p=receptek&amp;cat=Vegán">Vegán</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?p=about">Rólunk</a>
+                </li>
+                <ul class="navbar-nav ms-auto" id="nav-rigth">
+                    %!NAVITEMUPLOAD!%
+                    %!NAVITEMLOGIN!%
+                </ul>
             </ul>
-        </li>
-        </ul>
-
-
-        <li>
-            <a class="nav-item nav-link" id="nav-categories" href="index.php?p=about">
-            Rólunk
-            </a>
-        </li>
-        %!NAVITEMUPLOAD!%
-        %!NAVITEMLOGIN!%
-    </ul>
+        </div>
+    </div>
 </nav>

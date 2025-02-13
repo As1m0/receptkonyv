@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 
@@ -15,7 +14,7 @@
     box-sizing: border-box;
 }
 
-.primary-color{
+.primary-color {
     color: var(--primary-color)
 }
 
@@ -67,7 +66,7 @@ a {
     opacity: 80%;
 }
 
-.blokk{
+.blokk {
     background-color: white;
 }
 
@@ -81,11 +80,13 @@ nav {
 
 nav #logo {
     width: 100px;
-    margin-top: -4px;
+    margin-top: -5px;
+    margin-left: 5px;
 }
 
 #nav-btn {
-    margin-top: -3px;
+    margin-left: 2px;
+    margin-top: -2px;
     padding: 3px 6px;
     font-size: 12px;
 }
@@ -110,7 +111,7 @@ nav #logo {
 
 
 
-.white{
+.white {
     background-color: white;
 }
 
@@ -190,11 +191,11 @@ footer {
     min-height: 378px;
 }
 
-.card-deck{
+.card-deck {
     padding: 0px;
 }
 
-.card-img-wrapper{
+.card-img-wrapper {
     width: 100%;
     max-height: 180px;
     overflow: hidden;
@@ -204,13 +205,13 @@ footer {
     width: 100%;
 }
 
-.nev-wrapper{
+.nev-wrapper {
     width: 100%;
     height: 22px;
     overflow: hidden;
 }
 
-.nev-wrapper h5{
+.nev-wrapper h5 {
     font-size: 18px;
 }
 
@@ -253,7 +254,7 @@ footer {
     height: 485px;
     border-radius: 10px;
     position: sticky;
-    top:5px;
+    top: 5px;
 }
 
 #szurok select {
@@ -261,7 +262,7 @@ footer {
     border: 1px solid lightgray;
 }
 
-.order-list{
+.order-list {
     width: 100%;
     margin-top: -20px;
 }
@@ -277,7 +278,8 @@ footer {
     padding: 10px;
     cursor: pointer;
 }
-.order-list ul li:hover{
+
+.order-list ul li:hover {
     opacity: .8;
 }
 
@@ -338,32 +340,32 @@ footer {
 
 /*   hasonló receptek side section   */
 
-.recept-thumbnail{
+.recept-thumbnail {
     padding: 8px;
     border-radius: 5px;
 }
 
-.recept-thumbnail small{
+.recept-thumbnail small {
     font-size: 12px;
 }
 
 
-.recept-thumbnail img{
+.recept-thumbnail img {
     height: 100%;
 }
 
-.img-container{
+.img-container {
     width: 100%;
     height: 60px;
     overflow: hidden;
 }
 
-.thumbnail-reviews img{
+.thumbnail-reviews img {
     width: 60px;
     margin-top: 12px;
 }
 
-#thumb-link:hover{
+#thumb-link:hover {
     color: black;
 }
 
@@ -376,7 +378,7 @@ footer {
     margin: 10px auto;
 }
 
-.review-thumb .user-pic{
+.review-thumb .user-pic {
     width: 80px;
     text-align: center;
     margin-left: auto;
@@ -384,30 +386,30 @@ footer {
     border-radius: 50%;
 }
 
-.review-star{
+.review-star {
     width: 100px;
     margin: 10px 0 15px 0;
 }
 
-.comment-text{
+.comment-text {
     font-size: 14px;
     line-height: 1.3rem;
 }
 
-.time-stamp{
-    color: rbga(0,0,0,0.2) !important;
+.time-stamp {
+    color: rbga(0, 0, 0, 0.2) !important;
 }
 
-.write-review{
+.write-review {
     width: 80%;
     margin: auto;
 }
 
-.write-review button{
+.write-review button {
     margin: auto;
 }
 
-#starContainer{
+#starContainer {
     width: 60%;
     margin-bottom: 5px;
 }
@@ -419,6 +421,7 @@ footer {
     cursor: pointer;
     margin: 10px auto;
 }
+
 .write-review .star {
     width: 20px;
     height: 20px;
@@ -427,36 +430,37 @@ footer {
     margin: 5px;
     transition: all ease .2;
 }
+
 .write-review .star.selected {
     background-image: url('../../content/stars/star-filled.png');
 }
 
-.write-review .star:hover{
+.write-review .star:hover {
     opacity: .5;
 }
 
-.review-delete-btn{
+.review-delete-btn {
     display: flex;
     flex-direction: column;
     align-items: end;
     margin-right: 10px;
 }
 
-.review-delete-btn button{
+.review-delete-btn button {
     font-size: 12px;
 }
 
-.review-delete-btn button:hover{
+.review-delete-btn button:hover {
     background-color: red;
     color: white;
 }
 
-.com-del-block{
+.com-del-block {
     display: block;
     float: right;
 }
 
-.com-del-btn{
+.com-del-btn {
     color: rgb(253, 93, 93);
     border-radius: 50%;
     text-align: center;
@@ -466,7 +470,7 @@ footer {
     outline: none;
 }
 
-.com-del-block form input:hover{
+.com-del-block form input:hover {
     background-color: rgb(253, 93, 93);
     color: white;
     cursor: pointer;
@@ -474,51 +478,51 @@ footer {
 
 /*              recept slider         */
 
-.slider{
+.slider {
     padding: 40px 0;
-    background-color: rgba(255,255,255,.8);
+    background-color: rgba(255, 255, 255, .8);
     width: 100%;
 }
 
-.slider .flex{
-display: flex;
-max-width: 1200px;
-overflow: hidden;
-align-items: center;
-justify-content: center;
-margin: auto;
+.slider .flex {
+    display: flex;
+    max-width: 1200px;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
 }
 
-.small-deck{
+.small-deck {
     height: 280px;
     margin: 20px 20px;
     width: 200px !important;
     min-width: 200px;
     border-radius: 10px;
-    box-shadow: 5px 5px 15px rgba(0,0,0,.1);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, .1);
     background-color: white;
 }
 
-.img-wrapper{
+.img-wrapper {
     width: 100%;
     height: 130px;
     overflow: hidden;
 }
 
-.img-wrapper img{
+.img-wrapper img {
     width: 100%;
 }
 
 /*              Profil page         */
 
-.cover-pic{
+.cover-pic {
     width: 100%;
     height: 250px;
     overflow: hidden;
     position: relative;
 }
 
-.cover-pic h2{
+.cover-pic h2 {
     position: absolute;
     top: 40%;
     left: 50%;
@@ -527,44 +531,44 @@ margin: auto;
 }
 
 
-.profil-pic{
+.profil-pic {
     width: 80%;
     max-width: 200px;
     border-radius: 50% !important;
 }
 
 
-#delete{
+#delete {
     color: red;
 }
 
-#delete:hover{
+#delete:hover {
     background-color: red;
     color: white;
 }
 
-.actions a{
+.actions a {
     padding: 0 10px;
 }
 
-.delete-recept{
+.delete-recept {
     color: red;
 }
 
-.buttons{
+.buttons {
     margin-top: 90px;
 }
 
-#login-box{
+#login-box {
     margin-top: -140px;
 }
 
-#register-box{
+#register-box {
     margin-top: -140px;
 }
 
-.shadow{
-    box-shadow: 5px 5px 15px rgba(0,0,0,.1);
+.shadow {
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, .1);
 }
 
 
@@ -572,17 +576,17 @@ margin: auto;
 /*          STAR RECEPT SECTION           */
 
 
-.star-recept{
+.star-recept {
     width: 100vw;
     background-color: rgb(238, 229, 201);
     padding: 50px 0;
 }
 
-.p-0{
+.p-0 {
     padding: 0px !important;
 }
 
-.mw-80{
+.mw-80 {
     max-width: 1200px;
 }
 
@@ -606,73 +610,73 @@ margin: auto;
     opacity: .8;
 }
 
-.star-recept-kep{
-    width: 100%;     
-    height: 100%;     
+.star-recept-kep {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: center;
     transition: all ease .2;
 }
 
-.star-recept-kep:hover{
+.star-recept-kep:hover {
     opacity: .8;
 }
 
-.wrap{
+.wrap {
     width: 100%;
     height: 100%;
     position: relative;
     overflow: hidden;
 }
 
-.star-btn{
+.star-btn {
     margin-top: auto;
     text-align: center;
 }
 
-.star-flex{
+.star-flex {
     display: flex;
     flex-direction: column;
-    justify-content:end;
+    justify-content: end;
     align-items: center;
     height: 100%;
     padding: 20px;
     box-sizing: border-box;
 }
 
-.textarea-td{
+.textarea-td {
     width: 300px;
 }
 
-#content-table{
+#content-table {
     width: 80% !important;
     max-width: 800px;
 }
 
 /*            ABOUT             */
 
-#about-hl{
+#about-hl {
     font-size: 60px;
     color: white;
     margin-top: 50px;
 }
 
-.big-number{
+.big-number {
     font-size: 120px;
 }
 
-.num-card{
+.num-card {
     box-shadow: 4px 4px 12px rgba(0, 0, 0, .1);
     width: 300px;
     padding: 20px 0;
     border-radius: 22px;
 }
 
-#user-num{
+#user-num {
     float: right;
 }
 
-#about-text{
+#about-text {
     font-size: 18px;
 }
 
@@ -680,7 +684,7 @@ margin: auto;
 
 /*       POP UP WINDOW               */
 
-#pop-up{
+#pop-up {
     position: fixed;
     right: 30px;
     bottom: 30px;
@@ -692,12 +696,12 @@ margin: auto;
 }
 
 
-#pop-up h4{
+#pop-up h4 {
     color: red;
 }
 
 
-#new-badge{
+#new-badge {
     position: absolute;
     top: -10px;
     left: -10px;
@@ -710,7 +714,7 @@ margin: auto;
     font-weight: bold;
 }
 
-#pop-cls-btn{
+#pop-cls-btn {
     position: absolute;
     top: 0px;
     right: 10px;
@@ -721,16 +725,17 @@ margin: auto;
     cursor: pointer;
 }
 
-#pop-cls-btn:hover{
+#pop-cls-btn:hover {
     opacity: .8;
 }
 
-.d-block{
+.d-block {
     display: block;
     position: relative;
 }
 
-.remove-filter, #remove-search{
+.remove-filter,
+#remove-search {
     color: red;
     cursor: pointer;
     position: absolute;
@@ -739,16 +744,17 @@ margin: auto;
     animation: all ease .2s;
 }
 
-.remove-filter:hover, #remove-search:hover{
+.remove-filter:hover,
+#remove-search:hover {
     opacity: .4;
 }
 
-#remove-search{
+#remove-search {
     top: 8px;
     right: 22px;
 }
 
-.text-left{
+.text-left {
     text-align: left;
     position: absolute;
     left: 0px;
@@ -759,6 +765,7 @@ margin: auto;
         opacity: 0;
         transform: translateX(100%);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -769,6 +776,7 @@ margin: auto;
     from {
         opacity: 1;
     }
+
     to {
         opacity: 0;
     }
@@ -781,4 +789,18 @@ margin: auto;
 
 #pop-up.fade-out {
     animation: fadeOut 0.5s forwards;
+}
+
+
+@media only screen and (min-width: 767px) {
+    #nav-rigth {
+        position: absolute;
+        right: 5px;
+    }
+}
+
+@media only screen and (max-width: 766px) {
+    #nav-rigth {
+        margin-left: 0px !important;
+    }
 }
