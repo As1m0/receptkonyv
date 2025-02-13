@@ -278,7 +278,7 @@ abstract class Model
         }
     }
 
-    public static function getDynamicQueryResults(array $serachData): array
+    public static function getDynamicQueryResults(array $serachData, $limit = 50): array
     {
 
         // Initialize an array for conditions and params
@@ -307,8 +307,31 @@ abstract class Model
 
         // Check for rating and add condition
         if (isset($serachData["rating"])) {
-            $conditions[] = "`rating` >= ?";
-            $params[] = new DBParam(DBTypes::Int, $serachData["rating"]);
+            switch ($serachData["rating"]) {
+                case "1":
+                    $ratingQuery = "1";
+                    break;
+                case "2":
+                    $ratingQuery = "BETWEEN 2 AND 3";
+                    break;
+                case "3":
+                    $ratingQuery = "BETWEEN 3 AND 4";
+                    break;
+                case "4":
+                    $ratingQuery = "BETWEEN 4 AND 5";
+                    break;
+                case "5":
+                    $ratingQuery = "5";
+                    break;
+                default:
+                    $ratingQuery = "0";
+            }
+            $ratingCond = "HAVING `avg_ertekeles` >= ?";
+            $params[] = new DBParam(DBTypes::String, $ratingQuery);
+        }
+        else
+        {
+            $ratingCond = "";
         }
 
         // Check for time and add condition
@@ -345,7 +368,8 @@ abstract class Model
                 ". $finalconditions ."
             GROUP BY
                 r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name
-        ";
+                ".$ratingCond."
+            LIMIT ".$limit;
 
         $result = DBHandler::RunQuery($fullquery, $params);
         return $result->fetch_all(MYSQLI_ASSOC);

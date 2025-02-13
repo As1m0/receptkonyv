@@ -102,6 +102,10 @@ class ReceptekPage implements IPageBase
                 $this->template->AddData("RECEPTCARDS", $receptCard);
             }
         }
+        else
+        {
+            $this->template->AddData("RECEPTCARDS", "<h4 class=\"text-center\">Nincs találat!</h4>");
+        }
         
     }
        

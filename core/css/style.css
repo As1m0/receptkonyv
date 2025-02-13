@@ -252,6 +252,8 @@ footer {
     background-color: white;
     height: 485px;
     border-radius: 10px;
+    position: sticky;
+    top:5px;
 }
 
 #szurok select {
