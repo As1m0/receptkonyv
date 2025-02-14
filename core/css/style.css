@@ -188,7 +188,7 @@ footer {
     border-radius: 20px;
     border: none;
     transition: all ease .3s;
-    min-height: 378px;
+    height: 340px;
 }
 
 .card-deck {
@@ -197,12 +197,24 @@ footer {
 
 .card-img-wrapper {
     width: 100%;
-    max-height: 180px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
 }
 
 .card-img-top {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-bottom-text {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 15px;
 }
 
 .nev-wrapper {
@@ -467,11 +479,11 @@ footer {
     height: 23px;
     border: none;
     outline: none;
+    background-color: none !important;
 }
 
 .com-del-block form input:hover {
-    background-color: rgb(253, 93, 93);
-    color: white;
+    opacity: .5;
     cursor: pointer;
 }
 
@@ -486,30 +498,45 @@ footer {
 .slider .flex {
     display: flex;
     max-width: 1200px;
-    overflow: hidden;
     align-items: center;
     justify-content: center;
     margin: auto;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 8px;
+    /* Space between items */
+    padding-bottom: 10px;
 }
 
 .small-deck {
     height: 280px;
-    margin: 20px 20px;
+    margin: 20px 10px;
     width: 200px !important;
     min-width: 200px;
     border-radius: 10px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, .1);
     background-color: white;
+    flex: 0 0 auto;
+    /* Ensures items don't shrink */
+    scroll-snap-align: start;
+}
+
+.flex::-webkit-scrollbar {
+    display: none;
 }
 
 .img-wrapper {
     width: 100%;
     height: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
 }
 
 .img-wrapper img {
-    width: 100%;
+
+    object-fit: cover;
 }
 
 /*              Profil page         */
@@ -581,6 +608,10 @@ footer {
     padding: 50px 0;
 }
 
+.star-recept .container {
+    width: 90vw;
+}
+
 .p-0 {
     padding: 0px !important;
 }
@@ -640,8 +671,15 @@ footer {
     align-items: center;
     height: 100%;
     padding: 20px;
-    box-sizing: border-box;
 }
+
+@media only screen and (max-width: 766px) {
+    .star-flex h2 {
+        margin: 10px 0 !important;
+    }
+}
+
+
 
 .textarea-td {
     width: 300px;
@@ -759,6 +797,11 @@ footer {
     left: 0px;
 }
 
+.title-wrapper {
+    height: 48px;
+    overflow: hidden;
+}
+
 @keyframes slideIn {
     from {
         opacity: 0;
@@ -790,7 +833,37 @@ footer {
     animation: fadeOut 0.5s forwards;
 }
 
+#filter-button{
+    color: var(--primary-color);
+    letter-spacing: 2px;
+}
 
+#filter-button:hover{
+    opacity: .5;
+}
+
+#filter-box-collapsed{
+    border-radius: 10px;
+    width: 90%;
+    cursor: pointer;
+}
+
+#close-filter{
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: var(--primary-color);
+    font-size: 22px;
+}
+
+#close-filter:hover{
+    opacity: .5;
+}
+
+
+
+/*          NAVBAR RIGHT           */
 @media only screen and (min-width: 767px) {
     #nav-rigth {
         position: absolute;
@@ -802,4 +875,35 @@ footer {
     #nav-rigth {
         margin-left: 0px !important;
     }
+}
+
+
+
+/*          FILTER BOX            */
+@media only screen and (min-width: 767px) {
+    #filter-box {
+        display: block;
+    }
+    #filter-box-collapsed{
+        display: none;
+    }
+    #close-filter{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 766px) {
+    #filter-box {
+        display: none;
+    }
+    #filter-box-collapsed{
+        display: block;
+    }
+    #close-filter{
+        display: block;
+    }
+}
+
+.user-card-deck{
+    height: 350px;
 }

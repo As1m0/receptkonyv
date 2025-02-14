@@ -59,15 +59,15 @@
         <div id="ingredientsForm">
             <div id="ingredients" class="row g-3 mb-3">
                 <div class="col-12 row align-items-end ingredient-row mt-1">
-                    <div class="col-md-3">
-                        <label for="ingredientAmount1" class="form-label">Mennyiség</label>
-                        <input type="number" step="0.1" class="form-control input-filed" id="ingredientAmount1"
-                            name="ingredients[0][mennyiseg]" placeholder="pl. 100.." required>
-                    </div>
                     <div class="col-md-4">
                         <label for="ingredientName1" class="form-label">Hozzávaló neve</label>
                         <input type="text" class="form-control input-filed" id="ingredientName1"
                             name="ingredients[0][nev]" placeholder="pl. cukor.." required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="ingredientAmount1" class="form-label">Mennyiség</label>
+                        <input type="number" step="0.1" class="form-control input-filed" id="ingredientAmount1"
+                            name="ingredients[0][mennyiseg]" placeholder="pl. 100.." required>
                     </div>
                     <div class="col-md-3">
                         <label for="ingredientUnit1" class="form-label">Mértékegység</label>
@@ -81,15 +81,17 @@
                             <option value="db">db</option>
                             <option value="ek">ek</option>
                             <option value="tk">tk</option>
+                            <option value="pohár">pohár</option>
+                            <option value="csésze">csésze</option>
                             <option value="bögre">bögre</option>
                             <option value="csomag">csomag</option>
-                            <option value="fej">fej</option>
                             <option value="doboz">doboz</option>
                             <option value="csipet">csipet</option>
+                            <option value="marék">marék</option>
                             <option value="csokor">csokor</option>
-                            <option value="csésze">csésze</option>
                             <option value="szelet">szelet</option>
                             <option value="gerezd">gerezd</option>
+                            <option value="fej">fej</option>
                             <option value="szál">szál</option>
                         </select>
                     </div>

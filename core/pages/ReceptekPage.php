@@ -28,7 +28,7 @@ class ReceptekPage implements IPageBase
         {
             $encodedCategory= urldecode($_GET["cat"]);
             $searchData["category"] = strtolower($encodedCategory);
-            $this->template->AddData("RECEPTCARDS", "<h2 class=\"primary-color\">{$encodedCategory} receptek</h2>");
+            $this->template->AddData("RECEPTCARDS", "<h2 class=\"primary-color mb-3\">{$encodedCategory} receptek</h2>");
         }
         
         if(!isset($_GET["cat"]) && !isset($_POST["category"]))

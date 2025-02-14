@@ -1,3 +1,19 @@
+let szuroButton = document.getElementById('filter-box-collapsed');
+let szuroBox = document.getElementById('filter-box');
+
+szuroButton.addEventListener('click', function () {
+    szuroBox.style.display = 'block';
+    szuroButton.style.display = 'none';
+});
+
+
+function closeFilter() {
+    szuroBox.style.display = 'none';
+    szuroButton.style.display = 'block';
+}
+
+
+
 function removeFilter(inputId) {
     const inputElement = document.getElementById(inputId);
     if (inputElement) {
@@ -20,6 +36,8 @@ function CheckFilters() {
         const removeElement = document.getElementById(remove);
         if (selectElement && removeElement) {
             if (selectElement.value.trim() !== '') {
+                szuroBox.style.display = 'block';
+                szuroButton.style.display = 'none';
                 removeElement.classList.remove('d-none');
             } else {
                 removeElement.classList.add('d-none');

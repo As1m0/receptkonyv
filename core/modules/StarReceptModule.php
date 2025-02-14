@@ -38,7 +38,7 @@ class StarReceptModule implements IVisibleModuleBase
         }
 
 
-        if ($result["recept_adatok"][0]["pic_name"] !== null) {
+        if ($result["recept_adatok"][0]["pic_name"] !== null && file_exists($cfg["receptKepek"]."/".$result["recept_adatok"][0]["pic_name"].".jpg")) {
             $this->template->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$result["recept_adatok"][0]["pic_name"].".jpg");
         } else {
             $this->template->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image_thumb.png");

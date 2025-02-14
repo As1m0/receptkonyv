@@ -21,7 +21,7 @@ class RecentRecepiesModule implements IVisibleModuleBase
         foreach ($data as $recept){
             $card = Template::Load("slider-recepie-card.html");
 
-            if ($recept["pic_name"] !== null) {
+            if ($recept["pic_name"] !== null && file_exists($cfg["receptKepek"]."/".$recept["pic_name"]."_thumb.jpg")) {
                 $card->AddData("KEP", $cfg["receptKepek"]."/".$recept["pic_name"]."_thumb.jpg");
             } else {
                 $card->AddData("KEP", "{$cfg["receptKepek"]}/no_image_thumb.png");
