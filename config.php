@@ -3,7 +3,7 @@ $cfg = [];
 
 $cfg["debug"] = true;
 
-$cfg["heroRecepieID"] = 50;
+$cfg["heroRecepieID"] = 92;
 $cfg["SliderNum"] = 5;
 
 $cfg["debugErrorPage"] = "DebugError.html";

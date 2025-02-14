@@ -587,10 +587,12 @@ footer {
 
 #login-box {
     margin-top: -140px;
+    height: auto;
 }
 
 #register-box {
     margin-top: -140px;
+    height: auto;
 }
 
 .shadow {
@@ -611,6 +613,15 @@ footer {
 .star-recept .container {
     width: 90vw;
 }
+.star-recept .container .row{
+    height: 420px;
+}
+
+.star-recept .img-wrap{
+    height: 100%;
+    overflow: hidden !important;
+}
+
 
 .p-0 {
     padding: 0px !important;

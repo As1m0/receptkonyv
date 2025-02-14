@@ -17,13 +17,23 @@ class StarReceptModule implements IVisibleModuleBase
 
         $result = Model::RecepieFullData($cfg["heroRecepieID"]);
         
-        //Star adatainak betöltése
-        $this->template->AddData("LINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$result["recept_adatok"][0]["recept_id"]}");
-        $this->template->AddData("NEV", $result["recept_adatok"][0]["recept_neve"]);
-        $this->template->AddData("IDO", $result["recept_adatok"][0]["elk_ido"]);
-        $this->template->AddData("ADAG", $result["recept_adatok"][0]["adag"]);
-        $this->template->AddData("NEHEZSEG", $result["recept_adatok"][0]["nehezseg"]);
+        if(!empty($result["recept_adatok"][0]["recept_neve"]))
+        {
+            $this->template->AddData("LINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$result["recept_adatok"][0]["recept_id"]}");
+            $this->template->AddData("NEV", $result["recept_adatok"][0]["recept_neve"]);
+            $this->template->AddData("IDO", $result["recept_adatok"][0]["elk_ido"]);
+            $this->template->AddData("ADAG", $result["recept_adatok"][0]["adag"]);
+            $this->template->AddData("NEHEZSEG", $result["recept_adatok"][0]["nehezseg"]);
 
+            if ($result["recept_adatok"][0]["pic_name"] !== null && file_exists($cfg["receptKepek"]."/".$result["recept_adatok"][0]["pic_name"].".jpg")) {
+                $this->template->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$result["recept_adatok"][0]["pic_name"].".jpg");
+            } else {
+                $this->template->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image_thumb.png");
+            }
+    
+        }
+        //Star adatainak betöltése
+        
         if (!empty($result["reviews"][0]))
         {
             $this->template->AddData("ERTEKELESSZAM", $result["reviews"][0]["ertekeles_count"]);
@@ -37,12 +47,5 @@ class StarReceptModule implements IVisibleModuleBase
             $this->template->AddData("STARSPIC", Template::GetStarImg(0));
         }
 
-
-        if ($result["recept_adatok"][0]["pic_name"] !== null && file_exists($cfg["receptKepek"]."/".$result["recept_adatok"][0]["pic_name"].".jpg")) {
-            $this->template->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$result["recept_adatok"][0]["pic_name"].".jpg");
-        } else {
-            $this->template->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image_thumb.png");
-        }
-        
     }
 }
