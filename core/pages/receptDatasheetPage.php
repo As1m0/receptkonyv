@@ -51,15 +51,15 @@ class receptDatasheetPage implements IPageBase
             
             //Recept adatainak betöltése
             $this->template->AddData("NEV", $data["recept_adatok"][0]["recept_neve"]);
-            if($_SESSION["userfullname"] != $data["felhasznalo"][0]["veznev"]." ".$data["felhasznalo"][0]["kernev"])
-            {
-                $this->template->AddData("USER", $data["felhasznalo"][0]["veznev"]." ".$data["felhasznalo"][0]["kernev"]. " receptje");
-                $this->template->AddData("COLOR", "primary-color");
-            }
-            else
+            if(isset($_SESSION["userfullname"]) && $_SESSION["userfullname"] == $data["felhasznalo"][0]["veznev"]." ".$data["felhasznalo"][0]["kernev"])
             {
                 $this->template->AddData("USER", "Saját recept");
                 $this->template->AddData("COLOR", "green");
+            }
+            else
+            {
+                $this->template->AddData("USER", $data["felhasznalo"][0]["veznev"]." ".$data["felhasznalo"][0]["kernev"]. " receptje");
+                $this->template->AddData("COLOR", "primary-color");
             }
             
             $this->template->AddData("IDO", $data["recept_adatok"][0]["elk_ido"]);

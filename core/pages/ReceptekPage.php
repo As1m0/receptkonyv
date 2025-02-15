@@ -134,14 +134,14 @@ class ReceptekPage implements IPageBase
                 $receptCard->AddData("IDO", $recept["elk_ido"]);
                 $receptCard->AddData("ADAG", $recept["adag"]);
                 $receptCard->AddData("NEHEZSEG", $recept["nehezseg"]);
-                if($_SESSION["userfullname"] != $recept["veznev"] . " " . $recept["kernev"])
-                {
-                    $receptCard->AddData("USER", $recept["veznev"] . " " . $recept["kernev"]);
-                }
-                else
+                if(isset($_SESSION["userfullname"]) && $_SESSION["userfullname"] == $recept["veznev"] . " " . $recept["kernev"])
                 {
                     $receptCard->AddData("USER", "Saját recept");
                     $receptCard->AddData("COLOR", "bold green");
+                }
+                else
+                {
+                    $receptCard->AddData("USER", $recept["veznev"] . " " . $recept["kernev"]);
                 }
                 $avrScore = number_format($recept["avg_ertekeles"], 1);
                 $receptCard->AddData("SCORE", $avrScore);
