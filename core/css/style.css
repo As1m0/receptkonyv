@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 
+
 :root {
     --main-bg-color: #eeeeee;
     --primary-color: rgb(63 172 216);
     --sec-bg-color: rgb(234, 245, 250);
 }
-
 
 * {
     margin: 0;
@@ -188,11 +188,12 @@ footer {
     border-radius: 20px;
     border: none;
     transition: all ease .3s;
-    height: 340px;
+    min-height: 340px;
 }
 
 .card-deck {
     padding: 0px;
+    max-width: 280px;
 }
 
 .card-img-wrapper {
@@ -211,9 +212,7 @@ footer {
 }
 
 .card-bottom-text {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    position: block;
     bottom: 15px;
 }
 
@@ -509,7 +508,7 @@ footer {
 }
 
 .small-deck {
-    height: 280px;
+    min-height: 280px;
     margin: 20px 10px;
     width: 200px !important;
     min-width: 200px;
@@ -519,6 +518,10 @@ footer {
     flex: 0 0 auto;
     /* Ensures items don't shrink */
     scroll-snap-align: start;
+}
+
+.small-deck a{
+    margin-bottom: 15px;
 }
 
 .flex::-webkit-scrollbar {
@@ -613,13 +616,20 @@ footer {
 .star-recept .container {
     width: 90vw;
 }
-.star-recept .container .row{
-    height: 420px;
-}
 
 .star-recept .img-wrap{
-    height: 100%;
+    /*height: 100%;*/
     overflow: hidden !important;
+}
+
+.star-recept .container .row{
+
+}
+
+/*      !!!!!!!!!!!!!!!!!!                */
+.star-recept .container .row .col-md-7, .col-md-5{
+        max-height: 450px;
+        overflow: hidden;
 }
 
 
@@ -653,10 +663,9 @@ footer {
 
 .star-recept-kep {
     width: 100%;
-    height: 100%;
+    overflow: hidden;
     object-fit: cover;
     object-position: center;
-    transition: all ease .2;
 }
 
 .star-recept-kep:hover {
@@ -675,6 +684,7 @@ footer {
     text-align: center;
 }
 
+/*
 .star-flex {
     display: flex;
     flex-direction: column;
@@ -683,6 +693,7 @@ footer {
     height: 100%;
     padding: 20px;
 }
+*/
 
 @media only screen and (max-width: 766px) {
     .star-flex h2 {

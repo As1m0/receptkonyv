@@ -278,7 +278,7 @@ abstract class Model
         }
     }
 
-    public static function getDynamicQueryResults(array $serachData, $limit = 50): array
+    public static function getDynamicQueryResults(array $serachData, bool $fullData = false, int $start_from = 0, int $results_per_page = 100): array
     {
 
         // Initialize an array for conditions and params
@@ -347,7 +347,8 @@ abstract class Model
             $finalconditions = "1";
         }
 
-        $fullquery = "
+        if($fullData){
+            $fullquery = "
             SELECT
                 r.recept_id,
                 r.recept_neve,
@@ -369,8 +370,21 @@ abstract class Model
             GROUP BY
                 r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name
                 ".$ratingCond."
-            LIMIT ".$limit;
-
+            LIMIT ".$start_from.",".$results_per_page;
+        }
+        else
+        {
+         $fullquery = "
+            SELECT
+                recept_id
+            FROM
+                recept
+            WHERE
+                ". $finalconditions ."
+                ".$ratingCond."
+            LIMIT ".$start_from.",".$results_per_page;
+        }
+        
         $result = DBHandler::RunQuery($fullquery, $params);
         return $result->fetch_all(MYSQLI_ASSOC);
 

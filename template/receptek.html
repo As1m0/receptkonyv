@@ -3,6 +3,8 @@
 <div class="wrapper">
     <div class="row">
 
+
+
         <div class="col-lg-3 col-md-4 col-sm-12 my-2 white mx-auto shadow" id="filter-box-collapsed">
             <div>
                 <p class="text-center my-3" id="filter-button">szűrők<span style="float: right;"> &#8681;</span></p>
@@ -13,7 +15,6 @@
             <div class="filter shadow-sm">
                 <h4 class="p-4">Szűrők</h4>
                 <span class="close-filter" id="close-filter" onclick="closeFilter()">&#8679;</span>
-
 
                 <div class="container">
                     <form method="post" id="szurok" name="szurok">
@@ -32,7 +33,8 @@
                         </div>
                         <div class="form-group mt-3 d-block">
                             <label for="nehezseg" class="form-label">Nehézség</label>
-                            <span class="remove-filter d-none" id="remove-diff" onclick="removeFilter('nehezseg')">X</span>
+                            <span class="remove-filter d-none" id="remove-diff"
+                                onclick="removeFilter('nehezseg')">X</span>
                             <select class="form-select szuro-item" id="nehezseg" name="nehezseg">
                                 <option value="%!DIFF!%" selected>%!DIFF!%</option>
                                 <option value="Kezdő">Kezdő</option>
@@ -45,7 +47,8 @@
 
                         <div class="form-group mt-3 d-block">
                             <label for="review" class="form-label">Értékelés</label>
-                            <span class="remove-filter d-none" id="remove-review" onclick="removeFilter('review')">X</span>
+                            <span class="remove-filter d-none" id="remove-review"
+                                onclick="removeFilter('review')">X</span>
                             <select class="form-select szuro-item" id="review" name="review">
                                 <option value="%!RATING!%" selected>%!RATING!%</option>
                                 <option value="*">*</option>
@@ -68,17 +71,20 @@
         </div>
 
         <div class="col-lg-9 col-md-8 col-sm-12 mr-2 white p-5">
-
-
+            <p class="text-center mb-3">Találatok száma: <b style="color: var(--primary-color)">%!RESULTNUM!%</b></p>
+            <!--
             <div class="order-list">
+                
                 <ul>
                     <li class="order-item">A-Z &darr;</li>
                     <li class="order-item">Elk. idő &darr;</li>
                     <li class="order-item">Feltöltés dátuma &darr;</li>
                     <li class="order-item">Értékelés &darr;</li>
-                    <!-- &uarr;  -->
                 </ul>
             </div>
+            -->
+
+
             <div class="row">
 
 
@@ -92,7 +98,15 @@
 
 
             </div>
-            <p class="text-center">%!PAGES!%</p>
+            <div class="container text-center">
+                <form method="post">
+                    <input type="hidden" name="category" value="%!HIDDENCATEGORY!%">
+                    <input type="hidden" name="time" value="%!TIME!%">
+                    <input type="hidden" name="nehezseg" value="%!DIFF!%">
+                    <input type="hidden" name="review" value="%!RATING!%">
+                    %!PAGES!%
+                </form>
+            </div>
         </div>
 
     </div>
