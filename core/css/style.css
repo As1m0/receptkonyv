@@ -30,6 +30,14 @@ a {
     color: var(--primary-color);
 }
 
+.bold{
+    font-weight: bold;
+}
+
+.green{
+    color: rgb(28, 194, 128);
+}
+
 .bg-image {
     position: absolute;
     z-index: -1;
@@ -162,8 +170,6 @@ footer {
 .upload-form #nehezseg {
     height: 38px;
 }
-
-
 
 .upload-form select {
     height: 38px;
@@ -820,7 +826,7 @@ footer {
 }
 
 .title-wrapper {
-    height: 48px;
+    height: 55px;
     overflow: hidden;
 }
 

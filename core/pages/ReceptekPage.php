@@ -96,7 +96,7 @@ class ReceptekPage implements IPageBase
         //PAGE HANDLING
         $DBresultCount = Model::getDynamicQueryResults($searchData, false);
 
-        $results_per_page = $cfg["resultPerPage"]; // Number of results per page
+        $results_per_page = $cfg["resultPerPage"];
         $total_results = count($DBresultCount);
         $this->template->AddData("RESULTNUM", $total_results);
         $total_pages = ceil($total_results / $results_per_page);
@@ -105,13 +105,21 @@ class ReceptekPage implements IPageBase
         $start_from = ($page - 1) * $results_per_page;
         $DBresult = Model::getDynamicQueryResults($searchData,true, $start_from,$results_per_page);
 
+        //buttons
         for ($i = 1; $i <= $total_pages; $i++) {
-        $this->template->AddData("PAGES", "<input type=\"submit\" class=\"btn\" name=\"page\" value=\"{$i}\">");
+        $this->template->AddData("PAGES", "<input type=\"submit\" class=\"btn\" style=\"color:" . ($page == $i ? 'var(--primary-color);' : '') . "\" name=\"page\" value=\"{$i}\">");
+        }
+        if($page != 1)
+        {
+            $this->template->AddData("PREV", "<button type=\"submit\" class=\"btn\" name=\"page\" value=\"".($page-1)."\"><</button>");
+        }
+        if($page != $total_pages){
+            $this->template->AddData("NEXT", "<button type=\"submit\" class=\"btn\" name=\"page\" value=\"".($page+1)."\">></button>");
         }
             
 
 
-
+        //recept cardok feltöltése
         if (count($DBresult) != 0) {
             foreach ($DBresult as $recept) {
                 $receptCard = Template::Load("recept-card.html");
@@ -126,7 +134,15 @@ class ReceptekPage implements IPageBase
                 $receptCard->AddData("IDO", $recept["elk_ido"]);
                 $receptCard->AddData("ADAG", $recept["adag"]);
                 $receptCard->AddData("NEHEZSEG", $recept["nehezseg"]);
-                $receptCard->AddData("USER", $recept["veznev"] . " " . $recept["kernev"]);
+                if($_SESSION["userfullname"] != $recept["veznev"] . " " . $recept["kernev"])
+                {
+                    $receptCard->AddData("USER", $recept["veznev"] . " " . $recept["kernev"]);
+                }
+                else
+                {
+                    $receptCard->AddData("USER", "Saját recept");
+                    $receptCard->AddData("COLOR", "bold green");
+                }
                 $avrScore = number_format($recept["avg_ertekeles"], 1);
                 $receptCard->AddData("SCORE", $avrScore);
                 $receptCard->AddData("STARSKEP", Template::GetStarImg($avrScore));

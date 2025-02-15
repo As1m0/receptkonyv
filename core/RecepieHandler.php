@@ -32,6 +32,10 @@ abstract class RecepieHandler
 
         $data["reviews"] = $result3->fetch_all(MYSQLI_ASSOC);
 
+        $result4 = DBHandler::RunQuery("SELECT `veznev`, `kernev` FROM `felhasznalok` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $data["recept_adatok"][0]["felh_id"])]);
+
+        $data["felhasznalo"] = $result4->fetch_all(MYSQLI_ASSOC);
+
         return $data;
     }
 
