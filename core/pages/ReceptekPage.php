@@ -130,7 +130,7 @@ class ReceptekPage implements IPageBase
                 } else {
                     $receptCard->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image_thumb.png");
                 }
-                $receptCard->AddData("RECEPTNEV", $recept["recept_neve"]);
+                $receptCard->AddData("RECEPTNEV", ucfirst($recept["recept_neve"]));
                 $receptCard->AddData("IDO", $recept["elk_ido"]);
                 $receptCard->AddData("ADAG", $recept["adag"]);
                 $receptCard->AddData("NEHEZSEG", $recept["nehezseg"]);

@@ -200,6 +200,7 @@ footer {
 .card-deck {
     padding: 0px;
     max-width: 280px;
+    margin: auto;
 }
 
 .card-img-wrapper {
@@ -340,6 +341,7 @@ footer {
 
 .ingredients ul li {
     margin: 5px 0;
+    text-indent: 8px;
 
 }
 
@@ -871,8 +873,8 @@ footer {
 }
 
 #filter-box-collapsed{
-    border-radius: 10px;
-    width: 90%;
+    border-radius: 25px;
+    width: 60%;
     cursor: pointer;
 }
 

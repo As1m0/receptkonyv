@@ -50,7 +50,7 @@ class receptDatasheetPage implements IPageBase
             }
             
             //Recept adatainak betöltése
-            $this->template->AddData("NEV", $data["recept_adatok"][0]["recept_neve"]);
+            $this->template->AddData("NEV", ucfirst($data["recept_adatok"][0]["recept_neve"]));
             if(isset($_SESSION["userfullname"]) && $_SESSION["userfullname"] == $data["felhasznalo"][0]["veznev"]." ".$data["felhasznalo"][0]["kernev"])
             {
                 $this->template->AddData("USER", "Saját recept");

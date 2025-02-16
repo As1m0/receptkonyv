@@ -380,7 +380,7 @@ abstract class Model
             FROM
                 recept
             WHERE
-                ". $finalconditions ."
+                ".$finalconditions."
                 ".$ratingCond."
             LIMIT ".$start_from.",".$results_per_page;
         }
