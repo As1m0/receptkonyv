@@ -216,6 +216,15 @@ footer {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: all ease .2s;
+}
+
+.card-deck:hover .card-img-top{
+    transform: scale(1.1);
+}
+
+.small-deck:hover .card-img-top{
+    transform: scale(1.1);
 }
 
 .card-bottom-text {

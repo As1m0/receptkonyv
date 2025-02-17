@@ -52,15 +52,32 @@ abstract class UserHandler
     public static function DeleteUser(int $id): void
     {
         DBHandler::RunQuery("DELETE FROM `reviews` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $id)]);
+        print("DB 1");
         $result = DBHandler::RunQuery("SELECT `recept_id` FROM `recept` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $id)]);
+        print("DB 2");
         $recept_ids = $result->fetch_all(MYSQLI_ASSOC);
         if(!empty($recept_ids)){
             foreach($recept_ids as $recept_id){
                 DBHandler::RunQuery("DELETE FROM `hozzavalok` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $recept_id["recept_id"])]);
+                print("DB 3");
+                DBHandler::RunQuery("DELETE FROM `reviews` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $recept_id["recept_id"])]);
+                print("DB 4");
                 DBHandler::RunQuery("DELETE FROM `recept` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $recept_id["recept_id"])]);
+                print("DB 5");
             }
         }
         DBHandler::RunQuery("DELETE FROM `felhasznalok` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $id)]);
+        print("DB 6");
+    }
+
+    public static function GetImages(int $userID): array
+    {
+        $data = array();
+        $result = DBHAndler::RunQuery("SELECT `pic_name` FROM `felhasznalok` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $userID)]);
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        $result = DBHAndler::RunQuery("SELECT `pic_name` FROM `recept` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $userID)]);
+        $data[] = $result->fetch_all(MYSQLI_ASSOC);
+        return $data;
     }
 
     public static function UpdateUser(int $userID, string $veznev, string $kernev, string $email, int $groupMember) : void

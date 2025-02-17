@@ -5,83 +5,65 @@ abstract class Model
 
     public static function CheckNewRecepie($lastChecked): array
     {
-        $result = DBHandler::RunQuery("SELECT `recept_neve`,`recept_id` FROM `recept` WHERE `created_at` > ? LIMIT 1", [ new DBParam( DBTypes::String, $lastChecked) ]);
+        $result = DBHandler::RunQuery("SELECT `recept_neve`,`recept_id` FROM `recept` WHERE `created_at` > ? LIMIT 1", [new DBParam(DBTypes::String, $lastChecked)]);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public static function GetPageData(string $page) : array
+    public static function GetPageData(string $page): array
     {
-          $result = DBHandler::RunQuery("SELECT * FROM `pages` WHERE `pageKey` = ?", [new DBParam(DBTypes::String, $page)]);
-          if($result->num_rows > 0)
-          {
-              return $result->fetch_assoc();
-          }
-          else
-          {
-              throw new NotFoundException("A megadott oldal nem található!");
-          }
-    }
-    
-    public static function LoadText(string|null $flag = null) : mixed
-    {
-            if($flag != null)
-            {
-                $result = DBHandler::RunQuery("SELECT `content` FROM `content` WHERE `flag` = ?", [new DBParam(DBTypes::String, $flag)]);
-            }
-            else
-            {
-                $result = DBHandler::RunQuery("SELECT * FROM `content` WHERE 1", []);
-            }
-            
-            if($result->num_rows > 0 && $flag != null)
-            {
-                $data = $result->fetch_assoc();
-                return $data["content"];
-            }
-            elseif($result->num_rows > 0)
-            {
-                return $result->fetch_all(MYSQLI_ASSOC);
-            }
-            else
-            {
-                throw new NotFoundException("A  megadott flag ($flag) nem található az adatbázisban!");
-            }
+        $result = DBHandler::RunQuery("SELECT * FROM `pages` WHERE `pageKey` = ?", [new DBParam(DBTypes::String, $page)]);
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc();
+        } else {
+            throw new NotFoundException("A megadott oldal nem található!");
+        }
     }
 
-    public static function ModifyText(string $flag, string $content) : bool
+    public static function LoadText(string|null $flag = null): mixed
     {
-        try
-        {
-            DBHandler::RunQuery("UPDATE `content` SET `content` = ? WHERE `flag` = ?",
-                [
-                new DBParam(DBTypes::String, $content),
-                new DBParam(DBTypes::String, $flag)
-                ]);
-            return true;
+        if ($flag != null) {
+            $result = DBHandler::RunQuery("SELECT `content` FROM `content` WHERE `flag` = ?", [new DBParam(DBTypes::String, $flag)]);
+        } else {
+            $result = DBHandler::RunQuery("SELECT * FROM `content` WHERE 1", []);
         }
-        catch (Exception)
-        {
+
+        if ($result->num_rows > 0 && $flag != null) {
+            $data = $result->fetch_assoc();
+            return $data["content"];
+        } elseif ($result->num_rows > 0) {
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            throw new NotFoundException("A  megadott flag ($flag) nem található az adatbázisban!");
+        }
+    }
+
+    public static function ModifyText(string $flag, string $content): bool
+    {
+        try {
+            DBHandler::RunQuery(
+                "UPDATE `content` SET `content` = ? WHERE `flag` = ?",
+                [
+                    new DBParam(DBTypes::String, $content),
+                    new DBParam(DBTypes::String, $flag)
+                ]
+            );
+            return true;
+        } catch (Exception) {
             return false;
         }
     }
-    
-    public static function GetModules(string|null $module = null) : array
+
+    public static function GetModules(string|null $module = null): array
     {
         global $cfg;
-        if($module == null)
-        {
+        if ($module == null) {
             $result = DBHandler::RunQuery("SELECT * FROM `modules`");
-        }
-        else
-        {
+        } else {
             $result = DBHandler::RunQuery("SELECT * FROM `modules` WHERE `name` = ?", [new DBParam(DBTypes::String, $module)]);
         }
-        if($result->num_rows > 0)
-        {
+        if ($result->num_rows > 0) {
             return $result->fetch_all(MYSQLI_ASSOC);
-        }
-        else
-        {
+        } else {
             throw new NotFoundException("A megadott modul, vagy összességében modul, nem található!");
         }
     }
@@ -90,13 +72,13 @@ abstract class Model
     {
         global $cfg;
         $data = array();
-        $logFilePath = $cfg["contentFolder"]."/search_log.log";
+        $logFilePath = $cfg["contentFolder"] . "/search_log.log";
         if (file_exists($logFilePath)) {
             $handle = fopen($logFilePath, "r");
-        
+
             if ($handle) {
                 while (($line = fgets($handle)) !== false) {
-                   $data[] = $line;
+                    $data[] = $line;
                 }
                 fclose($handle);
                 return $data;
@@ -112,12 +94,9 @@ abstract class Model
 
     public static function Login(string $email, string $pass): bool
     {
-        try
-        {
-        return UserHandler::Login($email, $pass);
-        }
-        catch (Exception $ex)
-        {
+        try {
+            return UserHandler::Login($email, $pass);
+        } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
     }
@@ -125,19 +104,40 @@ abstract class Model
 
     public static function Register(array $data): void
     {
-        try
-        {
-            UserHandler::Register( $data);
-        }
-        catch (Exception $ex)
-        {
+        try {
+            UserHandler::Register($data);
+        } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
-        
+
     }
 
     public static function DeleteUser(int $id): void
     {
+        //delete all profil pics and recepie pics
+        global $cfg;
+        $pictures = UserHandler::GetImages($id);
+        if (!empty($pictures[0])) {
+            foreach ($pictures[0] as $picture) {
+                if (file_exists($cfg["ProfilKepek"] . "/" . $picture . "_thumb.jpg")) {
+                    unlink($cfg["ProfilKepek"] . "/" . $picture . "_thumb.jpg");
+                }
+                if (file_exists($cfg["ProfilKepek"] . "/" . $picture . ".jpg")) {
+                    unlink($cfg["ProfilKepek"] . "/" . $picture . ".jpg");
+                }
+            }
+        }
+        if (!empty($pictures[1])) {
+            foreach ($pictures[1] as $picture) {
+                if (file_exists($cfg["receptKepek"] . "/" . $picture["pic_name"] . "_thumb.jpg")) {
+                    unlink($cfg["receptKepek"] . "/" . $picture["pic_name"] . "_thumb.jpg");
+                }
+                if (file_exists($cfg["receptKepek"] . "/" . $picture["pic_name"] . ".jpg")) {
+                    unlink($cfg["receptKepek"] . "/" . $picture["pic_name"] . ".jpg");
+                }
+            }
+        }
+        //delete from DB
         try
         {
         UserHandler::DeleteUser($id);
@@ -148,52 +148,40 @@ abstract class Model
         }
     }
 
-    public static function UpdateUser(int $userID, string $veznev, string $kernev, string $email, int $groupMember) : void
+    public static function UpdateUser(int $userID, string $veznev, string $kernev, string $email, int $groupMember): void
     {
-        try
-        {
-        UserHandler::UpdateUser($userID, $veznev, $kernev, $email, $groupMember);
-        }
-        catch (Exception $ex)
-        {
+        try {
+            UserHandler::UpdateUser($userID, $veznev, $kernev, $email, $groupMember);
+        } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
     }
 
     public static function GetAllUserData(): array
     {
-        try
-        {
-       return UserHandler::GetAllUserData();
-        }
-        catch (Exception $ex)
-        {
+        try {
+            return UserHandler::GetAllUserData();
+        } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
     }
 
-  
 
-    public static function UploadReview(array $data) : void
+
+    public static function UploadReview(array $data): void
     {
-        try
-        {
-        ReviewHandler::UploadReview($data);
-        }
-        catch (Exception $ex)
-        {
+        try {
+            ReviewHandler::UploadReview($data);
+        } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
     }
 
-    public static function DeleteReview(int $kommentID) : void
+    public static function DeleteReview(int $kommentID): void
     {
-        try
-        {
-        ReviewHandler::DeleteReview($kommentID);
-    }
-        catch (Exception $ex)
-        {
+        try {
+            ReviewHandler::DeleteReview($kommentID);
+        } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
     }
@@ -201,79 +189,74 @@ abstract class Model
 
     public static function UploadRecept(array $data): void
     {
-        try
-        {
-        RecepieHandler::UploadRecept( $data );
-        }
-        catch (Exception $ex)
-        {
+        try {
+            RecepieHandler::UploadRecept($data);
+        } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
     }
 
     public static function GetRecepies(string $query = "", int $limit = 50, ?int $userId = null): array
     {
-        try
-        {
-        return RecepieHandler::GetRecepies($query, $limit, $userId);
-        }
-        catch (Exception $ex)
-        {
+        try {
+            return RecepieHandler::GetRecepies($query, $limit, $userId);
+        } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
     }
 
     public static function RecepieFullData(int $recept_id): array
     {
-        try
-        {
-        return RecepieHandler::RecepieFullData( $recept_id );
-        }
-        catch (Exception $ex)
-        {
+        try {
+            return RecepieHandler::RecepieFullData($recept_id);
+        } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
     }
 
-    public static function GetLatestRecepies($limit) : array
+    public static function GetLatestRecepies($limit): array
     {
-        try
-        {
-        return RecepieHandler::GetLatestRecepies($limit);
-        }
-        catch (Exception $ex)
-        {
+        try {
+            return RecepieHandler::GetLatestRecepies($limit);
+        } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
     }
 
     public static function DeleteRecepie(int $receptId): void
     {
-        try
+        global $cfg;
+        //delere recept pictures
+        $picture = RecepieHandler::GetRecepieImgName($receptId);
+        if(!empty($picture[0]))
         {
-        RecepieHandler::DeleteRecepie($receptId);
+            if (file_exists($cfg["receptKepek"] . "/" . $picture[0]["pic_name"] . "_thumb.jpg")) {
+                unlink($cfg["receptKepek"] . "/" . $picture[0]["pic_name"] . "_thumb.jpg");
+            }
+            if (file_exists($cfg["receptKepek"] . "/" . $picture[0]["pic_name"] . ".jpg")) {
+                unlink($cfg["receptKepek"] . "/" . $picture[0]["pic_name"] . ".jpg");
+            }
         }
-        catch (Exception $ex)
-        {
+        //delte from DB
+        try {
+            RecepieHandler::DeleteRecepie($receptId);
+        } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
     }
- 
 
-    public static function GetNumbers() : array
+
+    public static function GetNumbers(): array
     {
-        try
-        {
-        $result1 = DBHandler::RunQuery("SELECT `recept_id` FROM `recept` WHERE 1", []);
-        $result2 = DBHandler::RunQuery("SELECT `felh_id` FROM `felhasznalok` WHERE 1", []);
+        try {
+            $result1 = DBHandler::RunQuery("SELECT `recept_id` FROM `recept` WHERE 1", []);
+            $result2 = DBHandler::RunQuery("SELECT `felh_id` FROM `felhasznalok` WHERE 1", []);
 
-        $data["recept"] = count($result1->fetch_all(MYSQLI_ASSOC));
-        $data["felh"] = count($result2->fetch_all(MYSQLI_ASSOC));
+            $data["recept"] = count($result1->fetch_all(MYSQLI_ASSOC));
+            $data["felh"] = count($result2->fetch_all(MYSQLI_ASSOC));
 
-        return $data;
-        }
-        catch (Exception $ex)
-        {
+            return $data;
+        } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
     }
@@ -328,26 +311,23 @@ abstract class Model
             }
             $ratingCond = "HAVING `avg_ertekeles` >= ?";
             $params[] = new DBParam(DBTypes::String, $ratingQuery);
-        }
-        else
-        {
+        } else {
             $ratingCond = "";
         }
 
         // Check for time and add condition
         if (isset($serachData["time"])) {
-            $conditions[] = "`elk_ido` ".$serachData["time"];
+            $conditions[] = "`elk_ido` " . $serachData["time"];
         }
 
 
         if (count($conditions) > 0) {
             $finalconditions = implode(" AND ", $conditions);
-        }
-        else {
+        } else {
             $finalconditions = "1";
         }
 
-        if($fullData){
+        if ($fullData) {
             $fullquery = "
             SELECT
                 r.recept_id,
@@ -366,25 +346,23 @@ abstract class Model
             LEFT JOIN
                 reviews rv ON r.recept_id = rv.recept_id
             WHERE
-                ". $finalconditions ."
+                " . $finalconditions . "
             GROUP BY
                 r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name
-                ".$ratingCond."
-            LIMIT ".$start_from.",".$results_per_page;
-        }
-        else
-        {
-         $fullquery = "
+                " . $ratingCond . "
+            LIMIT " . $start_from . "," . $results_per_page;
+        } else {
+            $fullquery = "
             SELECT
                 recept_id
             FROM
                 recept
             WHERE
-                ".$finalconditions."
-                ".$ratingCond."
-            LIMIT ".$start_from.",".$results_per_page;
+                " . $finalconditions . "
+                " . $ratingCond . "
+            LIMIT " . $start_from . "," . $results_per_page;
         }
-        
+
         $result = DBHandler::RunQuery($fullquery, $params);
         return $result->fetch_all(MYSQLI_ASSOC);
 

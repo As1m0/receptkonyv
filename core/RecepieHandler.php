@@ -145,6 +145,12 @@ abstract class RecepieHandler
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public static function GetRecepieImgName(int $receptId): array
+    {
+       $result = DBHandler::RunQuery("SELECT `pic_name` FROM `recept` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $receptId)]);
+       return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public static function DeleteRecepie(int $receptId): void
     {
         DBHandler::RunQuery("DELETE FROM `hozzavalok` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $receptId)]);
