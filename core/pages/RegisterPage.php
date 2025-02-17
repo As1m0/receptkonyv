@@ -148,11 +148,15 @@ class RegisterPage implements IPageBase
 
         $height1 = intval($width1 / $aspectRatio);
         $canvas1 = imagecreatetruecolor($width1, $height1);
+        $white = imagecolorallocate($canvas1, 255, 255, 255);
+        imagefill($canvas1, 0, 0, $white);
         imagecopyresampled($canvas1, $img, 0, 0, 0, 0, $width1, $height1, $originalWidth, $originalHeight);
         imagejpeg($canvas1, $cfg["ProfilKepek"] . "/" . $name . ".jpg");
 
         $height2 = intval($width2 / $aspectRatio);
         $canvas2 = imagecreatetruecolor($width2, $height2);
+        $white = imagecolorallocate($canvas2, 255, 255, 255);
+        imagefill($canvas2, 0, 0, $white);
         imagecopyresampled($canvas2, $img, 0, 0, 0, 0, $width2, $height2, $originalWidth, $originalHeight);
         imagejpeg($canvas2, $cfg["ProfilKepek"] . "/" . $name . "_thumb.jpg");
 
@@ -160,6 +164,7 @@ class RegisterPage implements IPageBase
         imagedestroy($canvas2);
         imagedestroy($img);
     }
+
 
 
 
