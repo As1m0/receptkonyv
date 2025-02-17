@@ -23,6 +23,11 @@ class AboutPage implements IPageBase
         $this->template->AddData("USER", $data["felh"]);
         $this->template->AddData("RECEPT", $data["recept"]);
 
+        if(isset($_SESSION["usermail"]))
+        {
+            $this->template->AddData("EMAIL",$_SESSION["usermail"]);
+        }
+
         if(isset($_POST["ok"]))
         {
             if(isset($_POST["email"]) && filter_input(INPUT_POST,"email", FILTER_VALIDATE_EMAIL) &&
