@@ -101,6 +101,8 @@ abstract class RecepieHandler
                 r.recept_neve LIKE ? $userCondition
             GROUP BY
                 r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name
+            ORDER BY
+                r.created_at DESC
             LIMIT ?
         ",
         $param2

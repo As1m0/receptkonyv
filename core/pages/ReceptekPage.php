@@ -94,7 +94,7 @@ class ReceptekPage implements IPageBase
         
 
         //PAGE HANDLING
-        $DBresultCount = Model::getDynamicQueryResults($searchData, false);
+        $DBresultCount = Model::getDynamicQueryResults($searchData);
 
         $results_per_page = $cfg["resultPerPage"];
         $total_results = count($DBresultCount);

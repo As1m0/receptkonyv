@@ -369,20 +369,27 @@ abstract class Model
                 " . $finalconditions . "
             GROUP BY
                 r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name
+            ORDER BY
+            r.created_at DESC
                 " . $ratingCond . "
             LIMIT " . $start_from . "," . $results_per_page;
         } else {
             $fullquery = "
             SELECT
-                recept_id
+                r.recept_id,
+                COALESCE(AVG(rv.ertekeles), 0) AS avg_ertekeles
             FROM
-                recept
+                recept r
+            LEFT JOIN
+                reviews rv ON r.recept_id = rv.recept_id
             WHERE
                 " . $finalconditions . "
+            GROUP BY
+                r.recept_id
                 " . $ratingCond . "
             LIMIT " . $start_from . "," . $results_per_page;
         }
-
+        
         $result = DBHandler::RunQuery($fullquery, $params);
         return $result->fetch_all(MYSQLI_ASSOC);
 
