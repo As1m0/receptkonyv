@@ -199,15 +199,16 @@ abstract class Model
     public static function UpdateRecept(array $data): void
     {
         global $cfg;
-        if(isset($data["prev-img"]) && $data["prev-img"] != "")
+        if($data["recept"]["pic_name"] != "")
         {
             if (file_exists($cfg["receptKepek"] . "/" . $data["prev-img"] . "_thumb.jpg")) {
                 unlink($cfg["receptKepek"] . "/" . $data["prev-img"] . "_thumb.jpg");
             }
-            if (file_exists($cfg["receptKepek"] . "/" . $data["recept"]["pic_name"] . ".jpg")) {
+            if (file_exists($cfg["receptKepek"] . "/" .  $data["prev-img"] . ".jpg")) {
                 unlink($cfg["receptKepek"] . "/" . $data["prev-img"] . ".jpg");
             }
         }
+        
         try {
             RecepieHandler::UpdateRecept($data);
         } catch (Exception $ex) {
