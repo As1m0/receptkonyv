@@ -41,6 +41,14 @@ class receptDatasheetPage implements IPageBase
                 }
             }
 
+            if(isset($_POST["delete-recepie"]))
+            {
+                $receptIdDel = filter_var(trim($_POST["delete-recepie"]), FILTER_VALIDATE_INT);
+                print_r($receptIdDel);
+                Model::DeleteRecepie($receptIdDel);
+                //navigate
+            }
+
             // DB Recept betöltése
             $data = Model::RecepieFullData($receptID);
             
@@ -52,10 +60,15 @@ class receptDatasheetPage implements IPageBase
             //Recept adatainak betöltése
             $this->template->AddData("NEV", ucfirst($data["recept_adatok"][0]["recept_neve"]));
             $this->template->AddData("TIME", substr($data["recept_adatok"][0]["created_at"], 0, 10));
+            if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true)
+            {
+            $buttons = Template::Load("recepie-datapage-buttons.html");
+            $buttons->AddData("RECEPTID", $receptID);
+            $this->template->AddData("BUTTONS", $buttons);
+            }
             if(isset($_SESSION["userfullname"]) && $_SESSION["userfullname"] == $data["felhasznalo"][0]["veznev"]." ".$data["felhasznalo"][0]["kernev"])
             {
                 $this->template->AddData("USER", "Saját recept");
-                $this->template->AddData("COLOR", "green");
             }
             else
             {

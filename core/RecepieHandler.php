@@ -32,9 +32,13 @@ abstract class RecepieHandler
 
         $data["reviews"] = $result3->fetch_all(MYSQLI_ASSOC);
 
-        $result4 = DBHandler::RunQuery("SELECT `veznev`, `kernev` FROM `felhasznalok` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $data["recept_adatok"][0]["felh_id"])]);
+        if(isset($data["recept_adatok"][0]["felh_id"]))
+        {
+            $result4 = DBHandler::RunQuery("SELECT `veznev`, `kernev` FROM `felhasznalok` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $data["recept_adatok"][0]["felh_id"])]);
 
-        $data["felhasznalo"] = $result4->fetch_all(MYSQLI_ASSOC);
+            $data["felhasznalo"] = $result4->fetch_all(MYSQLI_ASSOC);
+        }
+
 
         return $data;
     }
@@ -132,6 +136,49 @@ abstract class RecepieHandler
         foreach ($data["hozzavalok"] as $item) {
             DBHandler::RunQuery("INSERT INTO `hozzavalok`(`recept_id`, `nev`,`mennyiseg`,`mertekegyseg`) VALUES (?,?,?,?)",
             [ new DBParam(DBTypes::Int, $insert_id),
+            new DBParam(DBTypes::String, $item["nev"]),
+            new DBParam(DBTypes::Double, $item["mennyiseg"]),
+            new DBParam(DBTypes::String, $item["mertekegyseg"]) ]);
+        }
+    }
+
+    public static function UpdateRecept(array $data): void
+    {
+
+        //update recepie data
+        if($data["recept"]["pic_name"] != "")
+        {
+            DBHandler::RunQuery("UPDATE `recept` SET `recept_neve` = ?, `kategoria` = ?, `leiras` = ?, `elk_ido` = ?, `adag` = ?, `nehezseg` = ?, `pic_name` = ? WHERE `recept_id` = ?",
+        [ new DBParam(DBTypes::String, $data["recept"]["recept_neve"]),
+                new DBParam(DBTypes::String, $data["recept"]["kategoria"]),
+                new DBParam(DBTypes::String, $data["recept"]["leiras"]),
+                new DBParam(DBTypes::Int, $data["recept"]["elk_ido"]),
+                new DBParam(DBTypes::Int, $data["recept"]["adag"]),
+                new DBParam(DBTypes::String, $data["recept"]["nehezseg"]),
+                new DBParam(DBTypes::String, $data["recept"]["pic_name"]),
+                new DBParam(DBTypes::Int, $data["recept_id"])
+                ]);
+        }
+        elseif($data["recept"]["pic_name"] == "")
+        {
+            DBHandler::RunQuery("UPDATE `recept` SET `recept_neve` = ?, `kategoria` = ?, `leiras` = ?, `elk_ido` = ?, `adag` = ?, `nehezseg` = ? WHERE `recept_id` = ?",
+            [ new DBParam(DBTypes::String, $data["recept"]["recept_neve"]),
+                    new DBParam(DBTypes::String, $data["recept"]["kategoria"]),
+                    new DBParam(DBTypes::String, $data["recept"]["leiras"]),
+                    new DBParam(DBTypes::Int, $data["recept"]["elk_ido"]),
+                    new DBParam(DBTypes::Int, $data["recept"]["adag"]),
+                    new DBParam(DBTypes::String, $data["recept"]["nehezseg"]),
+                    new DBParam(DBTypes::Int, $data["recept_id"])
+                    ]);
+        }
+
+        //delete current ingredients
+        DBHandler::RunQuery("DELETE FROM `hozzavalok` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $data["recept_id"])]);
+
+        //upload new ingredients
+        foreach ($data["hozzavalok"] as $item) {
+            DBHandler::RunQuery("INSERT INTO `hozzavalok`(`recept_id`, `nev`,`mennyiseg`,`mertekegyseg`) VALUES (?,?,?,?)",
+            [ new DBParam(DBTypes::Int, $data["recept_id"]),
             new DBParam(DBTypes::String, $item["nev"]),
             new DBParam(DBTypes::Double, $item["mennyiseg"]),
             new DBParam(DBTypes::String, $item["mertekegyseg"]) ]);

@@ -196,6 +196,25 @@ abstract class Model
         }
     }
 
+    public static function UpdateRecept(array $data): void
+    {
+        global $cfg;
+        if(isset($data["prev-img"]) && $data["prev-img"] != "")
+        {
+            if (file_exists($cfg["receptKepek"] . "/" . $data["prev-img"] . "_thumb.jpg")) {
+                unlink($cfg["receptKepek"] . "/" . $data["prev-img"] . "_thumb.jpg");
+            }
+            if (file_exists($cfg["receptKepek"] . "/" . $data["recept"]["pic_name"] . ".jpg")) {
+                unlink($cfg["receptKepek"] . "/" . $data["prev-img"] . ".jpg");
+            }
+        }
+        try {
+            RecepieHandler::UpdateRecept($data);
+        } catch (Exception $ex) {
+            throw new DBException($ex->GetMessage());
+        }
+    }
+
     public static function GetRecepies(string $query = "", int $limit = 50, ?int $userId = null): array
     {
         try {

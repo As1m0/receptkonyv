@@ -1,6 +1,8 @@
+
 //ingredients handler
 
-let ingredientIndex = 1;
+let ingredientIndex = document.getElementById("ingr-num").innerHTML;
+console.log(ingredientIndex);
 
 document.getElementById('addIngredient').addEventListener('click', () => {
   const ingredientsContainer = document.getElementById('ingredients');
@@ -61,6 +63,18 @@ document.getElementById('ingredientsForm').addEventListener('click', (e) => {
     }
   }
 });
+
+kepElement = document.getElementById("formFile");
+kepElement.addEventListener("change", () => {
+  if(kepElement.value !== "")
+  {
+    document.getElementById("receptkep").style.display = "none";
+  }
+  else
+  {
+    document.getElementById("receptkep").style.display = "block";
+  }
+})
 
 
 

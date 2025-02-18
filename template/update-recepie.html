@@ -1,0 +1,91 @@
+<h6 class="text-center" style="background-color: %!COLOR!%; padding: 5px; color: white;">%!RESULT!%</h6>
+
+<div class="container upload-form my-4">
+    <h2 class="text-center my-4">%!NEV!% módosítása</h2>
+    <form method="post" id="receptFeltoltes" onsubmit="validateForm(event)" enctype="multipart/form-data">
+        <div class="form-group py-3">
+            <label for="name" class="my-1">Recept neve</label><br>
+            <input type="text" name="name" class="form-control" id="name" value="%!NEV!%" required>
+        </div>
+
+        <div class="separator"></div>
+
+
+        <div class="form-group py-3">
+            <label for="formFile" class="form-label">Kép feltöltése</label>
+            <input class="form-control" type="file" id="formFile" accept="%!ACCEPT!%" name="img">
+            <img src="%!RECEPTKEP!%" alt="%!NEV!%" class="my-2" style="width: 250px;" id="receptkep">
+        </div>
+
+        <div class="container mt-3">
+            <div class="row p-4" style="background-color: rgb(234, 245, 250); border-radius: 10px;">
+
+                <div class="form-group text-center col-sm-3">
+                    <label for="category" class="form-label">Kategória</label><br>
+                    <select class="from-control w-100" name="category" id="category">
+                        <option selected value="%!KATEGORIA!%">%!KATEGORIA!%</option>
+                        %!CATEGORIES!%
+                    </select>
+                </div>
+
+                <div class="form-group col-sm-3">
+                    <label for="time" class="form-label">Elkészítési idő</label>
+                    <input class="form-control" type="number" id="time" name="time" min="5" value="%!IDO!%" step="5">
+                    <small class="form-text text-muted">perc</small>
+                </div>
+
+                <div class="form-group col-sm-3">
+                    <label for="nehezseg" class="form-label">Nehézség</label>
+                    <select class="form-select" id="nehezseg" name="nehezseg">
+                        <option value="%!NEHEZSEG!%" selected>%!NEHEZSEG!%</option>
+                        <option value="kezdő">Kezdő</option>
+                        <option value="könnyű">Könnyű</option>
+                        <option value="közepes">Közepes</option>
+                        <option value="haladó">Haladó</option>
+                        <option value="profi">Profi</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-sm-3">
+                    <label for="adag" class="form-label">Adag</label>
+                    <input class="form-control" type="number" id="adag" name="adag" min="1" value="%!ADAG!%">
+                    <small class="form-text text-muted">fő</small>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="separator my-5 text-center">
+            <h4>Hozzávalók</h4>
+        </div>
+
+        <div id="ingredientsForm">
+            <div id="ingredients" class="row g-3 mb-3">
+
+                %!HOZZAVALOK!%
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-default" id="addIngredient">+ hozzávaló</button>
+
+        <div class="separator my-4 text-center">
+            <h4>Leírás</h4>
+        </div>
+
+        <div class="form-group py-3">
+            <label for="leiras" class="form-label">Recept elkészítése</label>
+            <textarea class="form-control" id="leiras" rows="15" name="leiras">%!LEIRAS!%</textarea>
+        </div>
+
+
+        <input type="submit" class="form-control btn btn-default my-4" name="update" id="update" value="Módosítás"
+            required>
+
+
+    </form>
+</div>
+<small class="d-none" id="ingr-num">%!INGNUM!%</small>
+
+
+<script src="core/scripts/UpdateForm.js" defer></script>
+%!SCRIPT!%
