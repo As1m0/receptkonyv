@@ -63,7 +63,7 @@
 
 
             </div>
-
+            <div class="py-4">%!BUTTONS!%</div>
             <div class="devider"></div>
 
 
@@ -106,6 +106,8 @@
 
 </div>
 
+<div id="append" class="d-none"></div>
+
 
 
 
@@ -118,15 +120,17 @@
 <script src="core/scripts/write-review-stars.js"></script>
 <script>
     function deleteRecepie(receptId) {
-    const userResponse = confirm("Biztosan törölni akarod ezt a receptet?");
+    const userResponse = confirm("Biztosan törölni akarod ezt a receptet?!!");
     if (userResponse) {
-                const form = document.createElement("from");
-                form.setAttribute("method", "post")
+                const form = document.createElement("form");
+                form.setAttribute("method", "post");
+                document.getElementById("append").appendChild(form);
                 const hiddenInput = document.createElement("input");
                 hiddenInput.type = "hidden";
                 hiddenInput.name = "delete-recepie";
                 hiddenInput.value = receptId;
                 form.appendChild(hiddenInput);
+                console.log(form);
                 form.submit();
     }
 }

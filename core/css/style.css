@@ -223,7 +223,7 @@ footer {
     transform: scale(1.1);
 }
 
-.small-deck:hover .card-img-top{
+.small-deck:hover .card-img-top-slider{
     transform: scale(1.1);
 }
 
@@ -234,9 +234,14 @@ footer {
 
 .nev-wrapper {
     width: 100%;
-    height: 44px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Number of lines before truncation */
+    -webkit-box-orient: vertical;
     overflow: hidden;
+    height: 44px;
 }
+
+
 
 .nev-wrapper h5 {
     font-size: 18px;
@@ -837,8 +842,13 @@ footer {
 
 .title-wrapper {
     height: 55px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Number of lines before truncation */
+    -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+
 
 @keyframes slideIn {
     from {
@@ -967,23 +977,49 @@ footer {
     object-fit: cover;
 }
 
+.card-img-top-slider{
+    transition: all ease .3s;
+}
+
 .button-wrapper{
     width: 300px;
-    margin: 20px auto -10px auto;
+    margin: 30px auto -20px auto;
     text-align: center;
 }
 
 .button-wrapper a {
-    padding: 2px 5px;
-    cursor: pointer;
+    padding: 8px 12px;
+    cursor: pointer !important;
     text-decoration: none;
+    border-radius: 18px;
+    border: 1px solid var(--primary-color);
+    transition: all ease .3s;
 }
 
-.button-wrapper a:hover{
-    opacity: .5;
+.button-wrapper a:nth-child(2){
+    border: 1px solid red;
+}
+
+.button-wrapper a:first-child:hover{
+    color: white;
+    background-color: var(--primary-color);
+}
+
+.button-wrapper a:nth-child(2):hover{
+    color: white;
+    background-color: red;
+    border: 1px solid transparent;
 }
 
 .red-link
 {
     color: red;
+    border: 1px solid var(--primary-color);
+}
+
+
+#receptkep{
+    display: block;
+    margin: auto;
+    width: 300px;
 }

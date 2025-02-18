@@ -13,16 +13,6 @@ class UpdateRecepiePage implements IPageBase
     {
         global $cfg;
 
-        if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] ==! false)
-        {
-            $this->template = Template::Load($pageData["template"]);
-        }
-        else
-        {
-            $_SESSION["visitedPage"] = "{$cfg['mainPage']}.php?p=update-recepie";
-            header("Location: {$cfg['mainPage']}.php?p=login");
-        }
-
         if(isset($_GET["id"]) && $_GET["id"] != "")
         {
             $receptID = htmlspecialchars(trim($_GET["id"]));
@@ -31,6 +21,18 @@ class UpdateRecepiePage implements IPageBase
         {
             header("Location: {$cfg['mainPage']}.php?p=404");
         }
+
+        if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] ==! false)
+        {
+            $this->template = Template::Load($pageData["template"]);
+        }
+        else
+        {
+            $_SESSION["visitedPage"] = "{$cfg['mainPage']}.php?p=update-recepie&id={$receptID}";
+            header("Location: {$cfg['mainPage']}.php?p=login");
+        }
+
+
 
 
 
@@ -59,8 +61,15 @@ class UpdateRecepiePage implements IPageBase
         $data = Model::RecepieFullData($receptID);
         if(empty($data["recept_adatok"]))
         {
-            Header("Location: index.php?p=404");
+            header("Location: {$cfg['mainPage']}.php?p=404");
         }
+
+        if(isset($_SESSION["userID"]) && $_SESSION["userID"]!== $data["recept_adatok"][0]["felh_id"])
+        {
+            $_SESSION["visitedPage"] = "{$cfg['mainPage']}.php?p=update-recepie&id={$receptID}";
+            header("Location: {$cfg['mainPage']}.php?p=404");
+        }
+
 
         $this->template->AddData("NEV", ucfirst($data["recept_adatok"][0]["recept_neve"]));
         $categories = Template::Load("foodCategories.html");

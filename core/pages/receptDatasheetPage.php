@@ -43,10 +43,10 @@ class receptDatasheetPage implements IPageBase
 
             if(isset($_POST["delete-recepie"]))
             {
+                print($_POST["delete-recepie"]);
                 $receptIdDel = filter_var(trim($_POST["delete-recepie"]), FILTER_VALIDATE_INT);
-                print_r($receptIdDel);
                 Model::DeleteRecepie($receptIdDel);
-                //navigate
+                Header("Location: index.php?p=account");
             }
 
             // DB Recept betöltése
@@ -60,7 +60,7 @@ class receptDatasheetPage implements IPageBase
             //Recept adatainak betöltése
             $this->template->AddData("NEV", ucfirst($data["recept_adatok"][0]["recept_neve"]));
             $this->template->AddData("TIME", substr($data["recept_adatok"][0]["created_at"], 0, 10));
-            if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true)
+            if(isset($_SESSION["userID"]) && $_SESSION["userID"] === $data["recept_adatok"][0]["felh_id"])
             {
             $buttons = Template::Load("recepie-datapage-buttons.html");
             $buttons->AddData("RECEPTID", $receptID);
