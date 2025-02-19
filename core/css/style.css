@@ -227,6 +227,10 @@ footer {
     transform: scale(1.1);
 }
 
+.recept-thumbnail:hover .card-img-top{
+    transform: scale(1.1);
+}
+
 .card-bottom-text {
     position: block;
     bottom: 15px;
@@ -388,7 +392,10 @@ footer {
 
 .img-container {
     width: 100%;
-    height: 60px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
 }
 
@@ -842,6 +849,14 @@ footer {
 
 .title-wrapper {
     height: 55px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Number of lines before truncation */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.title-wrapper-thumb {
+    height: 50px;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* Number of lines before truncation */
     -webkit-box-orient: vertical;

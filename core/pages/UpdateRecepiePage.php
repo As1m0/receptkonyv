@@ -3,7 +3,7 @@
 class UpdateRecepiePage implements IPageBase
 {
     private Template $template;
-    
+
     public function GetTemplate(): Template
     {
         return $this->template;
@@ -13,21 +13,17 @@ class UpdateRecepiePage implements IPageBase
     {
         global $cfg;
 
-        if(isset($_GET["id"]) && $_GET["id"] != "")
-        {
+
+
+        if (isset($_GET["id"]) && $_GET["id"] != "") {
             $receptID = htmlspecialchars(trim($_GET["id"]));
-        }
-        else
-        {
+        } else {
             header("Location: {$cfg['mainPage']}.php?p=404");
         }
 
-        if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] ==! false)
-        {
+        if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == !false) {
             $this->template = Template::Load($pageData["template"]);
-        }
-        else
-        {
+        } else {
             $_SESSION["visitedPage"] = "{$cfg['mainPage']}.php?p=update-recepie&id={$receptID}";
             header("Location: {$cfg['mainPage']}.php?p=login");
         }
@@ -36,40 +32,33 @@ class UpdateRecepiePage implements IPageBase
 
 
 
-
         $mimes = [];
-        if(isset($pageData["types"]))
-        {
-            foreach ($pageData["types"] as $type)
-            {
-                if(is_a($type, "AllowedMimes"))
-                {
+        if (isset($pageData["types"])) {
+            foreach ($pageData["types"] as $type) {
+                if (is_a($type, "AllowedMimes")) {
                     $mimes[] = $type->value;
                 }
             }
-        }
-        else
-        {
+        } else {
             $mimes = ["image/jpeg", "image/png"];
         }
 
-
         $this->template->AddData("ACCEPT", implode(",", $mimes));
-        
+
 
         //Load current data
         $data = Model::RecepieFullData($receptID);
-        if(empty($data["recept_adatok"]))
-        {
-            header("Location: {$cfg['mainPage']}.php?p=404");
+
+        // jogosultságok ellenőrzése
+        if (isset($_SESSION["userID"]) && $_SESSION["userID"] != $data["recept_adatok"][0]["felh_id"]) {
+            if (isset($_SESSION["groupMember"]) && $_SESSION["groupMember"] != 1) {
+                throw new PermissionDeniedException("A megadott oldal eléréséhez magasabb felhasználói szint szükséges!");
+            }
         }
 
-        if(isset($_SESSION["userID"]) && $_SESSION["userID"]!== $data["recept_adatok"][0]["felh_id"])
-        {
-            $_SESSION["visitedPage"] = "{$cfg['mainPage']}.php?p=update-recepie&id={$receptID}";
+        if (empty($data["recept_adatok"])) {
             header("Location: {$cfg['mainPage']}.php?p=404");
         }
-
 
         $this->template->AddData("NEV", ucfirst($data["recept_adatok"][0]["recept_neve"]));
         $categories = Template::Load("foodCategories.html");
@@ -79,18 +68,17 @@ class UpdateRecepiePage implements IPageBase
         $this->template->AddData("ADAG", $data["recept_adatok"][0]["adag"]);
         $this->template->AddData("NEHEZSEG", $data["recept_adatok"][0]["nehezseg"]);
         $this->template->AddData("LEIRAS", $data["recept_adatok"][0]["leiras"]);
-        
+
         //picture
-        if ($data["recept_adatok"][0]["pic_name"] != null && file_exists($cfg["receptKepek"]."/".$data["recept_adatok"][0]["pic_name"].".jpg")){
+        if ($data["recept_adatok"][0]["pic_name"] != null && file_exists($cfg["receptKepek"] . "/" . $data["recept_adatok"][0]["pic_name"] . ".jpg")) {
             $newdata["prev-img"] = $data["recept_adatok"][0]["pic_name"];
-            $this->template->AddData("RECEPTKEP", $cfg["receptKepek"]."/".$data["recept_adatok"][0]["pic_name"].".jpg");
+            $this->template->AddData("RECEPTKEP", $cfg["receptKepek"] . "/" . $data["recept_adatok"][0]["pic_name"] . ".jpg");
         } else {
-            $this->template->AddData("RECEPTKEP", $cfg["receptKepek"]."/no_image.png");
+            $this->template->AddData("RECEPTKEP", $cfg["receptKepek"] . "/no_image.png");
         }
         //Hozzávalók
         $this->template->AddData("INGNUM", count($data["hozzavalok"]));
-        for ($i=0 ; $i < count($data["hozzavalok"]); $i++)
-        {
+        for ($i = 0; $i < count($data["hozzavalok"]); $i++) {
             $ingredientsForm = Template::Load("ingredients-form.html");
             $ingredientsForm->AddData("NUM", $i);
             $ingredientsForm->AddData("NEV", $data["hozzavalok"][$i]["nev"]);
@@ -100,40 +88,34 @@ class UpdateRecepiePage implements IPageBase
         }
 
 
-        if(isset($_POST["update"]))
-        {
-         if(isset($_POST["name"]) && $_POST["name"] !== ""
-            && isset($_POST["category"]) && $_POST["category"] !== ""
-            && isset($_POST["time"]) && $_POST["time"] !== ""
-            && isset($_POST["nehezseg"]) && $_POST["nehezseg"] !== ""
-            && isset($_POST["adag"]) && $_POST["adag"] !== ""
-            && isset($_POST["ingredients"]) && count($_POST["ingredients"]) !== 0
-            && isset($_POST["leiras"]) && $_POST["leiras"] !== "")
-            {
-            $imgName = null;
-                
+        //Update kezelése
+        if (isset($_POST["update"])) {
+            if (
+                isset($_POST["name"]) && $_POST["name"] !== ""
+                && isset($_POST["category"]) && $_POST["category"] !== ""
+                && isset($_POST["time"]) && $_POST["time"] !== ""
+                && isset($_POST["nehezseg"]) && $_POST["nehezseg"] !== ""
+                && isset($_POST["adag"]) && $_POST["adag"] !== ""
+                && isset($_POST["ingredients"]) && count($_POST["ingredients"]) !== 0
+                && isset($_POST["leiras"]) && $_POST["leiras"] !== ""
+            ) {
+                $imgName = null;
+
                 //Kép átméretezése
-                if(isset($_FILES["img"]) && $_FILES["img"]["error"] == 0)
-                {
+                if (isset($_FILES["img"]) && $_FILES["img"]["error"] == 0) {
                     $mime = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $_FILES["img"]["tmp_name"]);
-                    if(in_array($mime, $mimes))
-                    {
-                        $imgName = sha1($_FILES["img"]["name"].microtime());
+                    if (in_array($mime, $mimes)) {
+                        $imgName = sha1($_FILES["img"]["name"] . microtime());
                         $imgName = substr($imgName, 0, 14);
 
-                        if(move_uploaded_file($_FILES["img"]["tmp_name"], $cfg["receptKepek"]."/".$imgName))
-                        {
+                        if (move_uploaded_file($_FILES["img"]["tmp_name"], $cfg["receptKepek"] . "/" . $imgName)) {
                             $this->resizeImg($mime, $imgName, $imgName, $cfg["foodPicSize1"], $cfg["foodPicSize2"]);
-                            unlink($cfg["receptKepek"]."/".$imgName);
+                            unlink($cfg["receptKepek"] . "/" . $imgName);
+                        } else {
+                            throw new Exception("Ismeretlen hiba, a kép feltöltése megszakadt!");
                         }
-                        else
-                        {
-                        throw new Exception("Ismeretlen hiba, a kép feltöltése megszakadt!");
-                        }
-                    }
-                    else
-                    {
-                    throw new Exception("A megadott kép nem megfelelő fomrátumú!");
+                    } else {
+                        throw new Exception("A megadott kép nem megfelelő fomrátumú!");
                     }
                 }
 
@@ -162,14 +144,12 @@ class UpdateRecepiePage implements IPageBase
 
                 $this->template->AddData("RESULT", "Sikeres recept módosítás!");
                 $this->template->AddData("COLOR", "green");
-                $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='index.php?p=recept-aloldal&r={$receptID}';}, 1500);</script>");
-            }
-            else
-            {
+                $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='index.php?p=recept-aloldal&r={$receptID}';}, 1200);</script>");
+            } else {
                 $this->template->AddData("RESULT", "Kérjük töltsön ki minden mezőt!");
                 $this->template->AddData("COLOR", "red");
             }
-            
+
         }
 
     }
@@ -215,6 +195,6 @@ class UpdateRecepiePage implements IPageBase
         imagedestroy($img);
     }
 
-    
+
 
 }
