@@ -44,7 +44,7 @@ class AccountPage implements IPageBase
                         $this->resizeImg($mime, $imgName, $imgName, $cfg["UserPicSize1"], $cfg["UserPicSize2"]);
                         unlink($cfg["ProfilKepek"] . "/" . $imgName);
                         // Update database
-                        if(isset($_SESSION["userpic"]) && $_SESSION["userpic"] !== "")
+                        if(isset($_SESSION["userpic"]) && $_SESSION["userpic"] !== "empty_profilPic" && $_SESSION["userpic"] !== "")
                         {
                             Model::UpdateUserImg($imgName, $_SESSION["userID"], $_SESSION["userpic"]);
                         }
