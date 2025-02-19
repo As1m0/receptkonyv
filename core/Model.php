@@ -157,6 +157,27 @@ abstract class Model
         }
     }
 
+    public static function UpdateUserImg(string $imgName, int $felh_id, string $oldImgName = null):void
+    {
+        try{
+            UserHandler::UpdateUserImg($imgName, $felh_id);
+        } catch (Exception $ex) {
+            throw new DBException($ex->GetMessage());
+        }
+
+        //remove images
+        global $cfg;
+        if($oldImgName !== null)
+        {
+            if (file_exists($cfg["ProfilKepek"] . "/" . $oldImgName . "_thumb.jpg")) {
+                unlink($cfg["ProfilKepek"] . "/" . $oldImgName . "_thumb.jpg");
+            }
+            if (file_exists($cfg["ProfilKepek"] . "/" .  $oldImgName . ".jpg")) {
+                unlink($cfg["ProfilKepek"] . "/" . $oldImgName . ".jpg");
+            }
+        }
+    }
+
     public static function GetAllUserData(): array
     {
         try {

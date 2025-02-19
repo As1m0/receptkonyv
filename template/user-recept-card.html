@@ -3,13 +3,13 @@
         <div class="card">
             <a href="%!RECEPTLINK!%">
                 <div class="card-img-wrapper">
-                    <img class="card-img-top"
-                        src="%!RECEPTKEP!%"
-                        alt="%!RECEPTNEV!%">
+                    <img class="card-img-top" src="%!RECEPTKEP!%" alt="%!RECEPTNEV!%">
                 </div>
             </a>
             <div class="card-body">
-                <div class="nev-wrapper"><h5 class="card-title"><a href="%!RECEPTLINK!%">%!RECEPTNEV!%</a></h5></div>
+                <div class="nev-wrapper">
+                    <h5 class="card-title"><a href="%!RECEPTLINK!%">%!RECEPTNEV!%</a></h5>
+                </div>
                 <ul class="card-list">
                     <li class="card-text">
                         <small class="text-muted"><span>%!IDO!%</span> perc | </small>
@@ -28,13 +28,14 @@
                 </div>
                 <div class="actions text-center mt-3">
                     <form method="post">
-                    <a href="#" class="delete-recept" onclick="deleteRecepie(%!RECEPTID!%)">törlés</a>
-                    <a href="index.php?p=update-recepie&id=%!RECEPTID!%" class="">szerkesztés</a>
+                        <a href="index.php?p=update-recepie&id=%!RECEPTID!%" class="">szerkesztés</a>
+                        <a href="#" class="delete-recept" onclick="deleteRecepie(%!RECEPTID!%)">törlés</a>
+
                     </form>
                 </div>
             </div>
-    
-            
+
+
         </div>
     </div>
 </div>

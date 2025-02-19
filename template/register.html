@@ -1,33 +1,41 @@
 <h6 class="text-center" style="background-color: %!COLOR!%; padding: 5px; color: white;">%!RESULT!%</h6>
 <div class="container d-flex justify-content-center align-items-center vh-100" id="register-box">
     <div class="card p-4 shadow-lg" style="width: 100%; max-width: 500px;">
-        <h3 class="text-center mb-4">Regisztráció</h3>
+        <h3 class="text-center mb-5">Regisztráció</h3>
         <form method="post" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="vezNev" class="form-label">Vezetéknév</label>
-                <input type="text" class="form-control" id="vezNev" name="vezNev" placeholder="Vezetékneved" required>
-            </div>
-            <div class="mb-3">
-                <label for="kerNev" class="form-label">Keresztnév</label>
-                <input type="text" class="form-control" id="kerNev" name="kerNev" placeholder="Keresztneved" required>
+            <div class="row">
+                <div class="mb-3 col-6">
+                    <label for="vezNev" class="form-label">Vezetéknév</label>
+                    <input type="text" class="form-control" id="vezNev" name="vezNev" placeholder="Vezetékneved" required>
+                </div>
+                <div class="mb-3 col-6">
+                    <label for="kerNev" class="form-label">Keresztnév</label>
+                    <input type="text" class="form-control" id="kerNev" name="kerNev" placeholder="Keresztneved" required>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email cím</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="Email címed" required>
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">Jelszó</label>
-                <input type="password" class="form-control" id="password" name="pass" placeholder="Jelszó" required>
-                <label for="password-check" class="form-label">Jelszó ismétlése</label>
-                <div class="mb-3">
-                    <input type="password" class="form-control" id="password-check" name="pass-check"
-                        placeholder="Jelszó imsét" required>
+                <div class="form-group mb-3">
+                    <label for="password" class="form-label">Jelszó</label>
+                    <input type="password" class="form-control" id="password" name="pass" placeholder="Jelszó" required>
+                </div>
+                <div class="form-group">
+                    <label for="password-check" class="form-label">Jelszó ismétlése</label>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" id="password-check" name="pass-check"
+                            placeholder="Jelszó imsét" required>
+                    </div>
                 </div>
             </div>
+            <!--
             <div class="mb-3">
                 <label for="profilePicture" class="form-label">Profilkép feltöltése</label>
                 <input type="file" class="form-control" id="profilePicture" name="img" accept="%!ACCEPT!%">
             </div>
+            -->
             <div class="custom-control custom-checkbox text-center mt-4">
                 <input type="checkbox" class="custom-control-input" id="customCheck1" required>
                 <label class="custom-control-label small" for="customCheck1">Elolvastam és elfogadom az oldal

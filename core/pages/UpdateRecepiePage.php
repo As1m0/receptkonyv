@@ -49,15 +49,15 @@ class UpdateRecepiePage implements IPageBase
         //Load current data
         $data = Model::RecepieFullData($receptID);
 
+        if (empty($data["recept_adatok"])) {
+            header("Location: {$cfg['mainPage']}.php?p=404");
+        }
+
         // jogosultságok ellenőrzése
         if (isset($_SESSION["userID"]) && $_SESSION["userID"] != $data["recept_adatok"][0]["felh_id"]) {
             if (isset($_SESSION["groupMember"]) && $_SESSION["groupMember"] != 1) {
                 throw new PermissionDeniedException("A megadott oldal eléréséhez magasabb felhasználói szint szükséges!");
             }
-        }
-
-        if (empty($data["recept_adatok"])) {
-            header("Location: {$cfg['mainPage']}.php?p=404");
         }
 
         $this->template->AddData("NEV", ucfirst($data["recept_adatok"][0]["recept_neve"]));

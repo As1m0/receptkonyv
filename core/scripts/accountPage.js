@@ -32,3 +32,15 @@ function deleteUser(userID)
             }
     }
 }
+
+let cameraIcon = document.getElementById("profil-pic-icon");
+cameraIcon.addEventListener("click", ()=>{
+    document.getElementById("img-form").classList.remove("d-none");
+    document.getElementById("main-content").classList.add("blur");
+});
+
+let closeBtn = document.getElementById("close-btn");
+closeBtn.addEventListener("click", () => {
+    document.getElementById("img-form").classList.add("d-none");
+    document.getElementById("main-content").classList.remove("blur");
+});

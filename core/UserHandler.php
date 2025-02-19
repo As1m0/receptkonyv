@@ -90,5 +90,14 @@ abstract class UserHandler
             new DBParam(DBTypes::Int, $userID)
         ]);
     }
+
+    public static function UpdateUserImg(string $imgName, int $felh_id):void
+    {
+        DBHandler::RunQuery("UPDATE `felhasznalok` SET `pic_name` = ? WHERE `felh_id` = ?",
+        [
+            new DBParam(DBTypes::String, $imgName),
+            new DBParam(DBTypes::Int, $felh_id),
+        ]);
+    }
 }
 
