@@ -71,13 +71,10 @@ class receptDatasheetPage implements IPageBase
             $buttons->AddData("RECEPTID", $receptID);
             $this->template->AddData("BUTTONS", $buttons);
         }
-        
-        if(isset($_SESSION["userID"]) && $_SESSION["userID"] === $data["recept_adatok"][0]["felh_id"])
-        {
+
+        if (isset($_SESSION["userID"]) && $_SESSION["userID"] === $data["recept_adatok"][0]["felh_id"]) {
             $this->template->AddData("USER", "Saját recept");
-        }
-        else
-        {
+        } else {
             $this->template->AddData("USER", $data["felhasznalo"][0]["veznev"] . " " . $data["felhasznalo"][0]["kernev"] . " receptje");
             $this->template->AddData("COLOR", "primary-color");
         }
@@ -154,19 +151,23 @@ class receptDatasheetPage implements IPageBase
         if (!empty($similarRecepies)) {
             foreach ($similarRecepies as $recepie) {
 
-                $receptThumb = Template::Load("recept-thumbnail.html");
+                if ($recepie["recept_id"] != $data["recept_adatok"][0]["recept_id"]) {
 
-                if ($recepie["pic_name"] != null && file_exists($cfg["receptKepek"] . "/" . $recepie["pic_name"] . ".jpg")) {
-                    $receptThumb->AddData("RECEPTKEPTHUMB", $cfg["receptKepek"] . "/" . $recepie["pic_name"] . ".jpg");
-                } else {
-                    $receptThumb->AddData("RECEPTKEPTHUMB", $cfg["receptKepek"] . "/no_image.png");
+                    $receptThumb = Template::Load("recept-thumbnail.html");
+
+                    if ($recepie["pic_name"] != null && file_exists($cfg["receptKepek"] . "/" . $recepie["pic_name"] . ".jpg")) {
+                        $receptThumb->AddData("RECEPTKEPTHUMB", $cfg["receptKepek"] . "/" . $recepie["pic_name"] . ".jpg");
+                    } else {
+                        $receptThumb->AddData("RECEPTKEPTHUMB", $cfg["receptKepek"] . "/no_image.png");
+                    }
+                    $receptThumb->AddData("RECEPTNEV", $recepie["recept_neve"]);
+                    $receptThumb->AddData("RECPTIDTH", $recepie["recept_id"]);
+                    $receptThumb->AddData("IDOTH", $recepie["elk_ido"]);
+                    $receptThumb->AddData("ADAGTH", $recepie["adag"]);
+                    $receptThumb->AddData("NEHEZSEGTH", $recepie["nehezseg"]);
+
+                    $this->template->AddData("RECEPTTHUMBNAILS", $receptThumb);
                 }
-                $receptThumb->AddData("RECEPTNEV", $recepie["recept_neve"]);
-                $receptThumb->AddData("IDOTH", $recepie["elk_ido"]);
-                $receptThumb->AddData("ADAGTH", $recepie["adag"]);
-                $receptThumb->AddData("NEHEZSEGTH", $recepie["nehezseg"]);
-
-                $this->template->AddData("RECEPTTHUMBNAILS", $receptThumb);
             }
         }
     }

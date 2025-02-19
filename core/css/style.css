@@ -404,6 +404,12 @@ footer {
     margin-top: 12px;
 }
 
+#thumb-link {
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: all ease .3s;
+}
+
 #thumb-link:hover {
     color: black;
 }
