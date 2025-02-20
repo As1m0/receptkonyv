@@ -113,7 +113,7 @@ class ReceptekPage implements IPageBase
         {
             $this->template->AddData("PREV", "<button type=\"submit\" class=\"btn\" name=\"page\" value=\"".($page-1)."\"><</button>");
         }
-        if($page != $total_pages){
+        if($page != $total_pages && $total_pages != 0){
             $this->template->AddData("NEXT", "<button type=\"submit\" class=\"btn\" name=\"page\" value=\"".($page+1)."\">></button>");
         }
             

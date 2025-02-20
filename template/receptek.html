@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <div class="col-lg-9 col-md-8 col-sm-12 mr-2 white p-5">
+        <div class="col-lg-9 col-md-8 col-sm-12 mr-2 white px-5 py-3">
             <p class="text-center mb-3">Találatok száma: <b style="color: var(--primary-color)">%!RESULTNUM!%</b></p>
             <!--
             <div class="order-list">
@@ -85,6 +85,17 @@
             </div>
             -->
 
+            <div class="container text-center mb-2">
+                <form method="post">
+                    <input type="hidden" name="category" value="%!HIDDENCATEGORY!%">
+                    <input type="hidden" name="time" value="%!TIME!%">
+                    <input type="hidden" name="nehezseg" value="%!DIFF!%">
+                    <input type="hidden" name="review" value="%!RATING!%">
+                    %!PREV!%
+                    %!PAGES!%
+                    %!NEXT!%
+                </form>
+            </div>
 
             <div class="row">
 

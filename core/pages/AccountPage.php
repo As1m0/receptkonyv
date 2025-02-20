@@ -44,15 +44,12 @@ class AccountPage implements IPageBase
                         $this->resizeImg($mime, $imgName, $imgName, $cfg["UserPicSize1"], $cfg["UserPicSize2"]);
                         unlink($cfg["ProfilKepek"] . "/" . $imgName);
                         // Update database
-                        if(isset($_SESSION["userpic"]) && $_SESSION["userpic"] !== "empty_profilPic" && $_SESSION["userpic"] !== "")
-                        {
+                        if (isset($_SESSION["userpic"]) && $_SESSION["userpic"] !== "empty_profilPic" && $_SESSION["userpic"] !== "") {
                             Model::UpdateUserImg($imgName, $_SESSION["userID"], $_SESSION["userpic"]);
-                        }
-                        else
-                        {
+                        } else {
                             Model::UpdateUserImg($imgName, $_SESSION["userID"]);
                         }
-                        
+
                         $_SESSION["userpic"] = $imgName;
                         $feedback = "A profilképed feltöltése sikeres!";
 
@@ -89,28 +86,49 @@ class AccountPage implements IPageBase
             $feedback = "A recept törlése sikeres!";
         }
 
-        //DB lekérés
-        $result = Model::GetRecepies("", 100, $_SESSION["userID"]);
 
-        if ($result["total_count"] !== 0) {
-            //recept cardok feltöltése
-            for ($i = 0; $i < count($result["results"]); $i++) {
-                //card template
+        //PAGE HANDLING
+        $DBresultCount = Model::getDynamicQueryResults(["userID" => $_SESSION["userID"]], false);
+        $results_per_page = $cfg["resultPerPage"];
+        $total_results = count($DBresultCount);
+        $this->template->AddData("RECEPTSZAM", $total_results);
+        $total_pages = ceil($total_results / $results_per_page);
+
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $start_from = ($page - 1) * $results_per_page;
+   
+
+        //DB lekérés
+        $result = Model::getDynamicQueryResults(["userID" => $_SESSION["userID"]], true, $start_from, $results_per_page);
+
+        //buttons
+        for ($i = 1; $i <= $total_pages; $i++) {
+            $this->template->AddData("PAGES", "<input type=\"submit\" class=\"btn\" style=\"color:" . ($page == $i ? 'var(--primary-color);' : '') . "\" name=\"page\" value=\"{$i}\">");
+        }
+        if ($page != 1) {
+            $this->template->AddData("PREV", "<button type=\"submit\" class=\"btn\" name=\"page\" value=\"" . ($page - 1) . "\"><</button>");
+        }
+        if ($page != $total_pages && $total_pages != 0) {
+            $this->template->AddData("NEXT", "<button type=\"submit\" class=\"btn\" name=\"page\" value=\"" . ($page + 1) . "\">></button>");
+        }
+
+        //cards
+        if (!empty($result)) {
+            foreach ($result as $receptdata) {
                 $recept = Template::Load("user-recept-card.html");
-                //card feltöltése
-                $recept_id = $result["results"][$i]["recept_id"];
+                $recept_id = $receptdata["recept_id"];
                 $recept->AddData("RECEPTID", $recept_id);
                 $recept->AddData("RECEPTLINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$recept_id}");
-                if ($result["results"][$i]["pic_name"] !== null && file_exists($cfg["receptKepek"] . "/" . $result["results"][$i]["pic_name"] . "_thumb.jpg")) {
-                    $recept->AddData("RECEPTKEP", $cfg["receptKepek"] . "/" . $result["results"][$i]["pic_name"] . "_thumb.jpg");
+                if ($receptdata["pic_name"] !== null && file_exists($cfg["receptKepek"] . "/" . $receptdata["pic_name"] . "_thumb.jpg")) {
+                    $recept->AddData("RECEPTKEP", $cfg["receptKepek"] . "/" . $receptdata["pic_name"] . "_thumb.jpg");
                 } else {
                     $recept->AddData("RECEPTKEP", "{$cfg["receptKepek"]}/no_image_thumb.png");
                 }
-                $recept->AddData("RECEPTNEV", $result["results"][$i]["recept_neve"]);
-                $recept->AddData("IDO", $result["results"][$i]["elk_ido"]);
-                $recept->AddData("ADAG", $result["results"][$i]["adag"]);
-                $recept->AddData("NEHEZSEG", $result["results"][$i]["nehezseg"]);
-                $avrScore = number_format($result["results"][$i]["avg_ertekeles"], 1);
+                $recept->AddData("RECEPTNEV", $receptdata["recept_neve"]);
+                $recept->AddData("IDO", $receptdata["elk_ido"]);
+                $recept->AddData("ADAG", $receptdata["adag"]);
+                $recept->AddData("NEHEZSEG", $receptdata["nehezseg"]);
+                $avrScore = number_format($receptdata["avg_ertekeles"], 1);
                 $recept->AddData("SCORE", $avrScore);
                 $recept->AddData("STARSKEP", Template::GetStarImg($avrScore));
                 //Card kiküldése
@@ -120,7 +138,6 @@ class AccountPage implements IPageBase
             $this->template->AddData("RECEPTEK", "<p class=\"text-center small\">még nem töltöttél fel receptet..</p>");
         }
 
-        $this->template->AddData("RECEPTSZAM", $result["total_count"]);
 
 
         if (isset($_POST["delete-user"])) {

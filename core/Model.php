@@ -361,6 +361,12 @@ abstract class Model
             $conditions[] = "`elk_ido` " . $serachData["time"];
         }
 
+        // Check for time and add condition
+        if (isset($serachData["userID"])) {
+            $conditions[] = "f.felh_id = ?";
+            $params[] = new DBParam(DBTypes::Int, $serachData["userID"]);
+        }
+
 
         if (count($conditions) > 0) {
             $finalconditions = implode(" AND ", $conditions);
@@ -402,6 +408,8 @@ abstract class Model
             FROM
                 recept r
             LEFT JOIN
+                felhasznalok f ON r.felh_id = f.felh_id
+            LEFT JOIN
                 reviews rv ON r.recept_id = rv.recept_id
             WHERE
                 " . $finalconditions . "
@@ -410,7 +418,7 @@ abstract class Model
                 " . $ratingCond . "
             LIMIT " . $start_from . "," . $results_per_page;
         }
-        
+        //print_r($fullquery);
         $result = DBHandler::RunQuery($fullquery, $params);
         return $result->fetch_all(MYSQLI_ASSOC);
 
