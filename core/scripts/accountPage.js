@@ -44,3 +44,15 @@ closeBtn.addEventListener("click", () => {
     document.getElementById("img-form").classList.add("d-none");
     document.getElementById("main-content").classList.remove("blur");
 });
+
+let PicInput = document.getElementById("picture-input");
+PicInput.addEventListener("change", (event) => {
+    let file = event.target.files[0];
+    if (file) {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+            document.getElementById("update-img-prev").setAttribute("src", e.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
+});

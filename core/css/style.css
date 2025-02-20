@@ -34,9 +34,15 @@ a {
     font-weight: bold;
 }
 
+.sticky{
+    position: sticky;
+    top: 10px;
+}
+
 .green{
     color: rgb(28, 194, 128);
 }
+
 
 .bg-image {
     position: absolute;
@@ -210,6 +216,26 @@ footer {
     justify-content: center;
     align-items: center;
     overflow: hidden;
+}
+
+.profil-pic-icon-wrapper{
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.profile .dropdown-toggle::after{
+    display: none !important;
+}
+
+.profil-icon-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .card-img-top {
@@ -594,11 +620,28 @@ footer {
     color: white;
 }
 
+.profil-img-wrapper {
+    max-width: 200px;
+    max-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 50% !important;
+}
+
 
 .profil-pic {
-    width: 80%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.update-img-preview{
+    display: block;
     max-width: 200px;
-    border-radius: 50% !important;
+    margin: 10px auto;
+    border-radius: 10px;
 }
 
 
@@ -625,7 +668,7 @@ footer {
 }
 
 .buttons {
-    margin-top: 90px;
+    margin-top: 30px;
 }
 
 #login-box {

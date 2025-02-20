@@ -2,9 +2,10 @@
     <form method="post" enctype="multipart/form-data">
         <span id="close-btn">X</span>
         <h3 class="mt-2 mb-4">Profilkép feltöltése</h3>
+        <img class="update-img-preview" src="%!SRC!%" alt="%!NAME!% profilkép" id="update-img-prev">
         <div class="form-group">
-            <label for="picture">kép válaszátsa:</label>
-            <input type="file" class="form-control my-2" name="img" id="picture" accept="%!ACCEPT!%" required>
+            <label for="picture-input">kép válaszátsa:</label>
+            <input type="file" class="form-control my-2" name="img" id="picture-input" accept="%!ACCEPT!%" required>
         </div>
         <div class="m-auto my-4">
             <input type="submit" name="upload" class="btn btn-default form-control" value="feltöltés">
@@ -23,7 +24,7 @@
                     <div class="text-center mt-4">
                         <div class="d-block" style="max-width: 210px; margin: auto;">
                             <img id="profil-pic-icon" src="content/camera-icon.png" alt="camera icon">
-                            <img class="profil-pic" src="%!SRC!%" alt="%!NAME!% profilkép">
+                            <div class="profil-img-wrapper"><img class="profil-pic" src="%!SRC!%" alt="%!NAME!% profilkép"></div>
                         </div>
                         <p class="my-3"><b>%!NAME!%</b></p>
                         <p class="my-3 small">%!EMAIL!%</p>
