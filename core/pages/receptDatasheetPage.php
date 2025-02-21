@@ -55,7 +55,8 @@ class receptDatasheetPage implements IPageBase
 
 
         // DB Recept betöltése
-        $data = Model::RecepieFullData($receptID);
+        $data = Model::RecepieFullData($receptID, isset($_SESSION["userID"]) ? $_SESSION["userID"] : null);
+        //print_r($data);
 
         if (empty($data["recept_adatok"])) {
             Header("Location: index.php?p=404");
@@ -77,6 +78,18 @@ class receptDatasheetPage implements IPageBase
         } else {
             $this->template->AddData("USER", $data["felhasznalo"][0]["veznev"] . " " . $data["felhasznalo"][0]["kernev"] . " receptje");
             $this->template->AddData("COLOR", "primary-color");
+        }
+
+        //heart icon
+        if (isset($data["is_favorite"])) {
+            $heartElement = Template::Load("favorite-icon.html");
+            if ($data["is_favorite"]) {
+                $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart2b.png");
+            } else if (!$data["is_favorite"]) {
+                $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart1b.png");
+            }
+            $heartElement->AddData("RECEPTID", $data["recept_adatok"][0]["recept_id"]);
+            $this->template->AddData("HEART", $heartElement);
         }
 
         $this->template->AddData("IDO", $data["recept_adatok"][0]["elk_ido"]);
@@ -146,7 +159,7 @@ class receptDatasheetPage implements IPageBase
 
 
         //Hasonló receptek betöltése
-        $similarRecepies = Model::getDynamicQueryResults(["category" => $data["recept_adatok"][0]["kategoria"]], true, 0, 5);
+        $similarRecepies = Model::getDynamicQueryResults(["category" => $data["recept_adatok"][0]["kategoria"]], true, 0, 5, isset($_SESSION["userID"]) ? $_SESSION["userID"] : null);
 
         if (!empty($similarRecepies)) {
             foreach ($similarRecepies as $recepie) {

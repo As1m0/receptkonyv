@@ -23,11 +23,6 @@ class ReceptekPage implements IPageBase
 
         $searchData = [];
 
-  
-
-
-
-
         if (isset($_GET["cat"]) && $_GET["cat"] !== "") {
             $encodedCategory = urldecode($_GET["cat"]);
             $searchData["category"] = strtolower($encodedCategory);
@@ -103,7 +98,7 @@ class ReceptekPage implements IPageBase
 
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $start_from = ($page - 1) * $results_per_page;
-        $DBresult = Model::getDynamicQueryResults($searchData,true, $start_from,$results_per_page);
+        $DBresult = Model::getDynamicQueryResults($searchData,true, $start_from,$results_per_page, isset($_SESSION["userID"]) ? $_SESSION["userID"] : null);
 
         //buttons
         for ($i = 1; $i <= $total_pages; $i++) {
@@ -123,6 +118,22 @@ class ReceptekPage implements IPageBase
         if (count($DBresult) != 0) {
             foreach ($DBresult as $recept) {
                 $receptCard = Template::Load("recept-card.html");
+
+                //heart icon
+                if(isset($recept["is_favorite"])){
+                    $heartElement = Template::Load("favorite-icon.html");
+                    if($recept["is_favorite"] == "true")
+                    {
+                        $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart2.png");
+                    }
+                    else if ($recept["is_favorite"] == "false")
+                    {
+                        $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart1.png");
+                    }
+                    $heartElement->AddData("RECEPTID", $recept["recept_id"]);
+                    $receptCard->AddData("HEART", $heartElement);
+                }
+                
                 $receptCard->AddData("RECEPTID", $recept["recept_id"]);
                 $receptCard->AddData("RECEPTLINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$recept["recept_id"]}");
                 if ($recept["pic_name"] !== null && file_exists($cfg["receptKepek"] . "/" . $recept["pic_name"] . "_thumb.jpg")) {

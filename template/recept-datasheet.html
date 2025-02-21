@@ -1,4 +1,5 @@
 <div class="container">
+
     <div class="row">
 
 
@@ -6,6 +7,7 @@
 
 
         <div class="col-lg-9 col-sm-12 blokk my-5 d-block">
+            %!HEART!%
             %!BUTTONS!%
             <h2 class="text-center mt-5 mb-4">%!NEV!%</h2>
             <h6 class="text-center %!COLOR!%">%!USER!%</h6>
@@ -31,9 +33,7 @@
 
 
             <div class="recepie-img-wrapper">
-                <img class="img-fluid"
-                    src="%!RECEPTKEP!%"
-                    alt="recept képe">
+                <img class="img-fluid" src="%!RECEPTKEP!%" alt="recept képe">
             </div>
 
             <div class="ingredients mx-5">
@@ -118,20 +118,47 @@
 
 
 <script src="core/scripts/write-review-stars.js"></script>
+
 <script>
     function deleteRecepie(receptId) {
-    const userResponse = confirm("Biztosan törölni akarod ezt a receptet?!!");
-    if (userResponse) {
-                const form = document.createElement("form");
-                form.setAttribute("method", "post");
-                document.getElementById("append").appendChild(form);
-                const hiddenInput = document.createElement("input");
-                hiddenInput.type = "hidden";
-                hiddenInput.name = "delete-recepie";
-                hiddenInput.value = receptId;
-                form.appendChild(hiddenInput);
-                console.log(form);
-                form.submit();
+        const userResponse = confirm("Biztosan törölni akarod ezt a receptet?!!");
+        if (userResponse) {
+            const form = document.createElement("form");
+            form.setAttribute("method", "post");
+            document.getElementById("append").appendChild(form);
+            const hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "delete-recepie";
+            hiddenInput.value = receptId;
+            form.appendChild(hiddenInput);
+            console.log(form);
+            form.submit();
+        }
     }
-}
+
+    function saveToFavorites(itemId) {
+        fetch('api/save_favorite.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ item_id: itemId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    //console.log(data.result);
+                    //console.log(data.ids);
+                    if (data.result === "inserted") {
+                        document.getElementById("icon-" + itemId).setAttribute("src", "content/heart_icons/heart2b.png");
+                    }
+                    else if (data.result === "removed") {
+                        document.getElementById("icon-" + itemId).setAttribute("src", "content/heart_icons/heart1b.png");
+                    }
+                } else {
+                    console.log('Hiba a kedvenchez adás közben: ' + data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
 </script>

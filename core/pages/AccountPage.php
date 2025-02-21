@@ -96,10 +96,10 @@ class AccountPage implements IPageBase
 
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $start_from = ($page - 1) * $results_per_page;
-   
+
 
         //DB lekérés
-        $result = Model::getDynamicQueryResults(["userID" => $_SESSION["userID"]], true, $start_from, $results_per_page);
+        $result = Model::getDynamicQueryResults(["userID" => $_SESSION["userID"]], true, $start_from, $results_per_page, $_SESSION["userID"]);
 
         //buttons
         for ($i = 1; $i <= $total_pages; $i++) {
@@ -116,9 +116,21 @@ class AccountPage implements IPageBase
         if (!empty($result)) {
             foreach ($result as $receptdata) {
                 $recept = Template::Load("user-recept-card.html");
-                $recept_id = $receptdata["recept_id"];
-                $recept->AddData("RECEPTID", $recept_id);
-                $recept->AddData("RECEPTLINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$recept_id}");
+
+                //heart icon
+                if (isset($receptdata["is_favorite"])) {
+                    $heartElement = Template::Load("favorite-icon.html");
+                    if ($receptdata["is_favorite"] == "true") {
+                        $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart2.png");
+                    } else if ($receptdata["is_favorite"] == "false") {
+                        $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart1.png");
+                    }
+                    $heartElement->AddData("RECEPTID", $receptdata["recept_id"]);
+                    $recept->AddData("HEART", $heartElement);
+                }
+
+                $recept->AddData("RECEPTID", $receptdata["recept_id"]);
+                $recept->AddData("RECEPTLINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$receptdata["recept_id"]}");
                 if ($receptdata["pic_name"] !== null && file_exists($cfg["receptKepek"] . "/" . $receptdata["pic_name"] . "_thumb.jpg")) {
                     $recept->AddData("RECEPTKEP", $cfg["receptKepek"] . "/" . $receptdata["pic_name"] . "_thumb.jpg");
                 } else {
@@ -156,7 +168,6 @@ class AccountPage implements IPageBase
 
 
     }
-
 
 
 

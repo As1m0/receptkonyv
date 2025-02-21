@@ -1130,3 +1130,33 @@ footer {
 .blur{
     filter: blur(3px);
 }
+
+.favoruite-icon{
+    position: absolute;
+    z-index: 99;
+    float: left;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.favoruite-icon img{
+    width: 23px;
+    transition: all ease .3s;
+}
+
+.favoruite-icon img:hover{
+    transform: scale(1.2);
+}
+
+.fade-out {
+    animation: fadeOut .15s forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}

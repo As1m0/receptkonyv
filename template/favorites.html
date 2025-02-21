@@ -1,0 +1,65 @@
+<div id="main-content">
+    <div style="max-width: 800px; margin: auto">
+        <div class="row">
+
+            <div class="col-12">
+                <div class="profil-receptek white" style="min-height: 800px;">
+                    <div class="cover-pic">
+                        <h2>Kedvenc receptjeim</h2>
+                        <img src="%!COVERIMG!%" alt="cover-pic" class="img-fluid">
+                    </div>
+
+                    <div class="row py-3 px-5">
+
+
+                        %!RECEPTEK!%
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="height: 500px;"></div>
+
+
+
+<script>
+    function saveToFavorites(itemId) {
+        fetch('api/save_favorite.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ item_id: itemId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    //console.log(data.result);
+                    //console.log(data.ids);
+                    if (data.result === "inserted") {
+                        document.getElementById("icon-" + itemId).setAttribute("src", "content/heart_icons/heart2.png");
+                    }
+                    else if (data.result === "removed") {
+                        document.getElementById("icon-" + itemId).setAttribute("src", "content/heart_icons/heart1.png");
+                        //TODO   reomve element
+                        // Remove the card element
+                        var card = document.getElementById('card-' + itemId);
+                        if (card) {
+                            card.classList.add("fade-out");
+                            setTimeout(function () {
+                                card.remove();;
+                            }, 200);
+
+                        }
+                    }
+                } else {
+                    console.log('Hiba a kedvenchez adás közben: ' + data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>

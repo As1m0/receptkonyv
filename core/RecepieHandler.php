@@ -2,7 +2,7 @@
 
 abstract class RecepieHandler
 {
-    public static function RecepieFullData(int $recept_id): array
+    public static function RecepieFullData(int $recept_id, $user_id = null): array
     {
         $data = [];
 
@@ -39,6 +39,18 @@ abstract class RecepieHandler
             $data["felhasznalo"] = $result4->fetch_all(MYSQLI_ASSOC);
         }
 
+        if($user_id != null)
+        {
+            $result4 = DBHandler::RunQuery("SELECT `recept_id` FROM `favorites` WHERE `user_id` = ? AND `recept_id` = ?",
+            [new DBParam(DBTypes::Int, $user_id),new DBParam(DBTypes::Int, $recept_id)]);
+            if(!empty($result4->fetch_all(MYSQLI_ASSOC)))
+            {
+                $data["is_favorite"] = true;
+            }
+            else {
+                $data["is_favorite"] = false;
+            }
+        }
 
         return $data;
     }
