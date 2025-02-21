@@ -6,7 +6,7 @@ abstract class Model
     public static function saveToFavorites(int $userId, int $receptId): string
     {
         try {
-            $data = DBHandler::RunQuery("SELECT `user_id` FROM `favorites` WHERE recept_id = ?", [new DBParam(DBTypes::Int, $receptId)]);
+            $data = DBHandler::RunQuery("SELECT `user_id` FROM `favorites` WHERE `recept_id` = ? AND `user_id` = ?", [new DBParam(DBTypes::Int, $receptId), new DBParam(DBTypes::Int, $userId)]);
             $result = $data->fetch_all(MYSQLI_ASSOC);
             if (empty($result)) {
                 DBHandler::RunQuery("INSERT INTO `favorites` (`user_id`,`recept_id`) VALUES (?,?)", [new DBParam(DBTypes::Int, $userId), new DBParam(DBTypes::Int, $receptId)]);

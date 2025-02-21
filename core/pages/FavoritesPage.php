@@ -53,7 +53,7 @@ class FavoritesPage implements IPageBase
                 $this->template->AddData("RECEPTEK", $recept);
             }
         } else {
-            $this->template->AddData("RECEPTEK", "<p class=\"text-center small\">még nem töltöttél fel receptet..</p>");
+            $this->template->AddData("RECEPTEK", "<p class=\"text-center small\">még nem mentettél el kedvenc receptet..</p>");
         }
 
     }
