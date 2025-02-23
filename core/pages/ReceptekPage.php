@@ -55,6 +55,7 @@ class ReceptekPage implements IPageBase
             Controller::RunModule("SearchKeyLoggerModule", ["searcKey" => $_GET[$cfg["searchKey"]]]);
         }
 
+        //szurok
         if (isset($_POST["time"]) && $_POST["time"] !== "") {
             $this->template->AddData("TIME", $_POST["time"]);
             switch ($_POST["time"]) {
@@ -114,7 +115,7 @@ class ReceptekPage implements IPageBase
             
 
 
-        //recept cardok feltöltése
+        //recept cards
         if (count($DBresult) != 0) {
             foreach ($DBresult as $recept) {
                 $receptCard = Template::Load("recept-card.html");
@@ -164,11 +165,13 @@ class ReceptekPage implements IPageBase
             $this->template->AddData("RECEPTCARDS", "<h4 class=\"text-center\">Nincs találat!</h4>");
         }
 
-
+        //Favorites script
+        $favScript = Template::Load("favApi.js");
+        $favScript->AddData("FULLHEART", $cfg["contentFolder"]."/heart_icons/heart2.png");
+        $favScript->AddData("EMPTYHEART", $cfg["contentFolder"]."/heart_icons/heart1.png");
+        $this->template->AddData("SCRIPTS", $favScript);
 
     }
-
-
 
 
 }

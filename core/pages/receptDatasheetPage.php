@@ -89,8 +89,9 @@ class receptDatasheetPage implements IPageBase
         $this->template->AddData("IDO", $data["recept_adatok"][0]["elk_ido"]);
         $this->template->AddData("ADAG", $data["recept_adatok"][0]["adag"]);
         $this->template->AddData("NEHEZSEG", $data["recept_adatok"][0]["nehezseg"]);
-        $this->template->AddData("LEIRAS", nl2br($data["recept_adatok"][0]["leiras"])); //nl2br -> add line brakes to HTML
+        $this->template->AddData("LEIRAS", nl2br($data["recept_adatok"][0]["leiras"]));
 
+        //review results
         if (isset($data["reviews"][0])) {
             $this->template->AddData("STARSPIC", Template::GetStarImg($data["reviews"][0]["avg_ertekeles"]));
             $this->template->AddData("KOMMENTSZAM", $data["reviews"][0]["comment_count"]);
@@ -176,6 +177,12 @@ class receptDatasheetPage implements IPageBase
                 }
             }
         }
+
+        //Favorites script
+        $favScript = Template::Load("favApi.js");
+        $favScript->AddData("FULLHEART", $cfg["contentFolder"]."/heart_icons/heart2b.png");
+        $favScript->AddData("EMPTYHEART", $cfg["contentFolder"]."/heart_icons/heart1b.png");
+        $this->template->AddData("SCRIPTS", $favScript);
     }
 
 

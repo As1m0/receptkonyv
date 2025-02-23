@@ -74,17 +74,23 @@ class AccountPage implements IPageBase
         } else {
             $this->template->AddData("SRC", $cfg["ProfilKepek"] . "/empty_profilPic.jpg");
         }
-        //$this->template->AddData("SRC", $cfg["ProfilKepek"] ."/".$_SESSION["userpic"]. ".jpg");
         $this->template->AddData("NAME", $_SESSION["userfullname"]);
         $this->template->AddData("USERID", $_SESSION["userID"]);
         $this->template->AddData("EMAIL", $_SESSION["usermail"]);
 
 
+        //delete recepie
         if (isset($_POST["delete-recepie"])) {
             $receptId = filter_var(trim($_POST["delete-recepie"]), FILTER_VALIDATE_INT);
             Model::DeleteRecepie($receptId);
             $feedback = "A recept törlése sikeres!";
         }
+
+        //Favorites script
+        $favScript = Template::Load("favApi.js");
+        $favScript->AddData("FULLHEART", $cfg["contentFolder"]."/heart_icons/heart2.png");
+        $favScript->AddData("EMPTYHEART", $cfg["contentFolder"]."/heart_icons/heart1.png");
+        $this->template->AddData("SCRIPTS", $favScript);
 
 
         //PAGE HANDLING
@@ -151,7 +157,7 @@ class AccountPage implements IPageBase
         }
 
 
-
+        //delete user
         if (isset($_POST["delete-user"])) {
             $userId = filter_var(trim($_POST["delete-user"]), FILTER_VALIDATE_INT);
             if ($userId == $_SESSION["userID"]) {
