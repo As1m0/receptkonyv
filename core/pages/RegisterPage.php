@@ -82,10 +82,16 @@ class RegisterPage implements IPageBase
                 {
                     $pass = hash("sha256", trim($_POST["pass"]));
                     //Upload to database
-                    Model::Register(array("veznev" => $vezNev, "kernev" => $kerNev, "email" => $email, "password_hash" => $pass, "pic_name" => $imgName));
-                    
+                    if( Model::Register(array("veznev" => $vezNev, "kernev" => $kerNev, "email" => $email, "password_hash" => $pass, "pic_name" => $imgName)))
+                    {
                         $result["reg"]["info"] = "Sikeres regisztráció!";
                         $result["reg"]["success"] = true;
+                    }
+                    else
+                    {
+                        $result["reg"]["info"] = "Már létezik fiók ezzel az email címmel!";
+                        $result["reg"]["success"] = false;
+                    }
                 }
                 else
                 {
@@ -116,7 +122,7 @@ class RegisterPage implements IPageBase
             }
         }
 
-        if(isset($result["reg"]["success"]) && $result["reg"]["success"] !== false)
+        if(isset($result["reg"]["success"]))
         {
         $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='{$cfg["mainPage"]}.php?p=login';}, 1500);</script>");
         }

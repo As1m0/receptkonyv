@@ -22,7 +22,7 @@ class LoginPage implements IPageBase
                     $email = htmlspecialchars(trim($_POST["email"]));
                     $pass = hash("sha256", trim($_POST["pass"]));
 
-                    if (Model::Login($email, $pass))
+                    if (Model::Login($email, $pass, isset($_POST["keep"])))
                     {
                         $result["login"]["info"] = "Sikeres bejelentkezés!";
                         $result["login"]["success"] = true;
@@ -61,7 +61,7 @@ class LoginPage implements IPageBase
             }
             else
             {
-                 $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='{$cfg["mainPage"]}.php';}, 1500);</script>");
+                $this->template->AddData("SCRIPT", "<script>window.setTimeout(function(){window.location.href='{$cfg["mainPage"]}.php';}, 1500);</script>");
             }
         }
     }

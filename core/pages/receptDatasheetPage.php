@@ -42,21 +42,15 @@ class receptDatasheetPage implements IPageBase
 
         //recept törlése
         if (isset($_POST["delete-recepie"])) {
-            print ($_POST["delete-recepie"]);
             $receptIdDel = filter_var(trim($_POST["delete-recepie"]), FILTER_VALIDATE_INT);
             Model::DeleteRecepie($receptIdDel);
             Header("Location: index.php?p=account");
+            exit();
         }
-
-
-
-
-
 
 
         // DB Recept betöltése
         $data = Model::RecepieFullData($receptID, isset($_SESSION["userID"]) ? $_SESSION["userID"] : null);
-        //print_r($data);
 
         if (empty($data["recept_adatok"])) {
             Header("Location: index.php?p=404");
@@ -123,7 +117,6 @@ class receptDatasheetPage implements IPageBase
 
         //Reviews betöltése
         if (!empty($data["reviews"])) {
-            //print_r($data["reviews"]);
             for ($j = 0; $j < count($data["reviews"]); $j++) {
                 $review = Template::Load("comment-thumbnail.html");
 
@@ -184,8 +177,6 @@ class receptDatasheetPage implements IPageBase
             }
         }
     }
-
-
 
 
 }

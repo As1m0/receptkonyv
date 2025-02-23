@@ -9,10 +9,11 @@ require_once("../config.php");
 require_once("../core/DBParam.php");
 require_once("../core/DBHandler.php");
 require_once("../core/Model.php");
+require_once("../core/RecepieHandler.php");
 require_once("../core/enums.php");
 
 session_start();
-$userId = $_SESSION['userID']; // Assuming user is logged in and user ID is stored in session
+$userId = $_SESSION['userID'];
 
 // Get the posted data
 $data = json_decode(file_get_contents('php://input'), true);

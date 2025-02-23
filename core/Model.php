@@ -3,28 +3,6 @@
 abstract class Model
 {
 
-    public static function saveToFavorites(int $userId, int $receptId): string
-    {
-        try {
-            $data = DBHandler::RunQuery("SELECT `user_id` FROM `favorites` WHERE `recept_id` = ? AND `user_id` = ?", [new DBParam(DBTypes::Int, $receptId), new DBParam(DBTypes::Int, $userId)]);
-            $result = $data->fetch_all(MYSQLI_ASSOC);
-            if (empty($result)) {
-                DBHandler::RunQuery("INSERT INTO `favorites` (`user_id`,`recept_id`) VALUES (?,?)", [new DBParam(DBTypes::Int, $userId), new DBParam(DBTypes::Int, $receptId)]);
-                return "inserted";
-            } else {
-                DBHandler::RunQuery("DELETE FROM `favorites` WHERE `user_id` = ? AND `recept_id` = ?", [new DBParam(DBTypes::Int, $userId), new DBParam(DBTypes::Int, $receptId)]);
-                return "removed";
-            }
-        } catch (Exception $e) {
-            throw new DBException("Hiba a kedvenc recept rögzitése során!", 0, $e);
-        }
-    }
-
-    public static function CheckNewRecepie($lastChecked): array
-    {
-        $result = DBHandler::RunQuery("SELECT `recept_neve`,`recept_id` FROM `recept` WHERE `created_at` > ? LIMIT 1", [new DBParam(DBTypes::String, $lastChecked)]);
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
 
     public static function GetPageData(string $page): array
     {
@@ -105,34 +83,47 @@ abstract class Model
         } else {
             throw new NotFoundException("A search log fájl nem elérhető");
         }
-
     }
 
 
-    public static function Login(string $email, string $pass): bool
+
+
+
+
+
+    //                          USER FUNCTIONS                        //
+
+
+    public static function Login(string $email, string $pass, bool $keepLogin = false): bool
     {
         try {
-            return UserHandler::Login($email, $pass);
+            return UserHandler::Login($email, $pass, $keepLogin);
         } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
     }
 
-
-    public static function Register(array $data): void
+    public static function Register(array $data): bool
     {
         try {
-            UserHandler::Register($data);
+            return UserHandler::Register($data);
         } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
-
     }
 
     public static function DeleteUser(int $id): void
     {
-        //delete all profil pics and recepie pics
         global $cfg;
+
+        //delete from DB
+        try {
+            UserHandler::DeleteUser($id);
+        } catch (Exception $ex) {
+            throw new DBException($ex->GetMessage());
+        }
+
+        //delete all profil pics and recepie pics
         $pictures = UserHandler::GetImages($id);
         if (!empty($pictures[0])) {
             foreach ($pictures[0] as $picture) {
@@ -153,12 +144,6 @@ abstract class Model
                     unlink($cfg["receptKepek"] . "/" . $picture["pic_name"] . ".jpg");
                 }
             }
-        }
-        //delete from DB
-        try {
-            UserHandler::DeleteUser($id);
-        } catch (Exception $ex) {
-            throw new DBException($ex->GetMessage());
         }
     }
 
@@ -202,6 +187,16 @@ abstract class Model
 
 
 
+
+
+
+
+
+
+
+    //                      REVIEW FUNCTIONS                        //
+
+
     public static function UploadReview(array $data): void
     {
         try {
@@ -221,6 +216,22 @@ abstract class Model
     }
 
 
+
+
+
+
+
+
+
+    //                        RECEPIE FUNCTIONS                       //
+
+
+    public static function CheckNewRecepie($lastChecked): array
+    {
+        $result = DBHandler::RunQuery("SELECT `recept_neve`,`recept_id` FROM `recept` WHERE `created_at` > ? LIMIT 1", [new DBParam(DBTypes::String, $lastChecked)]);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public static function UploadRecept(array $data): void
     {
         try {
@@ -230,9 +241,25 @@ abstract class Model
         }
     }
 
+    public static function saveToFavorites(int $userId, int $receptId): string
+    {
+        try {
+            return RecepieHandler::saveToFavorites($userId, $receptId);
+        } catch (Exception $e) {
+            throw new DBException("Hiba a kedvenc recept rögzitése során!", 0, $e);
+        }
+    }
+
     public static function UpdateRecept(array $data): void
     {
         global $cfg;
+
+        try {
+            RecepieHandler::UpdateRecept($data);
+        } catch (Exception $ex) {
+            throw new DBException($ex->GetMessage());
+        }
+
         if ($data["recept"]["pic_name"] != "") {
             if (file_exists($cfg["receptKepek"] . "/" . $data["prev-img"] . "_thumb.jpg")) {
                 unlink($cfg["receptKepek"] . "/" . $data["prev-img"] . "_thumb.jpg");
@@ -240,12 +267,6 @@ abstract class Model
             if (file_exists($cfg["receptKepek"] . "/" . $data["prev-img"] . ".jpg")) {
                 unlink($cfg["receptKepek"] . "/" . $data["prev-img"] . ".jpg");
             }
-        }
-
-        try {
-            RecepieHandler::UpdateRecept($data);
-        } catch (Exception $ex) {
-            throw new DBException($ex->GetMessage());
         }
     }
 
@@ -279,6 +300,14 @@ abstract class Model
     public static function DeleteRecepie(int $receptId): void
     {
         global $cfg;
+
+        //delte from DB
+        try {
+            RecepieHandler::DeleteRecepie($receptId);
+        } catch (Exception $ex) {
+            throw new DBException($ex->GetMessage());
+        }
+
         //delere recept pictures
         $picture = RecepieHandler::GetRecepieImgName($receptId);
         if (!empty($picture[0])) {
@@ -289,14 +318,16 @@ abstract class Model
                 unlink($cfg["receptKepek"] . "/" . $picture[0]["pic_name"] . ".jpg");
             }
         }
-        //delte from DB
+    }
+
+    public static function GetFavRecepies(int $userID): array
+    {
         try {
-            RecepieHandler::DeleteRecepie($receptId);
+            return RecepieHandler::GetFavRecepies($userID);
         } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
     }
-
 
     public static function GetNumbers(): array
     {
@@ -315,199 +346,12 @@ abstract class Model
 
     public static function getDynamicQueryResults(array $serachData, bool $fullData = false, int $start_from = 0, int $results_per_page = 100, int $userID = null): array
     {
-
-        // Initialize an array for conditions and params
-        $conditions = [];
-        $params = [];
-
-        if ($userID != null) {
-            $params[] = new DBParam(DBTypes::Int, $userID);
-        }
-
-        // Check for searchKey and add condition
-        if (isset($serachData["searchKey"])) {
-            $conditions[] = "`recept_neve` LIKE ?";
-            $params[] = new DBParam(DBTypes::String, "%" . $serachData["searchKey"] . "%");
-        }
-
-        // Check for category and add condition
-        if (isset($serachData["category"])) {
-            $conditions[] = "`kategoria` = ?";
-            $params[] = new DBParam(DBTypes::String, $serachData["category"]);
-        }
-
-
-
-        // Check for difficulty and add condition
-        if (isset($serachData["difficulty"])) {
-            $conditions[] = "`nehezseg` = ?";
-            $params[] = new DBParam(DBTypes::String, $serachData["difficulty"]);
-        }
-
-        // Check for rating and add condition
-        if (isset($serachData["rating"])) {
-            switch ($serachData["rating"]) {
-                case "1":
-                    $ratingQuery = "1";
-                    break;
-                case "2":
-                    $ratingQuery = "BETWEEN 2 AND 3";
-                    break;
-                case "3":
-                    $ratingQuery = "BETWEEN 3 AND 4";
-                    break;
-                case "4":
-                    $ratingQuery = "BETWEEN 4 AND 5";
-                    break;
-                case "5":
-                    $ratingQuery = "5";
-                    break;
-                default:
-                    $ratingQuery = "0";
-            }
-            $ratingCond = "HAVING `avg_ertekeles` >= ?";
-            $params[] = new DBParam(DBTypes::String, $ratingQuery);
-        } else {
-            $ratingCond = "";
-        }
-
-        // Check for time and add condition
-        if (isset($serachData["time"])) {
-            $conditions[] = "`elk_ido` " . $serachData["time"];
-        }
-
-        // Check for time and add condition
-        if (isset($serachData["userID"])) {
-            $conditions[] = "f.felh_id = ?";
-            $params[] = new DBParam(DBTypes::Int, $serachData["userID"]);
-        }
-
-
-        if (count($conditions) > 0) {
-            $finalconditions = implode(" AND ", $conditions);
-        } else {
-            $finalconditions = "1";
-        }
-
-        if ($fullData) {
-            if ($userID != null) {
-                $fullquery = "
-                SELECT
-                    r.recept_id,
-                    r.recept_neve,
-                    r.elk_ido,
-                    r.adag,
-                    r.nehezseg,
-                    r.pic_name,
-                    COALESCE(f.veznev, 'Nincs adat') AS veznev,
-                    COALESCE(f.kernev, 'Nincs adat') AS kernev,
-                    COALESCE(AVG(rv.ertekeles), 0) AS avg_ertekeles,
-                    CASE WHEN fav.user_id IS NOT NULL THEN 'true' ELSE 'false' END AS is_favorite
-                FROM
-                    recept r
-                LEFT JOIN
-                    felhasznalok f ON r.felh_id = f.felh_id
-                LEFT JOIN
-                    reviews rv ON r.recept_id = rv.recept_id
-                LEFT JOIN
-                    favorites fav ON r.recept_id = fav.recept_id AND fav.user_id = ?
-                WHERE
-                    " . $finalconditions . "
-                GROUP BY
-                    r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name, fav.user_id
-                ORDER BY
-                r.created_at DESC
-                    " . $ratingCond . "
-                LIMIT " . $start_from . "," . $results_per_page;
-            } else {
-                $fullquery = "
-            SELECT
-                r.recept_id,
-                r.recept_neve,
-                r.elk_ido,
-                r.adag,
-                r.nehezseg,
-                r.pic_name,
-                COALESCE(f.veznev, 'Nincs adat') AS veznev,
-                COALESCE(f.kernev, 'Nincs adat') AS kernev,
-                COALESCE(AVG(rv.ertekeles), 0) AS avg_ertekeles
-            FROM
-                recept r
-            LEFT JOIN
-                felhasznalok f ON r.felh_id = f.felh_id
-            LEFT JOIN
-                reviews rv ON r.recept_id = rv.recept_id
-            WHERE
-                " . $finalconditions . "
-            GROUP BY
-                r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name
-            ORDER BY
-            r.created_at DESC
-                " . $ratingCond . "
-            LIMIT " . $start_from . "," . $results_per_page;
-            }
-        } else {
-            $fullquery = "
-            SELECT
-                r.recept_id,
-                COALESCE(AVG(rv.ertekeles), 0) AS avg_ertekeles
-            FROM
-                recept r
-            LEFT JOIN
-                felhasznalok f ON r.felh_id = f.felh_id
-            LEFT JOIN
-                reviews rv ON r.recept_id = rv.recept_id
-            WHERE
-                " . $finalconditions . "
-            GROUP BY
-                r.recept_id
-                " . $ratingCond . "
-            LIMIT " . $start_from . "," . $results_per_page;
-        }
-        //print_r($fullquery);
-        $result = DBHandler::RunQuery($fullquery, $params);
-        return $result->fetch_all(MYSQLI_ASSOC);
-
-    }
-
-    public static function GetFavRecepies(int $userID): array
-    {
-        try
-        {
-            $result = DBHandler::RunQuery("
-            SELECT
-                r.recept_id,
-                r.recept_neve,
-                r.elk_ido,
-                r.adag,
-                r.nehezseg,
-                r.pic_name,
-                COALESCE(f.veznev, 'Nincs adat') AS veznev,
-                COALESCE(f.kernev, 'Nincs adat') AS kernev,
-                COALESCE(AVG(rv.ertekeles), 0) AS avg_ertekeles
-            FROM
-                recept r
-            LEFT JOIN
-                felhasznalok f ON r.felh_id = f.felh_id
-            LEFT JOIN
-                reviews rv ON r.recept_id = rv.recept_id
-            LEFT JOIN
-                favorites fav ON r.recept_id = fav.recept_id
-            WHERE
-                fav.user_id = ?
-            GROUP BY
-                r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name, f.veznev, f.kernev
-            ORDER BY
-                r.created_at DESC;",
-            [new DBParam(DBTypes::Int, $userID)]);
-        }
-        catch (Exception $ex)
-        {
+        try {
+            return RecepieHandler::getDynamicQueryResults($serachData, $fullData, $start_from, $results_per_page, $userID);
+        } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
-        return $result->fetch_all(MYSQLI_ASSOC);
     }
-
 
 
 }

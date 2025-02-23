@@ -3,149 +3,145 @@
 abstract class Controller
 {
 
-    public static function Route() : void
+    public static function Route(): void
     {
         global $cfg;
-        
+
+        // Logout
+        if (isset($_GET['logout']) && $_GET['logout']) {
+
+            session_unset();
+            session_destroy();
+
+            if (isset($_COOKIE['keeplogin'])) {
+                setcookie('keeplogin', '', time() - 3600);
+            }
+            if (isset($_COOKIE['usermail'])) {
+                setcookie('usermail', '', time() - 3600);
+            }
+            header("Location: {$cfg['mainPage']}.php");
+            exit();
+        }
+
         $page = $cfg["mainPage"];
-        if(isset($_GET[$cfg["pageKey"]]))
-        {
+        if (isset($_GET[$cfg["pageKey"]])) {
             $page = htmlspecialchars($_GET[$cfg["pageKey"]]);
         }
 
-        try
-        {
+        try {
             DBHandler::Init();
+
+            //check keep logged in cookie
+            if (!isset($_SESSION["loggedIn"])) {
+                if (isset($_COOKIE["keeplogin"])) {
+                    $keep = htmlspecialchars($_COOKIE["keeplogin"]);
+                    if ($keep == sha1($_SERVER["REMOTE_ADDR"])) {
+                        if (isset($_COOKIE["usermail"])) {
+                            $usermail = htmlspecialchars($_COOKIE["usermail"]);
+                            if (Model::Login($usermail, "", true) == false) {
+                                if (isset($_COOKIE['keeplogin'])) {
+                                    setcookie('keeplogin', '', time() - 3600);
+                                }
+                                if (isset($_COOKIE['usermail'])) {
+                                    setcookie('usermail', '', time() - 3600);
+                                }
+                                header("Location: {$cfg['mainPage']}.php");
+                                exit();
+                            }
+                        }
+                    }
+                }
+            }
+
             View::setBaseTemplate(Template::Load($cfg["mainPageTemplate"]));
             $pageData = Model::GetPageData($page);
-            if($pageData["enabled"] !== 1)
-            {
+            if ($pageData["enabled"] !== 1) {
                 throw new PermissionDeniedException("A megadott oldal elérése tiltott!");
             }
-            if (isset($_SESSION["groupMember"]) && $_SESSION["groupMember"] < $pageData["permission"])
-            {
+            if (isset($_SESSION["groupMember"]) && $_SESSION["groupMember"] < $pageData["permission"]) {
                 throw new PermissionDeniedException("A megadott oldal eléréséhez magasabb felhasználói szint szükséges!");
             }
-            if (!isset($_SESSION["groupMember"]) && $pageData["permission"] !== 0)
-            {
+            if (!isset($_SESSION["groupMember"]) && $pageData["permission"] !== 0) {
                 throw new PermissionDeniedException("A megadott oldal eléréséhez be kell jelentkezned!");
             }
-            if(class_exists($pageData["class"]) && in_array("IPageBase", class_implements($pageData["class"])))
-            {
+            if (class_exists($pageData["class"]) && in_array("IPageBase", class_implements($pageData["class"]))) {
                 $pageObject = new $pageData["class"]();
                 $pageObject->Run($pageData);
                 $result = $pageObject->GetTemplate();
-                if($result !== null)
-                {
-                    if($pageData["fullTemplate"] === 1)
-                    {
+                if ($result !== null) {
+                    if ($pageData["fullTemplate"] === 1) {
                         View::setBaseTemplate($result);
-                    }
-                    else
-                    {
+                    } else {
                         $parentData = Model::GetPageData($pageData["parent"]);
-                        if($parentData["enabled"] !== 1)
-                        {
+                        if ($parentData["enabled"] !== 1) {
                             throw new PermissionDeniedException("A megadott oldal elérése tiltott!");
                         }
                         View::setBaseTemplate(Template::Load($parentData["template"]));
                         View::getBaseTemplate()->AddData($cfg["defaultContentFlag"], $result);
 
-                        if($pageData["parent"] == "indexGroup")
-                        {
-                            View::getBaseTemplate()->AddData("BGIMAGE", $cfg["contentFolder"]."/".Model::LoadText("bg-img"));
+                        if ($pageData["parent"] == "indexGroup") {
+                            View::getBaseTemplate()->AddData("BGIMAGE", $cfg["contentFolder"] . "/" . Model::LoadText("bg-img"));
                             View::getBaseTemplate()->AddData($cfg["defaultNavFlag"], Controller::RunModule("NavigationModule"));
                             View::getBaseTemplate()->AddData($cfg["defaultFooterFlag"], Controller::RunModule("FooterModule"));
                             View::getBaseTemplate()->AddData("POPUP", Template::Load("pop-up-block.html"));
-                        }
-                        elseif($pageData["parent"] == "adminGroup")
-                        {
+                        } elseif ($pageData["parent"] == "adminGroup") {
                             View::getBaseTemplate()->AddData($cfg["defaultNavFlag"], Controller::RunModule("AdminNavModule"));
                         }
                     }
-                }
-                else
-                {
+                } else {
                     throw new PageLoadException("A megadott oldal nem generált tartalmat!");
                 }
-            }
-            else
-            {
+            } else {
                 throw new PageLoadException("A megadott oldalhoz tartozó osztály ({$pageData["class"]}) nem létezik, vagy nem megfelelő");
             }
-        }
-        catch (NotFoundException $ex)
-        {
+        } catch (NotFoundException $ex) {
             View::setBaseTemplate(Template::Load($cfg["PageNotFoundTemplate"]));
             View::getBaseTemplate()->AddData($cfg["defaultContentFlag"], $ex->getMessage());
-        }
-        catch (PermissionDeniedException $ex)
-        {
+        } catch (PermissionDeniedException $ex) {
             View::setBaseTemplate(Template::Load($cfg["PermissionDeniedTemplate"]));
             View::getBaseTemplate()->AddData($cfg["defaultContentFlag"], $ex->getMessage());
-        }
-        catch (Exception $ex)
-        {
-            if($cfg["debug"] /*&& (is_a($ex, "TemplateException") || is_a($ex, "PageLoadException"))*/)
-            {
+        } catch (Exception $ex) {
+            if ($cfg["debug"] /*&& (is_a($ex, "TemplateException") || is_a($ex, "PageLoadException"))*/) {
                 View::setBaseTemplate(Template::Load($cfg["debugErrorPage"]));
                 View::getBaseTemplate()->AddData("EXCEPTION", get_class($ex));
                 View::getBaseTemplate()->AddData("MESSAGE", $ex->getMessage());
                 View::getBaseTemplate()->AddData("TRACE", $ex->getTraceAsString());
-            }
-            elseif(!$cfg["debug"])
-            {
+            } elseif (!$cfg["debug"]) {
                 View::setBaseTemplate(Template::Load($cfg["maintanceTemplate"]));
             }
-        }
-        finally
-        {
-            try
-            {
-               DBHandler::Disconnect();
-            }
-            catch (Exception $ex)
-            {
+        } finally {
+            try {
+                DBHandler::Disconnect();
+            } catch (Exception $ex) {
                 //do nothing...
             }
             View::PrintFinalTemplate();
         }
-            
+
     }
-    
-    public static function RunModule(string $moduleName, array $data = []) : null|Template
+
+    public static function RunModule(string $moduleName, array $data = []): null|Template
     {
         $modules = Model::GetModules($moduleName);
-        if(class_exists($moduleName))
-        {
-            if($modules[0]["enabled"] === 1)
-            {
-                if(in_array("IVisibleModuleBase", class_implements($moduleName)))
-                {
+        if (class_exists($moduleName)) {
+            if ($modules[0]["enabled"] === 1) {
+                if (in_array("IVisibleModuleBase", class_implements($moduleName))) {
                     $module = new $moduleName();
                     $module->Run($data);
                     return $module->GetTemplate();
-                }
-                elseif(in_array("IModuleBase", class_implements($moduleName)))
-                {
+                } elseif (in_array("IModuleBase", class_implements($moduleName))) {
                     $module = new $moduleName();
                     $module->Run($data);
                     return null;
-                }
-                else
-                {
+                } else {
                     throw new ModuleException("A megadott modul szerkezetileg hibás!");
                 }
-            }
-            else
-            {
+            } else {
                 throw new ModuleException("A megadott modul nem engedélyezett!");
             }
-        }
-        else
-        {
+        } else {
             throw new NotFoundException("A megadott modul nem található!");
         }
     }
-    
+
 }
