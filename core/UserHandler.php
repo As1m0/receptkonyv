@@ -37,8 +37,8 @@ abstract class UserHandler
 
                 if($keepLogin)
                 {
-                    setcookie("keeplogin", sha1($_SERVER["REMOTE_ADDR"]), time()+60*60*24*30);
-                    setcookie("usermail", $data["email"], time()+60*60*24*30);
+                    setcookie("keeplogin", sha1($_SERVER["REMOTE_ADDR"]), time()+60*60*24*30*12);
+                    setcookie("usermail", $data["email"], time()+60*60*24*30*12);
                 }
                 return true;
             }
@@ -88,6 +88,7 @@ abstract class UserHandler
             foreach($recept_ids as $recept_id){
                 DBHandler::RunQuery("DELETE FROM `hozzavalok` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $recept_id["recept_id"])]);
                 DBHandler::RunQuery("DELETE FROM `reviews` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $recept_id["recept_id"])]);
+                DBHandler::RunQuery("DELETE FROM `favorites` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $recept_id["recept_id"])]);
                 DBHandler::RunQuery("DELETE FROM `recept` WHERE `recept_id` = ?", [new DBParam(DBTypes::Int, $recept_id["recept_id"])]);
             }
         }

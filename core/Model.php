@@ -115,14 +115,6 @@ abstract class Model
     public static function DeleteUser(int $id): void
     {
         global $cfg;
-
-        //delete from DB
-        try {
-            UserHandler::DeleteUser($id);
-        } catch (Exception $ex) {
-            throw new DBException($ex->GetMessage());
-        }
-
         //delete all profil pics and recepie pics
         $pictures = UserHandler::GetImages($id);
         if (!empty($pictures[0])) {
@@ -145,6 +137,13 @@ abstract class Model
                 }
             }
         }
+
+        //delete from DB
+        try {
+            UserHandler::DeleteUser($id);
+        } catch (Exception $ex) {
+            throw new DBException($ex->GetMessage());
+        }
     }
 
     public static function UpdateUser(int $userID, string $veznev, string $kernev, string $email, int $groupMember): void
@@ -164,7 +163,7 @@ abstract class Model
             throw new DBException($ex->GetMessage());
         }
 
-        //remove images
+        //remove old images
         global $cfg;
         if ($oldImgName !== null) {
             if (file_exists($cfg["ProfilKepek"] . "/" . $oldImgName . "_thumb.jpg")) {
@@ -301,13 +300,6 @@ abstract class Model
     {
         global $cfg;
 
-        //delte from DB
-        try {
-            RecepieHandler::DeleteRecepie($receptId);
-        } catch (Exception $ex) {
-            throw new DBException($ex->GetMessage());
-        }
-
         //delere recept pictures
         $picture = RecepieHandler::GetRecepieImgName($receptId);
         if (!empty($picture[0])) {
@@ -317,6 +309,13 @@ abstract class Model
             if (file_exists($cfg["receptKepek"] . "/" . $picture[0]["pic_name"] . ".jpg")) {
                 unlink($cfg["receptKepek"] . "/" . $picture[0]["pic_name"] . ".jpg");
             }
+        }
+
+        //delte from DB
+        try {
+            RecepieHandler::DeleteRecepie($receptId);
+        } catch (Exception $ex) {
+            throw new DBException($ex->GetMessage());
         }
     }
 

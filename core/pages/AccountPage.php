@@ -108,8 +108,10 @@ class AccountPage implements IPageBase
         $result = Model::getDynamicQueryResults(["userID" => $_SESSION["userID"]], true, $start_from, $results_per_page, $_SESSION["userID"]);
 
         //buttons
-        for ($i = 1; $i <= $total_pages; $i++) {
-            $this->template->AddData("PAGES", "<input type=\"submit\" class=\"btn\" style=\"color:" . ($page == $i ? 'var(--primary-color);' : '') . "\" name=\"page\" value=\"{$i}\">");
+        if ($page != 1){
+            for ($i = 1; $i <= $total_pages; $i++) {
+                $this->template->AddData("PAGES", "<input type=\"submit\" class=\"btn\" style=\"color:" . ($page == $i ? 'var(--primary-color);' : '') . "\" name=\"page\" value=\"{$i}\">");
+            }
         }
         if ($page != 1) {
             $this->template->AddData("PREV", "<button type=\"submit\" class=\"btn\" name=\"page\" value=\"" . ($page - 1) . "\"><</button>");
@@ -153,7 +155,7 @@ class AccountPage implements IPageBase
                 $this->template->AddData("RECEPTEK", $recept);
             }
         } else {
-            $this->template->AddData("RECEPTEK", "<p class=\"text-center small\">még nem töltöttél fel receptet..</p>");
+            $this->template->AddData("RECEPTEK", "<p class=\"text-center small\">még nem töltöttél fel receptet..</p><a href=\"index.php?p=recept-feltoltes\" class=\"btn btn-default m-3 py-2 w-25 m-auto\" style=\"border-radius: 20px\">Recept feltöltése</a>");
         }
 
 

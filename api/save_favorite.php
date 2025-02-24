@@ -35,6 +35,6 @@ catch(DBException $error)
 
 $response['success'] = true;
 $response['result'] = $result;
-$response['ids'] = "User id: ".$userId.", Recepie id: ".$itemId;
+$response['ids'] = "Recepie id: ".$itemId;
 echo json_encode($response);
 

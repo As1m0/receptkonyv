@@ -102,15 +102,16 @@ class ReceptekPage implements IPageBase
         $DBresult = Model::getDynamicQueryResults($searchData,true, $start_from,$results_per_page, isset($_SESSION["userID"]) ? $_SESSION["userID"] : null);
 
         //buttons
-        for ($i = 1; $i <= $total_pages; $i++) {
-        $this->template->AddData("PAGES", "<input type=\"submit\" class=\"btn\" style=\"color:" . ($page == $i ? 'var(--primary-color);' : '') . "\" name=\"page\" value=\"{$i}\">");
+        if ($total_pages != 1){
+            for ($i = 1; $i <= $total_pages; $i++) {
+                $this->template->AddData("PAGES", "<input type=\"submit\" class=\"btn\" style=\"color:" . ($page == $i ? 'var(--primary-color);' : '') . "\" name=\"page\" value=\"{$i}\">");
+            }
         }
-        if($page != 1)
-        {
-            $this->template->AddData("PREV", "<button type=\"submit\" class=\"btn\" name=\"page\" value=\"".($page-1)."\"><</button>");
+        if ($page != 1) {
+            $this->template->AddData("PREV", "<button type=\"submit\" class=\"btn\" name=\"page\" value=\"" . ($page - 1) . "\"><</button>");
         }
-        if($page != $total_pages && $total_pages != 0){
-            $this->template->AddData("NEXT", "<button type=\"submit\" class=\"btn\" name=\"page\" value=\"".($page+1)."\">></button>");
+        if ($page != $total_pages && $total_pages != 0) {
+            $this->template->AddData("NEXT", "<button type=\"submit\" class=\"btn\" name=\"page\" value=\"" . ($page + 1) . "\">></button>");
         }
             
 

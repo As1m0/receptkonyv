@@ -22,16 +22,16 @@
                 <div class="profil-adatok">
                     <h3>Profilom</h3>
                     <div class="text-center mt-4">
-                        <div class="d-block" style="max-width: 210px; margin: auto;">
+                        <div class="d-block" style="max-width: 200px; margin: auto;">
                             <img id="profil-pic-icon" src="content/camera-icon.png" alt="camera icon">
-                            <div class="profil-img-wrapper"><img class="profil-pic" src="%!SRC!%" alt="%!NAME!% profilkép"></div>
+                            <div class="profil-img-wrapper m-auto" id="profil-img-wrapper"><img class="profil-pic" src="%!SRC!%" alt="%!NAME!% profilkép"></div>
                         </div>
                         <p class="my-3"><b>%!NAME!%</b></p>
                         <p class="my-3 small">%!EMAIL!%</p>
                         <p class="my-3">%!RECEPTSZAM!% feltöltött recept</p>
                     </div>
                     <div class="buttons text-center">
-                        <a href="index.php?logout=true" class="btn btn-default mt-1">Kijelentkezés</a>
+                        <a href="index.php?logout=true" class="btn btn-outline-primary mt-1">Kijelentkezés</a>
                         <form method="post">
                             <a href="#" class="btn mt-1" id="delete" onclick="deleteUser(%!USERID!%)"><small>Profil
                                     törlése</small></a>
@@ -84,4 +84,10 @@
 <div style="height: 500px;"></div>
 
 <script src="core/scripts/accountPage.js"></script>
+<script>
+
+window.onresize =
+    document.getElementById("profil-img-wrapper").style.height = window.getComputedStyle(document.getElementById("profil-img-wrapper")).width;
+
+</script>
 <script>%!SCRIPTS!%</script>

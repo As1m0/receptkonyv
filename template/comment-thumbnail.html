@@ -1,19 +1,20 @@
 <div class="review-thumb">
+    <div class="com-del-block" style="display: %!DISP!%">
+        <form method="post">
+            <input type="hidden" name="comment_id" value="%!REVID!%">
+            <input type="submit" name="delete" value="x" class="com-del-btn" style="background-color: none !important;">
+        </form>
+    </div>
     <div class="row">
         <div class="col-sm-3">
             <div class="text-center">
-                <img class="user-pic" src="%!KOMMENTERPIC!%" alt="user-pic"><br>
+                <div class="review-img-wrapper mb-2"><img class="user-pic" src="%!KOMMENTERPIC!%" alt="user-pic"><br></div>
                 <p class="user-name" class="mb-0">%!KOMMENTERNAME!%</p>
             </div>
         </div>
         <div class="col-sm-9 mt-2">
             <div class="mx-3">
-                <div class="com-del-block" style="display: %!DISP!%">
-                    <form method="post">
-                        <input type="hidden" name="comment_id" value="%!REVID!%">
-                        <input type="submit" name="delete" value="x" class="com-del-btn" style="background-color: none !important;">
-                    </form>
-                </div>
+                
                 <small class="time-stamp">%!TIMESTAMP!%</small><br>
                 <img class="review-star" src="%!RATINGPIC!%" alt="stars" class="mt-2">
                 <p class="comment-text">%!KOMMENT!%</p>
