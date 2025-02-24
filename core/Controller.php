@@ -84,6 +84,7 @@ abstract class Controller
                             View::getBaseTemplate()->AddData($cfg["defaultNavFlag"], Controller::RunModule("NavigationModule"));
                             View::getBaseTemplate()->AddData($cfg["defaultFooterFlag"], Controller::RunModule("FooterModule"));
                             View::getBaseTemplate()->AddData("POPUP", Template::Load("pop-up-block.html"));
+                            View::getBaseTemplate()->AddData("COOKIEPOPUP", Template::Load("cookie-popup.html"));
                         } elseif ($pageData["parent"] == "adminGroup") {
                             View::getBaseTemplate()->AddData($cfg["defaultNavFlag"], Controller::RunModule("AdminNavModule"));
                         }
