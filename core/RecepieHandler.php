@@ -33,21 +33,28 @@ abstract class RecepieHandler
         $data["reviews"] = $result3->fetch_all(MYSQLI_ASSOC);
 
         if (isset($data["recept_adatok"][0]["felh_id"])) {
-            $result4 = DBHandler::RunQuery("SELECT `veznev`, `kernev` FROM `felhasznalok` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $data["recept_adatok"][0]["felh_id"])]);
+            $result4 = DBHandler::RunQuery("SELECT `veznev`, `kernev`, `pic_name` FROM `felhasznalok` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $data["recept_adatok"][0]["felh_id"])]);
 
             $data["felhasznalo"] = $result4->fetch_all(MYSQLI_ASSOC);
         }
 
         if ($user_id != null) {
-            $result4 = DBHandler::RunQuery(
-                "SELECT `recept_id` FROM `favorites` WHERE `user_id` = ? AND `recept_id` = ?",
-                [new DBParam(DBTypes::Int, $user_id), new DBParam(DBTypes::Int, $recept_id)]
+            $result5 = DBHandler::RunQuery(
+                "SELECT * FROM `favorites` WHERE `recept_id` = ?",
+                [new DBParam(DBTypes::Int, $recept_id)]
             );
-            if (!empty($result4->fetch_all(MYSQLI_ASSOC))) {
-                $data["is_favorite"] = true;
-            } else {
-                $data["is_favorite"] = false;
+
+            $favData = $result5->fetch_all(MYSQLI_ASSOC);
+
+            $data["is_favorite"] = false;
+            foreach ($favData as $item) {
+                if ($item['user_id'] == $user_id) {
+                    $data["is_favorite"] = true;
+                    break;
+                }
             }
+
+            $data["favorite_num"] = count($favData);
         }
 
         return $data;

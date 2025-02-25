@@ -59,6 +59,27 @@ class receptDatasheetPage implements IPageBase
         //Recept adatainak betöltése
         $this->template->AddData("NEV", ucfirst($data["recept_adatok"][0]["recept_neve"]));
         $this->template->AddData("TIME", substr($data["recept_adatok"][0]["created_at"], 0, 10));
+        $this->template->AddData("IDO", $data["recept_adatok"][0]["elk_ido"]);
+        $this->template->AddData("ADAG", $data["recept_adatok"][0]["adag"]);
+        $this->template->AddData("NEHEZSEG", $data["recept_adatok"][0]["nehezseg"]);
+        $this->template->AddData("LEIRAS", nl2br($data["recept_adatok"][0]["leiras"]));
+
+        if (isset($_SESSION["userID"]) && $_SESSION["userID"] === $data["recept_adatok"][0]["felh_id"]) {
+            $this->template->AddData("USER", "Saját recept");
+            if (file_exists($cfg["ProfilKepek"] . "/" . $_SESSION["userpic"] . "_thumb.jpg")) {
+                $this->template->AddData("USERPIC", $cfg["ProfilKepek"] . "/" . $_SESSION["userpic"] . "_thumb.jpg");
+            } else {
+                $this->template->AddData("USERPIC", $cfg["ProfilKepek"] . "/empty_profilPic_thumb.jpg");
+            }
+        } else {
+            $this->template->AddData("USER", $data["felhasznalo"][0]["veznev"] . " " . $data["felhasznalo"][0]["kernev"] . " receptje");
+            $this->template->AddData("COLOR", "primary-color");
+            if ($data["felhasznalo"][0]["pic_name"] != null && file_exists($cfg["ProfilKepek"] . "/" . $data["felhasznalo"][0]["pic_name"] . "_thumb.jpg")) {
+                $this->template->AddData("USERPIC", $cfg["ProfilKepek"] . "/" . $data["felhasznalo"][0]["pic_name"] . "_thumb.jpg");
+            } else {
+                $this->template->AddData("USERPIC", $cfg["ProfilKepek"] . "/empty_profilPic_thumb.jpg");
+            }
+        }
 
         //szerkesztési lehetőségek jogosultságának vizsgálata
         if (isset($_SESSION["userID"]) && $_SESSION["userID"] === $data["recept_adatok"][0]["felh_id"] || (isset($_SESSION["groupMember"]) && $_SESSION["groupMember"] == 1)) {
@@ -67,29 +88,19 @@ class receptDatasheetPage implements IPageBase
             $this->template->AddData("BUTTONS", $buttons);
         }
 
-        if (isset($_SESSION["userID"]) && $_SESSION["userID"] === $data["recept_adatok"][0]["felh_id"]) {
-            $this->template->AddData("USER", "Saját recept");
-        } else {
-            $this->template->AddData("USER", $data["felhasznalo"][0]["veznev"] . " " . $data["felhasznalo"][0]["kernev"] . " receptje");
-            $this->template->AddData("COLOR", "primary-color");
-        }
-
         //heart icon
         if (isset($data["is_favorite"])) {
             $heartElement = Template::Load("favorite-icon.html");
             if ($data["is_favorite"]) {
-                $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart2b.png");
-            } else if (!$data["is_favorite"]) {
-                $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart1b.png");
+                $heartElement->AddData("HEARTIMG", $cfg["contentFolder"] . "/heart_icons/heart2b.png");
+            } elseif (!$data["is_favorite"]) {
+                $heartElement->AddData("HEARTIMG", $cfg["contentFolder"] . "/heart_icons/heart1b.png");
             }
             $heartElement->AddData("RECEPTID", $data["recept_adatok"][0]["recept_id"]);
             $this->template->AddData("HEART", $heartElement);
+            $this->template->AddData("FAVNUM", $data["favorite_num"]);
+            $this->template->AddData("HEARTIMG", $cfg["contentFolder"] . "/heart_icons/heart1c.png");
         }
-
-        $this->template->AddData("IDO", $data["recept_adatok"][0]["elk_ido"]);
-        $this->template->AddData("ADAG", $data["recept_adatok"][0]["adag"]);
-        $this->template->AddData("NEHEZSEG", $data["recept_adatok"][0]["nehezseg"]);
-        $this->template->AddData("LEIRAS", nl2br($data["recept_adatok"][0]["leiras"]));
 
         //review results
         if (isset($data["reviews"][0])) {
@@ -180,8 +191,8 @@ class receptDatasheetPage implements IPageBase
 
         //Favorites script
         $favScript = Template::Load("favApi.js");
-        $favScript->AddData("FULLHEART", $cfg["contentFolder"]."/heart_icons/heart2b.png");
-        $favScript->AddData("EMPTYHEART", $cfg["contentFolder"]."/heart_icons/heart1b.png");
+        $favScript->AddData("FULLHEART", $cfg["contentFolder"] . "/heart_icons/heart2b.png");
+        $favScript->AddData("EMPTYHEART", $cfg["contentFolder"] . "/heart_icons/heart1b.png");
         $this->template->AddData("SCRIPTS", $favScript);
     }
 

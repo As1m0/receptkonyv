@@ -32,16 +32,16 @@ body {
     right: 10px;
     max-width: 600px;
     background-color: #ffffff;
-    color:black;
+    color: black;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     display: none;
 }
 
-.cookie-popup #accept-btn{
+.cookie-popup #accept-btn {
     width: 150px;
-    margin:auto;
+    margin: auto;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -52,16 +52,16 @@ a {
     color: var(--primary-color);
 }
 
-.bold{
+.bold {
     font-weight: bold;
 }
 
-.sticky{
+.sticky {
     position: sticky;
     top: 10px;
 }
 
-.green{
+.green {
     color: rgb(28, 194, 128);
 }
 
@@ -102,13 +102,13 @@ a {
     opacity: 80%;
 }
 
-.btn-outline-primary{
+.btn-outline-primary {
     background-color: transparent;
     color: var(--primary-color);
     border: 1px solid var(--primary-color);
 }
 
-.btn-outline-primary:hover{
+.btn-outline-primary:hover {
     border: 1px solid transparent;
 }
 
@@ -250,7 +250,7 @@ footer {
     overflow: hidden;
 }
 
-.profil-pic-icon-wrapper{
+.profil-pic-icon-wrapper {
     width: 25px;
     height: 25px;
     border-radius: 50%;
@@ -260,11 +260,11 @@ footer {
     overflow: hidden;
 }
 
-.profile .dropdown-toggle::after{
+.profile .dropdown-toggle::after {
     display: none !important;
 }
 
-.profil-icon-img{
+.profil-icon-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -277,15 +277,15 @@ footer {
     transition: all ease .2s;
 }
 
-.card-deck:hover .card-img-top{
+.card-deck:hover .card-img-top {
     transform: scale(1.1);
 }
 
-.small-deck:hover .card-img-top-slider{
+.small-deck:hover .card-img-top-slider {
     transform: scale(1.1);
 }
 
-.recept-thumbnail:hover .card-img-top{
+.recept-thumbnail:hover .card-img-top {
     transform: scale(1.1);
 }
 
@@ -297,7 +297,8 @@ footer {
 .nev-wrapper {
     width: 100%;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* Number of lines before truncation */
+    -webkit-line-clamp: 2;
+    /* Number of lines before truncation */
     -webkit-box-orient: vertical;
     overflow: hidden;
     height: 44px;
@@ -379,6 +380,37 @@ footer {
 
 /*           Recept aloldal               */
 
+
+#recepie-founder {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.founder-wrapper {
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: 0 10px;
+}
+
+.recepie-founder .founder-wrapper img {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+}
+
+#heart-icon{
+    height: 16px;
+    margin-left: 2px;
+}
+
+
 .parameters ul li {
     color: white !important;
     display: inline-block;
@@ -404,8 +436,7 @@ footer {
     margin: auto;
 }
 
-.reviews img {
-    margin-left: 20px;
+#stars-img {
     width: 90px;
     margin-top: -2px;
 }
@@ -420,7 +451,6 @@ footer {
     text-indent: 8px;
 
 }
-
 
 .list-element {
     color: var(--primary-color);
@@ -481,7 +511,7 @@ footer {
     margin: 10px auto;
 }
 
-.review-img-wrapper{
+.review-img-wrapper {
     margin: auto;
     width: 80px;
     height: 80px;
@@ -492,9 +522,9 @@ footer {
     border-radius: 50%;
 }
 
-.review-img-wrapper img{
-    width:100%;
-    height:100%;
+.review-img-wrapper img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
 }
 
@@ -623,7 +653,7 @@ footer {
     scroll-snap-align: start;
 }
 
-.small-deck a{
+.small-deck a {
     margin-bottom: 15px;
 }
 
@@ -680,7 +710,7 @@ footer {
     object-fit: cover;
 }
 
-.update-img-preview{
+.update-img-preview {
     display: block;
     max-width: 200px;
     margin: 10px auto;
@@ -702,7 +732,7 @@ footer {
     cursor: pointer;
 }
 
-.actions a:hover{
+.actions a:hover {
     opacity: 0.5;
 }
 
@@ -746,7 +776,7 @@ footer {
     margin: auto 20px;
 }
 
-.star-recept .img-wrap{
+.star-recept .img-wrap {
     max-height: 550px;
     overflow: hidden !important;
 }
@@ -941,7 +971,8 @@ footer {
 .title-wrapper {
     height: 55px;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* Number of lines before truncation */
+    -webkit-line-clamp: 2;
+    /* Number of lines before truncation */
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -949,7 +980,8 @@ footer {
 .title-wrapper-thumb {
     height: 25px;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* Number of lines before truncation */
+    -webkit-line-clamp: 2;
+    /* Number of lines before truncation */
     -webkit-box-orient: vertical;
     overflow: hidden;
     font-size: 14px;
@@ -988,22 +1020,22 @@ footer {
     animation: fadeOut 0.5s forwards;
 }
 
-#filter-button{
+#filter-button {
     color: var(--primary-color);
     letter-spacing: 2px;
 }
 
-#filter-button:hover{
+#filter-button:hover {
     opacity: .5;
 }
 
-#filter-box-collapsed{
+#filter-box-collapsed {
     border-radius: 25px;
     width: 60%;
     cursor: pointer;
 }
 
-#close-filter{
+#close-filter {
     cursor: pointer;
     position: absolute;
     top: 15px;
@@ -1012,7 +1044,7 @@ footer {
     font-size: 22px;
 }
 
-#close-filter:hover{
+#close-filter:hover {
     opacity: .5;
 }
 
@@ -1039,10 +1071,12 @@ footer {
     #filter-box {
         display: block;
     }
-    #filter-box-collapsed{
+
+    #filter-box-collapsed {
         display: none;
     }
-    #close-filter{
+
+    #close-filter {
         display: none;
     }
 }
@@ -1051,19 +1085,21 @@ footer {
     #filter-box {
         display: none;
     }
-    #filter-box-collapsed{
+
+    #filter-box-collapsed {
         display: block;
     }
-    #close-filter{
+
+    #close-filter {
         display: block;
     }
 }
 
-.user-card-deck{
+.user-card-deck {
     height: 350px;
 }
 
-.recepie-img-wrapper{
+.recepie-img-wrapper {
     width: 100%;
     max-height: 750px;
     display: flex;
@@ -1078,17 +1114,17 @@ footer {
     object-fit: cover;
 }
 
-.card-img-top-slider img{
+.card-img-top-slider img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.card-img-top-slider{
+.card-img-top-slider {
     transition: all ease .3s;
 }
 
-.button-wrapper{
+.button-wrapper {
     width: 300px;
     margin: 30px auto -20px auto;
     text-align: center;
@@ -1103,35 +1139,34 @@ footer {
     transition: all ease .3s;
 }
 
-.button-wrapper a:nth-child(2){
+.button-wrapper a:nth-child(2) {
     border: 1px solid red;
 }
 
-.button-wrapper a:first-child:hover{
+.button-wrapper a:first-child:hover {
     color: white;
     background-color: var(--primary-color);
 }
 
-.button-wrapper a:nth-child(2):hover{
+.button-wrapper a:nth-child(2):hover {
     color: white;
     background-color: red;
     border: 1px solid transparent;
 }
 
-.red-link
-{
+.red-link {
     color: red;
     border: 1px solid var(--primary-color);
 }
 
 
-#receptkep{
+#receptkep {
     display: block;
     margin: auto;
     width: 300px;
 }
 
-#profil-pic-icon{
+#profil-pic-icon {
     display: block;
     position: absolute;
     right: 25px;
@@ -1142,11 +1177,11 @@ footer {
     cursor: pointer;
 }
 
-#profil-pic-icon:hover{
+#profil-pic-icon:hover {
     transform: scale(1.1);
 }
 
-#img-form{
+#img-form {
     display: block;
     position: absolute;
     border-radius: 15px;
@@ -1158,7 +1193,7 @@ footer {
     box-shadow: 8px 8px 20px 8px rgb(0 0 0 / 20%);
 }
 
-#img-form #close-btn{
+#img-form #close-btn {
     float: right;
     padding: 5px;
     margin-top: -25px;
@@ -1166,15 +1201,15 @@ footer {
     transition: all ease .3s;
 }
 
-#img-form #close-btn:hover{
-   opacity: .5;
+#img-form #close-btn:hover {
+    opacity: .5;
 }
 
-.blur{
+.blur {
     filter: blur(3px);
 }
 
-.favoruite-icon{
+.favoruite-icon {
     position: absolute;
     z-index: 99;
     float: left;
@@ -1182,12 +1217,12 @@ footer {
     cursor: pointer;
 }
 
-.favoruite-icon img{
+.favoruite-icon img {
     width: 23px;
     transition: all ease .3s;
 }
 
-.favoruite-icon img:hover{
+.favoruite-icon img:hover {
     transform: scale(1.2);
 }
 
@@ -1199,6 +1234,7 @@ footer {
     from {
         opacity: 1;
     }
+
     to {
         opacity: 0;
     }
