@@ -33,7 +33,7 @@ abstract class RecepieHandler
         $data["reviews"] = $result3->fetch_all(MYSQLI_ASSOC);
 
         if (isset($data["recept_adatok"][0]["felh_id"])) {
-            $result4 = DBHandler::RunQuery("SELECT `veznev`, `kernev`, `pic_name` FROM `felhasznalok` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $data["recept_adatok"][0]["felh_id"])]);
+            $result4 = DBHandler::RunQuery("SELECT `veznev`, `kernev`, `pic_name`, `felh_id` FROM `felhasznalok` WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $data["recept_adatok"][0]["felh_id"])]);
 
             $data["felhasznalo"] = $result4->fetch_all(MYSQLI_ASSOC);
         }

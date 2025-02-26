@@ -101,7 +101,7 @@ class AccountPage implements IPageBase
         $result = Model::getDynamicQueryResults(["userID" => $_SESSION["userID"]], true, $start_from, $results_per_page, $_SESSION["userID"]);
 
         //buttons
-        if ($page != 1) {
+        if ($total_pages != 1) {
             for ($i = 1; $i <= $total_pages; $i++) {
                 $this->template->AddData("PAGES", "<input type=\"submit\" class=\"btn\" style=\"color:" . ($page == $i ? 'var(--primary-color);' : '') . "\" name=\"page\" value=\"{$i}\">");
             }

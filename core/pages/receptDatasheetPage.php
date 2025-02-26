@@ -59,6 +59,7 @@ class receptDatasheetPage implements IPageBase
 
         if (isset($_SESSION["userID"]) && $_SESSION["userID"] === $data["recept_adatok"][0]["felh_id"]) {
             $this->template->AddData("USER", "Saját recept");
+            $this->template->AddData("USERID", $_SESSION["userID"]);
             if (file_exists($cfg["ProfilKepek"] . "/" . $_SESSION["userpic"] . "_thumb.jpg")) {
                 $this->template->AddData("USERPIC", $cfg["ProfilKepek"] . "/" . $_SESSION["userpic"] . "_thumb.jpg");
             } else {
@@ -67,13 +68,13 @@ class receptDatasheetPage implements IPageBase
         } else {
             $this->template->AddData("USER", $data["felhasznalo"][0]["veznev"] . " " . $data["felhasznalo"][0]["kernev"] . " receptje");
             $this->template->AddData("COLOR", "primary-color");
+            $this->template->AddData("USERID", $data["felhasznalo"][0]["felh_id"]);
             if ($data["felhasznalo"][0]["pic_name"] != null && file_exists($cfg["ProfilKepek"] . "/" . $data["felhasznalo"][0]["pic_name"] . "_thumb.jpg")) {
                 $this->template->AddData("USERPIC", $cfg["ProfilKepek"] . "/" . $data["felhasznalo"][0]["pic_name"] . "_thumb.jpg");
             } else {
                 $this->template->AddData("USERPIC", $cfg["ProfilKepek"] . "/empty_profilPic_thumb.jpg");
             }
         }
-
 
 
 

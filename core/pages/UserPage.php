@@ -13,19 +13,15 @@ class UserPage implements IPageBase
     {
         global $cfg;
 
-        if(isset($_GET["user"]))
-        {
+        if (isset($_GET["user"])) {
             $userID = htmlspecialchars(trim($_GET["user"]));
-        }
-        else
-        {
+        } else {
             Header("Location: index.php?p=404");
         }
 
         $userData = UserHandler::GetOneUserData($userID);
 
-        if(empty($userData))
-        {
+        if (empty($userData)) {
             Header("Location: index.php?p=404");
         }
 
@@ -61,12 +57,12 @@ class UserPage implements IPageBase
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $start_from = ($page - 1) * $results_per_page;
 
-
         //DB receptek lekérés
         $DBresult = Model::getDynamicQueryResults(["userID" => $userID], true, $start_from, $results_per_page, isset($_SESSION["userID"]) ? $_SESSION["userID"] : null);
 
         //buttons
-        if ($page != 1) {
+        if($total_pages != 1)
+        {
             for ($i = 1; $i <= $total_pages; $i++) {
                 $this->template->AddData("PAGES", "<input type=\"submit\" class=\"btn\" style=\"color:" . ($page == $i ? 'var(--primary-color);' : '') . "\" name=\"page\" value=\"{$i}\">");
             }
@@ -85,20 +81,17 @@ class UserPage implements IPageBase
                 $receptCard = Template::Load("recept-card.html");
 
                 //heart icon
-                if(isset($recept["is_favorite"])){
+                if (isset($recept["is_favorite"])) {
                     $heartElement = Template::Load("favorite-icon.html");
-                    if($recept["is_favorite"] == "true")
-                    {
-                        $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart2.png");
-                    }
-                    elseif ($recept["is_favorite"] == "false")
-                    {
-                        $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart1.png");
+                    if ($recept["is_favorite"] == "true") {
+                        $heartElement->AddData("HEARTIMG", $cfg["contentFolder"] . "/heart_icons/heart2.png");
+                    } elseif ($recept["is_favorite"] == "false") {
+                        $heartElement->AddData("HEARTIMG", $cfg["contentFolder"] . "/heart_icons/heart1.png");
                     }
                     $heartElement->AddData("RECEPTID", $recept["recept_id"]);
                     $receptCard->AddData("HEART", $heartElement);
                 }
-                
+
                 $receptCard->AddData("RECEPTID", $recept["recept_id"]);
                 $receptCard->AddData("USERID", $recept["felh_id"]);
                 $receptCard->AddData("RECEPTLINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$recept["recept_id"]}");
@@ -111,13 +104,10 @@ class UserPage implements IPageBase
                 $receptCard->AddData("IDO", $recept["elk_ido"]);
                 $receptCard->AddData("ADAG", $recept["adag"]);
                 $receptCard->AddData("NEHEZSEG", $recept["nehezseg"]);
-                if(isset($_SESSION["userfullname"]) && $_SESSION["userfullname"] == $recept["veznev"] . " " . $recept["kernev"])
-                {
+                if (isset($_SESSION["userfullname"]) && $_SESSION["userfullname"] == $recept["veznev"] . " " . $recept["kernev"]) {
                     $receptCard->AddData("USER", "Saját recept");
                     $receptCard->AddData("COLOR", "bold green");
-                }
-                else
-                {
+                } else {
                     $receptCard->AddData("USER", $recept["veznev"] . " " . $recept["kernev"]);
                 }
                 $avrScore = number_format($recept["avg_ertekeles"], 1);

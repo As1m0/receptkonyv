@@ -128,7 +128,7 @@ class ReceptekPage implements IPageBase
                     {
                         $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart2.png");
                     }
-                    else if ($recept["is_favorite"] == "false")
+                    elseif ($recept["is_favorite"] == "false")
                     {
                         $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart1.png");
                     }
