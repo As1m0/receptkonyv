@@ -137,6 +137,7 @@ class ReceptekPage implements IPageBase
                 }
                 
                 $receptCard->AddData("RECEPTID", $recept["recept_id"]);
+                $receptCard->AddData("USERID", $recept["felh_id"]);
                 $receptCard->AddData("RECEPTLINK", "{$cfg["mainPage"]}.php?{$cfg["pageKey"]}=recept-aloldal&{$cfg["receptId"]}={$recept["recept_id"]}");
                 if ($recept["pic_name"] !== null && file_exists($cfg["receptKepek"] . "/" . $recept["pic_name"] . "_thumb.jpg")) {
                     $receptCard->AddData("RECEPTKEP", $cfg["receptKepek"] . "/" . $recept["pic_name"] . "_thumb.jpg");
@@ -150,7 +151,7 @@ class ReceptekPage implements IPageBase
                 if(isset($_SESSION["userfullname"]) && $_SESSION["userfullname"] == $recept["veznev"] . " " . $recept["kernev"])
                 {
                     $receptCard->AddData("USER", "Saját recept");
-                    $receptCard->AddData("COLOR", "bold green");
+                    $receptCard->AddData("COLOR", "green");
                 }
                 else
                 {

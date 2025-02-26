@@ -324,6 +324,7 @@ abstract class RecepieHandler
                     r.adag,
                     r.nehezseg,
                     r.pic_name,
+                    r.felh_id,
                     COALESCE(f.veznev, 'Nincs adat') AS veznev,
                     COALESCE(f.kernev, 'Nincs adat') AS kernev,
                     COALESCE(AVG(rv.ertekeles), 0) AS avg_ertekeles,
@@ -339,7 +340,7 @@ abstract class RecepieHandler
                 WHERE
                     " . $finalconditions . "
                 GROUP BY
-                    r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name, fav.user_id
+                    r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name, fav.user_id, r.felh_id
                 ORDER BY
                 r.created_at DESC
                     " . $ratingCond . "
@@ -353,6 +354,7 @@ abstract class RecepieHandler
                 r.adag,
                 r.nehezseg,
                 r.pic_name,
+                r.felh_id,
                 COALESCE(f.veznev, 'Nincs adat') AS veznev,
                 COALESCE(f.kernev, 'Nincs adat') AS kernev,
                 COALESCE(AVG(rv.ertekeles), 0) AS avg_ertekeles
@@ -365,7 +367,7 @@ abstract class RecepieHandler
             WHERE
                 " . $finalconditions . "
             GROUP BY
-                r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name
+                r.recept_id, r.recept_neve, r.elk_ido, r.adag, r.nehezseg, r.pic_name, r.felh_id
             ORDER BY
             r.created_at DESC
                 " . $ratingCond . "

@@ -72,9 +72,9 @@ abstract class UserHandler
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public static function GetOneUserData(string $mail): array
+    public static function GetOneUserData($userId): array
     {
-        $result = DBHandler::RunQuery("SELECT * FROM `felhasznalok` WHERE `email` = ?", [ new DBParam(DBTypes::String, $mail)]);
+        $result = DBHandler::RunQuery("SELECT * FROM `felhasznalok` WHERE `felh_id` = ?", [ new DBParam(DBTypes::Int, $userId)]);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 

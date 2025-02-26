@@ -1,26 +1,10 @@
-<div class="container white p-4 d-none" id="img-form">
-    <form method="post" enctype="multipart/form-data">
-        <span id="close-btn">X</span>
-        <h3 class="mt-2 mb-4">Profilkép feltöltése</h3>
-        <img class="update-img-preview" src="%!SRC!%" alt="%!NAME!% profilkép" id="update-img-prev">
-        <div class="form-group">
-            <label for="picture-input">kép válaszátsa:</label>
-            <input type="file" class="form-control my-2" name="img" id="picture-input" accept="%!ACCEPT!%" required>
-        </div>
-        <div class="m-auto my-4">
-            <input type="submit" name="upload" class="btn btn-default form-control" value="feltöltés">
-        </div>
-    </form>
-</div>
 
 
 <div id="main-content">
-    <h6 class="text-center" style="background-color:%!COLOR!%; padding: 5px; color: white;">%!RESULT!%</h6>
     <div class="wrapper">
         <div class="row">
             <div class="col-md-3 p-5 white rounded mt-3 max-height">
                 <div class="profil-adatok">
-                    <h3>Profilom</h3>
                     <div class="text-center mt-4">
                         <div class="d-block" style="max-width: 200px; margin: auto;">
                             <img id="profil-pic-icon" src="content/camera-icon.png" alt="camera icon">
@@ -30,20 +14,13 @@
                         <p class="my-3 small">%!EMAIL!%</p>
                         <p class="my-3">%!RECEPTSZAM!% feltöltött recept</p>
                     </div>
-                    <div class="buttons text-center">
-                        <a href="index.php?logout=true" class="btn btn-outline-primary mt-1">Kijelentkezés</a>
-                        <form method="post">
-                            <a href="#" class="btn mt-1" id="delete" onclick="deleteUser(%!USERID!%)"><small>Profil
-                                    törlése</small></a>
-                        </form>
-                    </div>
 
                 </div>
             </div>
             <div class="col-md-9">
                 <div class="profil-receptek white" style="min-height: 800px;">
                     <div class="cover-pic">
-                        <h2>Receptjeim</h2>
+                        <h2>%!NAME!% receptjei</h2>
                         <img src="%!COVERIMG!%" alt="cover-pic" class="img-fluid">
                     </div>
 
@@ -60,7 +37,7 @@
 
 
 
-                        %!RECEPTEK!%
+                        %!RECEPTCARDS!%
 
 
 
@@ -83,11 +60,8 @@
 
 <div style="height: 500px;"></div>
 
-<script src="core/scripts/accountPage.js"></script>
 <script>
-
 window.onresize =
     document.getElementById("profil-img-wrapper").style.height = window.getComputedStyle(document.getElementById("profil-img-wrapper")).width;
-
 </script>
 <script>%!SCRIPTS!%</script>
