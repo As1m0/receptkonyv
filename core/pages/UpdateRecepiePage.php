@@ -21,7 +21,7 @@ class UpdateRecepiePage implements IPageBase
             header("Location: {$cfg['mainPage']}.php?p=404");
         }
 
-        if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == !false) {
+        if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] ==! false) {
             $this->template = Template::Load($pageData["template"]);
         } else {
             $_SESSION["visitedPage"] = "{$cfg['mainPage']}.php?p=update-recepie&id={$receptID}";

@@ -79,17 +79,10 @@ class AccountPage implements IPageBase
         $this->template->AddData("EMAIL", $_SESSION["usermail"]);
 
 
-        //delete recepie
-        if (isset($_POST["delete-recepie"])) {
-            $receptId = filter_var(trim($_POST["delete-recepie"]), FILTER_VALIDATE_INT);
-            Model::DeleteRecepie($receptId);
-            $feedback = "A recept törlése sikeres!";
-        }
-
         //Favorites script
         $favScript = Template::Load("favApi.js");
-        $favScript->AddData("FULLHEART", $cfg["contentFolder"]."/heart_icons/heart2.png");
-        $favScript->AddData("EMPTYHEART", $cfg["contentFolder"]."/heart_icons/heart1.png");
+        $favScript->AddData("FULLHEART", $cfg["contentFolder"] . "/heart_icons/heart2.png");
+        $favScript->AddData("EMPTYHEART", $cfg["contentFolder"] . "/heart_icons/heart1.png");
         $this->template->AddData("SCRIPTS", $favScript);
 
 
@@ -108,7 +101,7 @@ class AccountPage implements IPageBase
         $result = Model::getDynamicQueryResults(["userID" => $_SESSION["userID"]], true, $start_from, $results_per_page, $_SESSION["userID"]);
 
         //buttons
-        if ($page != 1){
+        if ($page != 1) {
             for ($i = 1; $i <= $total_pages; $i++) {
                 $this->template->AddData("PAGES", "<input type=\"submit\" class=\"btn\" style=\"color:" . ($page == $i ? 'var(--primary-color);' : '') . "\" name=\"page\" value=\"{$i}\">");
             }
@@ -129,9 +122,9 @@ class AccountPage implements IPageBase
                 if (isset($receptdata["is_favorite"])) {
                     $heartElement = Template::Load("favorite-icon.html");
                     if ($receptdata["is_favorite"] == "true") {
-                        $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart2.png");
-                    } else if ($receptdata["is_favorite"] == "false") {
-                        $heartElement->AddData("HEARTIMG", $cfg["contentFolder"]."/heart_icons/heart1.png");
+                        $heartElement->AddData("HEARTIMG", $cfg["contentFolder"] . "/heart_icons/heart2.png");
+                    } elseif ($receptdata["is_favorite"] == "false") {
+                        $heartElement->AddData("HEARTIMG", $cfg["contentFolder"] . "/heart_icons/heart1.png");
                     }
                     $heartElement->AddData("RECEPTID", $receptdata["recept_id"]);
                     $recept->AddData("HEART", $heartElement);
@@ -156,6 +149,21 @@ class AccountPage implements IPageBase
             }
         } else {
             $this->template->AddData("RECEPTEK", "<p class=\"text-center small\">még nem töltöttél fel receptet..</p><a href=\"index.php?p=recept-feltoltes\" class=\"btn btn-default m-3 py-2 w-25 m-auto\" style=\"border-radius: 20px\">Recept feltöltése</a>");
+        }
+
+
+        //delete recepie
+        if (isset($_POST["delete-recepie"])) {
+            $receptId = filter_var(trim($_POST["delete-recepie"]), FILTER_VALIDATE_INT);
+            //chech if the recepie is from te user
+            foreach ($result as $recepie) {
+                if ($recepie["recept_id"] === $receptId) {
+                    Model::DeleteRecepie($receptId);
+                    $feedback = "A recept törlése sikeres!";
+                    Header("Location: index.php?p=account");
+                    break;
+                }
+            }
         }
 
 

@@ -40,13 +40,6 @@ class receptDatasheetPage implements IPageBase
             }
         }
 
-        //recept törlése
-        if (isset($_POST["delete-recepie"])) {
-            $receptIdDel = filter_var(trim($_POST["delete-recepie"]), FILTER_VALIDATE_INT);
-            Model::DeleteRecepie($receptIdDel);
-            Header("Location: index.php?p=account");
-            exit();
-        }
 
 
         // DB Recept betöltése
@@ -81,12 +74,28 @@ class receptDatasheetPage implements IPageBase
             }
         }
 
+
+
+
         //szerkesztési lehetőségek jogosultságának vizsgálata
         if (isset($_SESSION["userID"]) && $_SESSION["userID"] === $data["recept_adatok"][0]["felh_id"] || (isset($_SESSION["groupMember"]) && $_SESSION["groupMember"] == 1)) {
             $buttons = Template::Load("recepie-datapage-buttons.html");
             $buttons->AddData("RECEPTID", $receptID);
             $this->template->AddData("BUTTONS", $buttons);
         }
+
+        //recept törlése
+        if (isset($_POST["delete-recepie"])) {
+            $receptIdDel = filter_var(trim($_POST["delete-recepie"]), FILTER_VALIDATE_INT);
+            if (isset($_SESSION["userID"]) && $_SESSION["userID"] === $data["recept_adatok"][0]["felh_id"] || (isset($_SESSION["groupMember"]) && $_SESSION["groupMember"] == 1))
+            {
+                Model::DeleteRecepie($receptIdDel);
+                Header("Location: index.php?p=account");
+                exit();
+            }
+        }
+
+
 
         //heart icon
         if (isset($data["is_favorite"])) {
@@ -98,9 +107,10 @@ class receptDatasheetPage implements IPageBase
             }
             $heartElement->AddData("RECEPTID", $data["recept_adatok"][0]["recept_id"]);
             $this->template->AddData("HEART", $heartElement);
-            $this->template->AddData("FAVNUM", $data["favorite_num"]);
-            $this->template->AddData("HEARTIMG", $cfg["contentFolder"] . "/heart_icons/heart1c.png");
         }
+        $this->template->AddData("FAVNUM", $data["favorite_num"]);
+        $this->template->AddData("HEARTIMG", $cfg["contentFolder"] . "/heart_icons/heart1c.png");
+
 
         //review results
         if (isset($data["reviews"][0])) {
@@ -118,6 +128,7 @@ class receptDatasheetPage implements IPageBase
         } else {
             $this->template->AddData("RECEPTKEP", $cfg["receptKepek"] . "/no_image.png");
         }
+
 
         //Hozzávalók
         $hozzavalok = "";
@@ -173,10 +184,10 @@ class receptDatasheetPage implements IPageBase
 
                     $receptThumb = Template::Load("recept-thumbnail.html");
 
-                    if ($recepie["pic_name"] != null && file_exists($cfg["receptKepek"] . "/" . $recepie["pic_name"] . ".jpg")) {
-                        $receptThumb->AddData("RECEPTKEPTHUMB", $cfg["receptKepek"] . "/" . $recepie["pic_name"] . ".jpg");
+                    if ($recepie["pic_name"] != null && file_exists($cfg["receptKepek"] . "/" . $recepie["pic_name"] . "_thumb.jpg")) {
+                        $receptThumb->AddData("RECEPTKEPTHUMB", $cfg["receptKepek"] . "/" . $recepie["pic_name"] . "_thumb.jpg");
                     } else {
-                        $receptThumb->AddData("RECEPTKEPTHUMB", $cfg["receptKepek"] . "/no_image.png");
+                        $receptThumb->AddData("RECEPTKEPTHUMB", $cfg["receptKepek"] . "/no_image_thumb.png");
                     }
                     $receptThumb->AddData("RECEPTNEV", $recepie["recept_neve"]);
                     $receptThumb->AddData("RECPTIDTH", $recepie["recept_id"]);
@@ -189,7 +200,9 @@ class receptDatasheetPage implements IPageBase
             }
         }
 
-        //Favorites script
+
+        
+        //add Favorites script
         $favScript = Template::Load("favApi.js");
         $favScript->AddData("FULLHEART", $cfg["contentFolder"] . "/heart_icons/heart2b.png");
         $favScript->AddData("EMPTYHEART", $cfg["contentFolder"] . "/heart_icons/heart1b.png");

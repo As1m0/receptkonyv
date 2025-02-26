@@ -38,14 +38,16 @@ abstract class RecepieHandler
             $data["felhasznalo"] = $result4->fetch_all(MYSQLI_ASSOC);
         }
 
+
+        $result5 = DBHandler::RunQuery(
+            "SELECT * FROM `favorites` WHERE `recept_id` = ?",
+            [new DBParam(DBTypes::Int, $recept_id)]
+        );
+
+        $favData = $result5->fetch_all(MYSQLI_ASSOC);
+        $data["favorite_num"] = count($favData);
+
         if ($user_id != null) {
-            $result5 = DBHandler::RunQuery(
-                "SELECT * FROM `favorites` WHERE `recept_id` = ?",
-                [new DBParam(DBTypes::Int, $recept_id)]
-            );
-
-            $favData = $result5->fetch_all(MYSQLI_ASSOC);
-
             $data["is_favorite"] = false;
             foreach ($favData as $item) {
                 if ($item['user_id'] == $user_id) {
@@ -53,8 +55,6 @@ abstract class RecepieHandler
                     break;
                 }
             }
-
-            $data["favorite_num"] = count($favData);
         }
 
         return $data;
