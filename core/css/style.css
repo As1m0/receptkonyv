@@ -62,7 +62,7 @@ a {
 }
 
 .headline{
-    font-size: 40px;
+    font-size: 38px;
     font-weight: bold;
 }
 
@@ -168,6 +168,7 @@ a {
 
 .profil-box small{
     display: block;
+    word-wrap: break-word;
 }
 
 .upload-box{
@@ -183,6 +184,16 @@ a {
 .profil-receptek{
     padding: 0px;
     min-height: 1800px;
+}
+
+.profil-wrapper{
+    padding-right: 0;
+}
+
+@media only screen and (max-width: 766px) {
+    .profil-wrapper {
+        padding-left: 0px;
+    }
 }
 
 .fav-wrapper{
@@ -812,7 +823,7 @@ footer {
 
 .cover-pic h2 {
     position: absolute;
-    top: 40%;
+    top: 35%;
     left: 50%;
     transform: translateX(-50%);
     color: white;
