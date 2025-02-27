@@ -26,6 +26,10 @@ body {
     font-family: "Montserrat", serif;
 }
 
+.placeholder{
+    height: 500px;
+}
+
 .cookie-popup {
     position: fixed;
     bottom: 10px;
@@ -51,6 +55,15 @@ body {
 
 a {
     color: var(--primary-color);
+}
+
+.pr-0{
+    padding-right: 0px;
+}
+
+.headline{
+    font-size: 40px;
+    font-weight: bold;
 }
 
 .link-default {
@@ -83,13 +96,55 @@ a {
     max-width: 600px;
 }
 
+.mh-800{
+    min-height: 800px;
+}
+
+.ml-20{
+    margin-left: 20px;
+}
+
+.maxw-100{
+    max-width: 100px;
+}
+
+.mw-200{
+    max-width: 200px;
+}
+
+.mw-400{
+    max-width: 400px;
+}
+
+.mw-500{
+    max-width: 500px;
+}
+
+.mw-600 {
+    max-width: 600px;
+}
+
+.mw-800{
+    max-width: 800px;
+}
+
 .mw-850 {
     max-width: 850px;
     margin: auto;
 }
 
+.mw-950 {
+    max-width: 950px;
+    margin: auto;
+}
+
 .mr-3{
     margin-right: 3rem !important;
+}
+
+.result{
+    padding: 5px;
+    color: white
 }
 
 .dynamic-padding {
@@ -115,8 +170,24 @@ a {
     display: block;
 }
 
+.upload-box{
+    background-color: rgb(234, 245, 250);
+    border-radius: 10px;
+}
+
+.profil-pic-wrapper{
+    max-width: 200px;
+    margin: auto;
+}
+
 .profil-receptek{
     padding: 0px;
+    min-height: 1800px;
+}
+
+.fav-wrapper{
+    max-width: 1000px;
+    margin: auto;
 }
 
 .bg-image {

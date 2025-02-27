@@ -15,14 +15,14 @@
 
 
 <div id="main-content">
-    <h6 class="text-center" style="background-color:%!COLOR!%; padding: 5px; color: white;">%!RESULT!%</h6>
+    <h6 class="text-center result" style="background-color:%!COLOR!%;">%!RESULT!%</h6>
     <div class="wrapper">
-        <div class="row" style="width: 100%; margin: 0">
+        <div class="row w-100 m-0">
             <div class="col-md-3 p-5 white rounded mt-1 mb-0 max-height profil-box m-auto">
                 <div class="profil-adatok">
                     <h3>Profilom</h3>
                     <div class="text-center mt-4">
-                        <div class="d-block" style="max-width: 200px; margin: auto;">
+                        <div class="d-block profil-pic-wrapper">
                             <img id="profil-pic-icon" src="content/camera-icon.png" alt="camera icon">
                             <div class="profil-img-wrapper m-auto" id="profil-img-wrapper"><img class="profil-pic" src="%!SRC!%" alt="%!NAME!% profilkép"></div>
                         </div>
@@ -40,14 +40,14 @@
 
                 </div>
             </div>
-            <div class="col-md-9" style="padding-right: 0 !important;">
-                <div class="profil-receptek white" style="min-height: 800px;">
+            <div class="col-md-9 pr-0">
+                <div class="profil-receptek white">
                     <div class="cover-pic">
-                        <h2>Receptjeim</h2>
+                        <h2 class="headline">Receptjeim</h2>
                         <img src="%!COVERIMG!%" alt="cover-pic" class="img-fluid">
                     </div>
 
-                    <div class="row py-3 mw-850 dynamic-padding" style="width: 100%; margin: auto;">
+                    <div class="row py-3 mw-950 dynamic-padding w-100 m-auto pb-5">
 
                         <div class="container text-center pb-3">
                             <form method="post">
@@ -81,7 +81,6 @@
     </div>
 </div>
 
-<div style="height: 500px;"></div>
 
 <script src="core/scripts/accountPage.js"></script>
 <script>

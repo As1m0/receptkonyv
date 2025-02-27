@@ -1,15 +1,15 @@
 <div id="main-content">
-    <div style="max-width: 1200px; margin: auto">
-        <div class="row" style="width: 100%; margin: 0">
+    <div class="fav-wrapper">
+        <div class="row w-100 m-0">
 
 
-                <div class="profil-receptek white" style="min-height: 800px;">
+                <div class="profil-receptek white mb-3">
                     <div class="cover-pic mb-3">
-                        <h2>Kedvenc receptjeim</h2>
+                        <h2 class="headline">Kedvenc receptjeim</h2>
                         <img src="%!COVERIMG!%" alt="cover-pic" class="img-fluid">
                     </div>
 
-                    <div class="row py-3 px-5 dynamic-padding mw-850" style="width: 100%; margin: auto">
+                    <div class="row py-3 px-5 dynamic-padding mw-950 w-100 m-auto">
 
 
                         %!RECEPTEK!%
@@ -21,8 +21,6 @@
         </div>
     </div>
 </div>
-
-<div style="height: 500px;"></div>
 
 
 
@@ -39,7 +37,6 @@
             .then(data => {
                 if (data.success) {
                     //console.log(data.result);
-                    //console.log(data.ids);
                     if (data.result === "inserted") {
                         document.getElementById("icon-" + itemId).setAttribute("src", "content/heart_icons/heart2.png");
                     }
