@@ -53,12 +53,12 @@ a {
     color: var(--primary-color);
 }
 
-.link-default{
+.link-default {
     text-decoration: none;
     transition: all ease .2s;
 }
 
-.link-default:hover{
+.link-default:hover {
     opacity: .8;
 }
 
@@ -75,8 +75,48 @@ a {
     color: rgb(28, 194, 128);
 }
 
-.max-height{
-    max-height: 800px;
+.max-height {
+    max-height: 600px;
+}
+
+.max-width{
+    max-width: 600px;
+    margin: auto;
+}
+
+.mw-850 {
+    max-width: 850;
+}
+
+.mr-3{
+    margin-right: 3rem !important;
+}
+
+.dynamic-padding {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}
+
+@media only screen and (max-width: 766px) {
+    .dynamic-padding {
+        padding-left: 0.4rem !important;
+        padding-right: 0.4rem !important;
+    }
+}
+
+@media only screen and (min-width: 766px) {
+    .profil-box {
+        position: sticky;
+        top: 0;
+    }
+}
+
+.profil-box small{
+    display: block;
+}
+
+.profil-receptek{
+    padding: 0px;
 }
 
 .bg-image {
@@ -418,7 +458,7 @@ footer {
     background-size: cover;
 }
 
-#heart-icon{
+#heart-icon {
     height: 16px;
     margin-left: 2px;
 }
@@ -776,7 +816,7 @@ footer {
 
 
 .star-recept {
-    width: 100vw;
+    width: 100%;
     background-color: rgb(238, 229, 201);
     padding: 50px 0;
 }
@@ -888,14 +928,13 @@ footer {
 
 .num-card {
     box-shadow: 4px 4px 12px rgba(0, 0, 0, .1);
-    width: 300px;
+    min-width: 50%;
     padding: 20px 0;
     border-radius: 22px;
+    margin: auto;
 }
 
-#user-num {
-    float: right;
-}
+
 
 #about-text {
     font-size: 18px;
@@ -1109,7 +1148,7 @@ footer {
 }
 
 .user-card-deck {
-    height: 350px;
+   
 }
 
 .recepie-img-wrapper {
