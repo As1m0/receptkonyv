@@ -81,11 +81,11 @@ a {
 
 .max-width{
     max-width: 600px;
-    margin: auto;
 }
 
 .mw-850 {
-    max-width: 850;
+    max-width: 850px;
+    margin: auto;
 }
 
 .mr-3{
