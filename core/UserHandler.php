@@ -68,7 +68,11 @@ abstract class UserHandler
     }
     public static function GetAllUserData(): array
     {
-        $result = DBHandler::RunQuery("SELECT * FROM `felhasznalok` WHERE 1", []);
+        $result = DBHandler::RunQuery("SELECT f.*, COUNT(r.recept_id) AS recipe_count
+                                            FROM felhasznalok f
+                                            LEFT JOIN recept r ON f.felh_id = r.felh_id
+                                            GROUP BY f.felh_id;"
+        , []);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
