@@ -1234,7 +1234,7 @@ footer {
 
 /*          FILTER BOX            */
 
-#filter-box{
+#filter-box {
     padding-right: 5px;
 }
 
@@ -1263,6 +1263,10 @@ footer {
 
     #close-filter {
         display: block;
+    }
+
+    #set-postion-box {
+        margin-top: 5px;
     }
 }
 
@@ -1420,4 +1424,11 @@ footer {
     to {
         opacity: 0;
     }
+}
+
+#set-portion-box {
+    max-width: 220px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }

@@ -24,6 +24,7 @@ class receptDatasheetPage implements IPageBase
 
         $receptID = intval(htmlspecialchars($_GET[$cfg["receptId"]]));
 
+
         //írt comment feldolgozása
         if (isset($_POST["UserReview"])) {
             $review = htmlspecialchars(trim($_POST["review"]));
@@ -75,6 +76,7 @@ class receptDatasheetPage implements IPageBase
                 $this->template->AddData("USERPIC", $cfg["ProfilKepek"] . "/empty_profilPic_thumb.jpg");
             }
         }
+
 
 
 
@@ -131,10 +133,29 @@ class receptDatasheetPage implements IPageBase
         }
 
 
+
+        //adagok számítása
+        $defaultPortion = $data["recept_adatok"][0]["adag"];
+        $calcPortion = 1;
+        if(isset($_POST["setPortion"]))
+        {
+            if(isset($_POST["portion"]) && $_POST["portion"] !== "")
+            {
+                $userProtion = htmlspecialchars(trim($_POST["portion"]));
+                $calcPortion = $userProtion/$defaultPortion;
+                $this->template->AddData("PORTION", $userProtion);
+            }
+        }
+        else
+        {
+            $this->template->AddData("PORTION", $defaultPortion);
+        }
+
+
         //Hozzávalók
         $hozzavalok = "";
         for ($i = 0; $i < count($data["hozzavalok"]); $i++) {
-            $hozzavalok .= "<li>{$data["hozzavalok"][$i]["mennyiseg"]}&nbsp{$data["hozzavalok"][$i]["mertekegyseg"]}&nbsp<span class=\"list-element\">{$data["hozzavalok"][$i]["nev"]}</span></li>";
+            $hozzavalok .= "<li>".round($data["hozzavalok"][$i]["mennyiseg"]*$calcPortion, 2)."&nbsp{$data["hozzavalok"][$i]["mertekegyseg"]}&nbsp<span class=\"list-element\">{$data["hozzavalok"][$i]["nev"]}</span></li>";
         }
         $this->template->addData("HOZZAVALOK", $hozzavalok);
 
