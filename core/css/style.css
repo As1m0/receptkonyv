@@ -483,9 +483,15 @@ footer {
 }
 
 .card-list {
+    text-align: center;
     text-decoration: none;
     list-style-type: none;
     padding-left: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 25px;
+    overflow: hidden;
+    letter-spacing: -0.6px;
 }
 
 .card-list li {
@@ -1227,6 +1233,11 @@ footer {
 
 
 /*          FILTER BOX            */
+
+#filter-box{
+    padding-right: 5px;
+}
+
 @media only screen and (min-width: 767px) {
     #filter-box {
         display: block;
@@ -1326,6 +1337,10 @@ footer {
     border: 1px solid var(--primary-color);
 }
 
+.profil-adatok p:nth-child(3) {
+    word-break: break-all;
+}
+
 
 #receptkep {
     display: block;
@@ -1336,8 +1351,8 @@ footer {
 #profil-pic-icon {
     display: block;
     position: absolute;
-    right: 25px;
-    bottom: 10px;
+    right: 10%;
+    bottom: 5%;
     width: 30px;
     height: 30px;
     transition: all ease .2s;
