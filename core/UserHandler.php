@@ -2,11 +2,11 @@
 
 abstract class UserHandler
 {
-    public static function Login(string $email, string $pass, $keepLogin = false): bool
+    public static function Login(string $email, string $pass, $keep = false, $token = null): bool
     {
-        if($pass == "")
+        if($token !== null)
         {
-            $result = DBHandler::RunQuery("SELECT * FROM `felhasznalok` WHERE `email` = ?", [ new DBParam(DBTypes::String, $email)]);
+            $result = DBHandler::RunQuery("SELECT * FROM `felhasznalok` WHERE `token` = ?", [ new DBParam(DBTypes::String, $token)]);
         }
         else
         {
@@ -21,6 +21,7 @@ abstract class UserHandler
             {
                 //save user info to SESSION
                 $_SESSION["loggedIn"] = true;
+                $_SESSION["usermail"] = $data["email"];
                 $_SESSION["userID"] = $data["felh_id"];
                 $_SESSION["username"] =  $data["kernev"];
                 $_SESSION["userfullname"] = $data["veznev"] . " " . $data["kernev"];
@@ -33,12 +34,12 @@ abstract class UserHandler
                 {
                     $_SESSION["userpic"] = "empty_profilPic";
                 }
-                    $_SESSION["usermail"] = $data["email"];
-
-                if($keepLogin)
+                
+                if($keep && $token == null)
                 {
-                    setcookie("keeplogin", sha1($_SERVER["REMOTE_ADDR"]), time()+60*60*24*30*12);
-                    setcookie("usermail", $data["email"], time()+60*60*24*30*12);
+                    $token = bin2hex(random_bytes(16));
+                    DBHandler::RunQuery("UPDATE `felhasznalok` SET `token` = ? WHERE `felh_id` = ?", [ new DBParam(DBTypes::String, $token), new DBParam(DBTypes::Int, $data["felh_id"])]);
+                    setcookie("login_token", $token, time()+60*60*24*30*12);
                 }
                 return true;
             }

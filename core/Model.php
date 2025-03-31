@@ -94,10 +94,10 @@ abstract class Model
     //                          USER FUNCTIONS                        //
 
 
-    public static function Login(string $email, string $pass, bool $keepLogin = false): bool
+    public static function Login(string $email, string $pass, bool $keep = false, string $token = null): bool
     {
         try {
-            return UserHandler::Login($email, $pass, $keepLogin);
+            return UserHandler::Login($email, $pass, $keep, $token);
         } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
@@ -110,6 +110,10 @@ abstract class Model
         } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
+    }
+
+    public static function DeleteLoginToken(): void{
+        DBHandler::RunQuery("UPDATE `felhasznalok` SET `token` = NULL WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $_SESSION["userID"])]);
     }
 
     public static function DeleteUser(int $id): void

@@ -7,21 +7,7 @@ abstract class Controller
     {
         global $cfg;
 
-        // Logout
-        if (isset($_GET['logout']) && $_GET['logout']) {
 
-            session_unset();
-            session_destroy();
-
-            if (isset($_COOKIE['keeplogin'])) {
-                setcookie('keeplogin', '', time() - 3600);
-            }
-            if (isset($_COOKIE['usermail'])) {
-                setcookie('usermail', '', time() - 3600);
-            }
-            header("Location: {$cfg['mainPage']}.php");
-            exit();
-        }
 
         $page = $cfg["mainPage"];
         if (isset($_GET[$cfg["pageKey"]])) {
@@ -31,23 +17,30 @@ abstract class Controller
         try {
             DBHandler::Init();
 
+            // Logout
+            if (isset($_GET['logout']) && $_GET['logout']) {
+                Model::DeleteLoginToken();
+
+                session_unset();
+                session_destroy();
+
+                if (isset($_COOKIE['login_token'])) {
+                    setcookie('login_token', '', time() - 3600);
+                }
+
+                header("Location: {$cfg['mainPage']}.php");
+                exit();
+            }
+
             //check keep logged in cookie
             if (!isset($_SESSION["loggedIn"])) {
-                if (isset($_COOKIE["keeplogin"])) {
-                    $keep = htmlspecialchars($_COOKIE["keeplogin"]);
-                    if ($keep == sha1($_SERVER["REMOTE_ADDR"])) {
-                        if (isset($_COOKIE["usermail"])) {
-                            $usermail = htmlspecialchars($_COOKIE["usermail"]);
-                            if (Model::Login($usermail, "", true) == false) {
-                                if (isset($_COOKIE['keeplogin'])) {
-                                    setcookie('keeplogin', '', time() - 3600);
-                                }
-                                if (isset($_COOKIE['usermail'])) {
-                                    setcookie('usermail', '', time() - 3600);
-                                }
-                                header("Location: {$cfg['mainPage']}.php");
-                                exit();
-                            }
+                if (isset($_COOKIE["login_token"])) {
+                    $token = htmlspecialchars($_COOKIE["login_token"]);
+                    if (Model::Login("", "", true, $token) == false) {
+                        if (isset($_COOKIE['login_token'])) {
+                            setcookie('login_token', '', time() - 3600);
+                            header("Location: {$cfg['mainPage']}.php");
+                            exit();
                         }
                     }
                 }
