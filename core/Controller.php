@@ -19,15 +19,13 @@ abstract class Controller
 
             // Logout
             if (isset($_GET['logout']) && $_GET['logout']) {
-                Model::DeleteLoginToken();
-
-                session_unset();
-                session_destroy();
-
                 if (isset($_COOKIE['login_token'])) {
+                    $token = htmlspecialchars($_COOKIE["login_token"]);
+                    Model::DeleteLoginToken($token);
                     setcookie('login_token', '', time() - 3600);
                 }
-
+                session_unset();
+                session_destroy();
                 header("Location: {$cfg['mainPage']}.php");
                 exit();
             }
@@ -36,7 +34,7 @@ abstract class Controller
             if (!isset($_SESSION["loggedIn"])) {
                 if (isset($_COOKIE["login_token"])) {
                     $token = htmlspecialchars($_COOKIE["login_token"]);
-                    if (Model::Login("", "", true, $token) == false) {
+                    if (Model::loginWithToken($token) == false) {
                         if (isset($_COOKIE['login_token'])) {
                             setcookie('login_token', '', time() - 3600);
                             header("Location: {$cfg['mainPage']}.php");

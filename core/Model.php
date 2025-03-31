@@ -94,13 +94,32 @@ abstract class Model
     //                          USER FUNCTIONS                        //
 
 
-    public static function Login(string $email, string $pass, bool $keep = false, string $token = null): bool
+    public static function Login(string $email, string $pass, bool $keep = false, string $userID = null): bool
     {
         try {
-            return UserHandler::Login($email, $pass, $keep, $token);
+            return UserHandler::Login($email, $pass, $keep, $userID);
         } catch (Exception $ex) {
             throw new DBException($ex->GetMessage());
         }
+    }
+
+    public static function loginWithToken($token): bool
+    {
+        $result = DBHandler::RunQuery("SELECT `user_id` FROM `login_tokens` WHERE `token` = ?",
+         [new DBParam(DBTypes::String, $token)]);
+        if($result->num_rows > 0)
+        {
+            $data = $result->fetch_assoc();
+            return Self::Login("","", false, $data["user_id"]);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static function DeleteLoginToken(string $token): void{
+        DBHandler::RunQuery("DELETE FROM `login_tokens` WHERE `token` = ?", [new DBParam(DBTypes::String, $token)]);
     }
 
     public static function Register(array $data): bool
@@ -112,9 +131,6 @@ abstract class Model
         }
     }
 
-    public static function DeleteLoginToken(): void{
-        DBHandler::RunQuery("UPDATE `felhasznalok` SET `token` = NULL WHERE `felh_id` = ?", [new DBParam(DBTypes::Int, $_SESSION["userID"])]);
-    }
 
     public static function DeleteUser(int $id): void
     {

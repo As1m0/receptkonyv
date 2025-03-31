@@ -2,11 +2,11 @@
 
 abstract class UserHandler
 {
-    public static function Login(string $email, string $pass, $keep = false, $token = null): bool
+    public static function Login(string $email, string $pass, $keep = false, $userID = null): bool
     {
-        if($token !== null)
+        if($userID !== null)
         {
-            $result = DBHandler::RunQuery("SELECT * FROM `felhasznalok` WHERE `token` = ?", [ new DBParam(DBTypes::String, $token)]);
+            $result = DBHandler::RunQuery("SELECT * FROM `felhasznalok` WHERE `felh_id` = ?", [ new DBParam(DBTypes::Int, $userID)]);
         }
         else
         {
@@ -35,10 +35,10 @@ abstract class UserHandler
                     $_SESSION["userpic"] = "empty_profilPic";
                 }
                 
-                if($keep && $token == null)
+                if($keep)
                 {
                     $token = bin2hex(random_bytes(16));
-                    DBHandler::RunQuery("UPDATE `felhasznalok` SET `token` = ? WHERE `felh_id` = ?", [ new DBParam(DBTypes::String, $token), new DBParam(DBTypes::Int, $data["felh_id"])]);
+                    DBHandler::RunQuery("INSERT INTO `login_tokens` (`user_id`,`token`) VALUES (?,?)", [ new DBParam(DBTypes::Int, $data["felh_id"]), new DBParam(DBTypes::String, $token) ]);
                     setcookie("login_token", $token, time()+60*60*24*30*12);
                 }
                 return true;
