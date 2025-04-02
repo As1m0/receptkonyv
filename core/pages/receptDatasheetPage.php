@@ -54,7 +54,7 @@ class receptDatasheetPage implements IPageBase
         $this->template->AddData("NEV", ucfirst($data["recept_adatok"][0]["recept_neve"]));
         $this->template->AddData("TIME", substr($data["recept_adatok"][0]["created_at"], 0, 10));
         $this->template->AddData("IDO", $data["recept_adatok"][0]["elk_ido"]);
-        $this->template->AddData("ADAG", $data["recept_adatok"][0]["adag"]);
+        $this->template->AddData("ADAG", $data["recept_adatok"][0]["kategoria"]);
         $this->template->AddData("NEHEZSEG", $data["recept_adatok"][0]["nehezseg"]);
         $this->template->AddData("LEIRAS", nl2br($data["recept_adatok"][0]["leiras"]));
 

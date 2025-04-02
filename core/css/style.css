@@ -208,6 +208,10 @@ a {
     min-height: 1800px;
 }
 
+.min-h-1800{
+    min-height: 1800px;
+}
+
 .profil-wrapper {
     padding-right: 0;
 }
@@ -311,6 +315,13 @@ nav #logo {
     opacity: .3;
 
 }
+
+.nav-icon{
+    width: 17px;
+    margin-top: -2px;
+    margin-right: 6px;
+}
+
 
 
 
@@ -549,6 +560,7 @@ footer {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-left: -10px;
 }
 
 .founder-wrapper {
@@ -573,25 +585,35 @@ footer {
     margin-left: 2px;
 }
 
+.parameters {
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+    margin: auto;
+    border-radius: 5px;
+    max-width: 350px;
+    background-color: var(--primary-color);
+    opacity: .8;
+}
+
+.parameters ul{
+    padding-left: 0px;
+    width: 100%;
+}
+
 
 .parameters ul li {
+    font-size: 18px;
+    font-weight: 600;
     color: white !important;
     display: inline-block;
     text-align: center;
     text-decoration: none;
     list-style-type: none;
-    padding: 4px 2px 3px 2px;
+    padding: 5px 2px 4px 2px;
 }
 
-.parameters {
-    display: block;
-    margin-top: 30px;
-    margin: auto;
-    width: 250px;
-    border-radius: 5px;
-    background-color: var(--primary-color);
-    opacity: .8;
-}
+
 
 .reviews {
     display: block;
